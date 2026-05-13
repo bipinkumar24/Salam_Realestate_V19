@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="rental_management.PropertyDashboardListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="before">
+            <PropertyListDashboard list="props.list"/>
+        </xpath>
+    </t>
+
+    <t t-name="rental_management.RentalContractDashboardListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="before">
+            <RentalContractDashboard list="props.list"/>
+        </xpath>
+    </t>
+
+    <t t-name="rental_management.SaleContractDashboardListRenderer" t-inherit="web.ListRenderer" t-inherit-mode="primary">
+        <xpath expr="//div[hasclass('o_list_renderer')]" position="before">
+            <SaleContractDashboard list="props.list"/>
+        </xpath>
+    </t>
+</templates>

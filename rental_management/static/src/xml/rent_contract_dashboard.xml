@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="rental_management.RentalContractDashboard">
+        <div class="o_rental_contract_dashboard container-fluid d-flex flex-column py-4 border-bottom bg-view overflow-auto tk-dash" t-on-click="onDashboardClick">
+            <div class="d-flex flex-column gap-3">
+                <div class="row g-4">
+                    <div class="col-md-12 col-lg-6 col-xl-3">
+                        <div class="bg-gray p-4 d-flex flex-column">
+                            <div class="">
+                                <h5 class="tk-primary">Contracts</h5>
+                                <hr class="tk-hr-border" />
+                            </div>
+                            <div class="d-flex justify-content-between gap-3 w-100">
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-total prop-cursor w-100 o_rent_contract_action"
+                                        data-field="contract_type" data-value="new_contract"
+                                        title="Draft Contracts">
+                                        <h4 class="bg-total mb-1">
+                                            <t t-out="state.values['new_contract_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Draft</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-draft prop-cursor w-100 o_rent_contract_action"
+                                        data-field="contract_type" data-value="running_contract"
+                                        title="Running Contracts">
+                                        <h4 class="bg-draft mb-1">
+                                            <t t-out="state.values['running_contract_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Running</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-available prop-cursor w-100 o_rent_contract_action"
+                                        data-field="contract_type" data-value="expire_contract"
+                                        title="Expire Contract">
+                                        <h4 class="bg-available mb-1">
+                                            <t t-out="state.values['expire_contract_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Expire</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-3">
+                        <div class="bg-gray p-4 d-flex flex-column">
+                            <div class="">
+                                <h5 class="tk-primary">Duration Types</h5>
+                                <hr class="tk-hr-border" />
+                            </div>
+                            <div class="d-flex justify-content-between gap-3 w-100">
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center bg-sale custom-rent-card prop-cursor w-100 o_rent_contract_action"
+                                        data-field="duration_type" data-value="by_duration"
+                                        title="By Duration Contracts">
+                                        <h4 class="bg-sale mb-1">
+                                            <t t-out="state.values['by_duration_count']" />
+                                        </h4>
+                                        <div class="fw-bold">By Duration</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-booked prop-cursor w-100 o_rent_contract_action"
+                                        data-field="duration_type" data-value="by_date"
+                                        title="By Date Contracts">
+                                        <h4 class="bg-booked mb-1">
+                                            <t t-out="state.values['by_date_count']" />
+                                        </h4>
+                                        <div class="fw-bold">By Date</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 col-xl-6">
+                        <div class="bg-gray p-4 d-flex flex-column">
+                            <div class="">
+                                <h5 class="tk-primary">Payment Terms</h5>
+                                <hr class="tk-hr-border" />
+                            </div>
+                            <div class="row -mx-2">
+                                <div class="col-6 col-sm-6 col-md-4 col-xl-2 mb-3 px-2">
+                                    <div class="card py-4 px-2 text-center bg-sale custom-rent-card prop-cursor w-100 o_rent_contract_action"
+                                        data-field="payment_term" data-value="daily"
+                                        title="Daily Payment Contracts">
+                                        <h4 class="bg-sale mb-1">
+                                            <t t-out="state.values['daily_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Daily</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-4 col-xl-2 mb-3 px-2">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-booked prop-cursor w-100 o_rent_contract_action"
+                                        data-field="payment_term" data-value="monthly"
+                                        title="Monthly Payment Contracts">
+                                        <h4 class="bg-booked mb-1">
+                                            <t t-out="state.values['monthly_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Monthly</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-4 col-xl-2 mb-3 px-2">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-sold prop-cursor w-100 o_rent_contract_action"
+                                        data-field="payment_term" data-value="quarterly"
+                                        title="Quarterly Payment Contracts">
+                                        <h4 class="bg-sold mb-1">
+                                            <t t-out="state.values['quarterly_count']" />
+                                        </h4>
+                                        <div class="fw-bold bg-sold">Quarterly</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-4 col-xl-2 mb-3 px-2">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-booked prop-cursor w-100 o_rent_contract_action"
+                                        data-field="payment_term" data-value="half_year"
+                                        title="Half Year Payment Contracts">
+                                        <h4 class="bg-booked mb-1">
+                                            <t t-out="state.values['half_year_count']" />
+                                        </h4>
+                                        <div class="fw-bold bg-booked">Half Year</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-4 col-xl-2 mb-3 px-2">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-sale prop-cursor w-100 o_rent_contract_action"
+                                        data-field="payment_term" data-value="year"
+                                        title="Yearly Payment Contracts">
+                                        <h4 class="bg-sale mb-1">
+                                            <t t-out="state.values['year_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Yearly</div>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-6 col-md-4 col-xl-2 mb-3 px-2">
+                                    <div class="card py-4 px-2 text-center custom-rent-card bg-available prop-cursor w-100 o_rent_contract_action"
+                                        data-field="payment_term" data-value="full_payment"
+                                        title="Fully Payment Contracts">
+                                        <h4 class="bg-available mb-1">
+                                            <t t-out="state.values['full_payment_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Full Payment</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

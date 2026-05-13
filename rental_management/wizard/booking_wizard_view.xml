@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="booking_wizard_form_view" model="ir.ui.view">
+            <field name="name">booking.wizard.form.view</field>
+            <field name="model">booking.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Booking">
+                    <field name="company_id" invisible="1" />
+                    <field name="currency_id" invisible="1" />
+                    <group string="Lead Details">
+                        <group>
+                            <field name="from_inquiry" />
+                        </group>
+                        <group>
+                            <field name="lead_id" options="{'no_open': True, 'no_create':True}"
+                                   invisible="from_inquiry == False"
+                                   required="from_inquiry == True"/>
+                        </group>
+                    </group>
+                    <group string="Property Details">
+                        <group>
+                            <field name="property_id" readonly="1" force_save="1" />
+                        </group>
+                        <group>
+                            <field name="price" />
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Customer Details">
+                            <field name="customer_id" required="1"
+                                options="{'no_quick_create':True,'no_create_edit':True}" />
+                        </group>
+                        <group string="Customer Pricing">
+                            <field name="book_price" />
+                            <field name="ask_price" required="1" />
+                        </group>
+                    </group>
+                    <group string="Broker Details">
+                        <group>
+                            <field name="is_any_broker" />
+                        </group>
+                    </group>
+                    <group>
+                        <group invisible="is_any_broker == False">
+                            <field name="broker_id"
+                                   options="{'no_quick_create':True,'no_create_edit':True}"
+                                   required="is_any_broker == True"/>
+                            <field name="commission_from"
+                                   required="is_any_broker == True" widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="commission_type"
+                                   required="is_any_broker == True"
+                                   widget="radio" options="{'horizontal': true}"/>
+                        </group>
+                        <group
+                                invisible="commission_type == False or is_any_broker == False">
+                            <field name="broker_commission_percentage"
+                                   invisible="commission_type == 'f'"
+                                   required="commission_type == 'p'"/>
+                            <field name="broker_commission" widget="monetary"
+                                   invisible="commission_type == 'p'"
+                                   required="commission_type == 'f'"/>
+                        </group>
+                    </group>
+                    <group string="Penalty Details" invisible="is_penalty_visible == False">
+                        <group>
+                            <field name="is_penalty_visible" invisible="1"/>
+                            <field name="is_penalty_applied"/>
+                            <field name="penalty_percentage" invisible="is_penalty_applied == False" required="is_penalty_applied != False"/>
+                        </group>
+                        <group>
+                            <field name="penalty_days_after_due" invisible="is_penalty_applied == False" required="is_penalty_applied != False"/>
+                        </group>
+                    </group>
+                    <group string="Item">
+                        <group>
+                            <field name="booking_item_id" options="{'no_open': True, 'no_quick_create': True}" required="1" />
+                        </group>
+                        <group>
+                            <field name="broker_item_id" options="{'no_open': True, 'no_quick_create': True}"
+                                   invisible="is_any_broker == False"
+                                   required="is_any_broker == True"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Maintenance Cost"
+                               invisible="is_any_maintenance == False">
+                            <field name="is_any_maintenance" invisible="1" />
+                            <field name="total_maintenance" />
+                        </group>
+                        <group string="Extra Utility Cost"
+                               invisible="is_utility_service == False">
+                            <field name="is_utility_service" invisible="1" />
+                            <field name="total_service" />
+                        </group>
+                    </group>
+                    <hr invisible="lead_id == False"/>
+                    <h6 invisible="lead_id == False">
+                        Note
+                    </h6>
+                    <field name="note" invisible="lead_id == False" widget="html"
+                        readonly="1" />
+                    <footer>
+                        <button string="Create Booking" type="object"
+                            class="btn btn-outline-success"
+                            name="create_booking_action" />
+                        <button string="Cancel" special="cancel" class="btn btn-outline-danger" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="booking_wizard_action" model="ir.actions.act_window">
+            <field name="name">Booking Of Property</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">booking.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

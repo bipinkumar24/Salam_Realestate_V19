@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_area_areas,area.areas,model_area_areas,base.group_user,1,1,1,1
+access_room_rooms,room.rooms,model_room_rooms,base.group_user,1,1,1,1
+access_price_prices,price.prices,model_price_prices,base.group_user,1,1,1,1
+access_booking_lead,access_booking_lead,custom_real_estate.model_booking_lead,base.group_user,1,1,1,1
+access_crm_booking_wizard,access_crm_booking_wizard,custom_real_estate.model_crm_booking_wizard,base.group_user,1,1,1,1
+access_unit_prioritization,access_unit_prioritization,custom_real_estate.model_unit_prioritization,base.group_user,1,1,1,1
+access_approval_level_prio,access.approval.level.prio,model_approval_level_prio,,1,1,1,1
+access_remarks_approval, access.remarks.approval,model_prio_remark_wizard,,1,1,1,1
+access_remarks_approval_prio, access.remarks.approval.prio,model_remarks_approval_prio,,1,1,1,1
+accesss_appart_type,access.appart.type,model_appart_type,,1,1,1,1

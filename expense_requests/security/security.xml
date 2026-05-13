@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="expense_ctgr" model="ir.module.category">
+            <field name="name">Expense Requests</field>
+        </record>
+
+        <record id="expense_privilege" model="res.groups.privilege">
+            <field name="name">Expense Requests</field>
+            <field name="category_id" ref="expense_requests.expense_ctgr"/>
+        </record>
+
+        <record id="expensess_manager" model="res.groups">
+            <field name="name">Manage department Expenses</field>
+            <field name="privilege_id" ref="expense_requests.expense_privilege"/>
+        </record>
+
+        <record id="all_expensess_manager" model="res.groups">
+            <field name="name">Manage All Expenses</field>
+            <field name="privilege_id" ref="expense_requests.expense_privilege"/>
+        </record>
+
+        <record id="can_request_expenses" model="res.groups">
+            <field name="name">Request Expense</field>
+            <field name="privilege_id" ref="expense_requests.expense_privilege"/>
+        </record>
+
+        <record id="department_approver" model="res.groups">
+            <field name="name">Department Expense Approver</field>
+            <field name="privilege_id" ref="expense_requests.expense_privilege"/>
+        </record>
+
+        <record id="hr_approver" model="res.groups">
+            <field name="name">HR Expense Approver</field>
+            <field name="privilege_id" ref="expense_requests.expense_privilege"/>
+        </record>
+
+        <record id="Finance_approver" model="res.groups">
+            <field name="name">Fianance Expense Approver</field>
+            <field name="privilege_id" ref="expense_requests.expense_privilege"/>
+        </record>
+        <record id="GM_approver" model="res.groups">
+            <field name="name">GM Approver</field>
+            <field name="privilege_id" ref="expense_requests.expense_privilege"/>
+        </record>
+    </data>
+</odoo>

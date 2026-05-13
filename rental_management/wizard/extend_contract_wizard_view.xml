@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="extend_contract_wizard_form_view" model="ir.ui.view">
+            <field name="name">extend.contract.wizard.form.view</field>
+            <field name="model">extend.contract.wizard</field>
+            <field name="arch" type="xml">
+                <form>
+                    <field name="company_id" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+                    <group>
+                        <group>
+                            <field name="duration_id" required="1"/>
+                            <field name="tenancy_id" required="1" invisible="1"/>
+                            <field name="revised_price"/>
+                            <field name="is_any_broker" invisible="1"/>
+                            <field name="new_broker_id" invisible="is_any_broker == False"/>
+                        </group>
+                        <group>
+                            <field name="payment_term" required="1"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Extend Contract" type="object" class="btn btn-outline-success"
+                                name="extend_contract_action"/>
+                        <button string="Cancel" special="cancel" class="btn btn-outline-danger"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+        <record id="extend_contract_wizard_action" model="ir.actions.act_window">
+            <field name="name">Extend Contract</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">extend.contract.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</odoo>

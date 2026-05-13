@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_rental" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.rental</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[hasclass('settings')]" position="inside">
+                    <div class="app_settings_block" data-string="Reminder Days"
+                         string="Rental Management"
+                         data-key="rental_management">
+                        <h2>Reminder Days</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Rent Reminder Days</span>
+                                    <div class="text-muted">
+                                        Reminder days for Creating Invoice
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="reminder_days"
+                                                   class="col-lg-3 o_light_label"/>
+                                            <field name="reminder_days" required="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Sale Reminder Days</span>
+                                    <div class="text-muted">
+                                        Reminder days for Creating Invoice
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <div class="content-group">
+                                        <div class="row mt16">
+                                            <label for="sale_reminder_days"
+                                                   class="col-lg-3 o_light_label"/>
+                                            <field name="sale_reminder_days" required="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Default Duration Days for Month, Quarter, Half Year and Year</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Month Days</span>
+                                    <br/>
+                                    <field name="month_days"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Quarter Days</span>
+                                    <br/>
+                                    <field name="quarter_days"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Year Days</span>
+                                    <br/>
+                                    <field name="year_days"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Half Year</span>
+                                    <br/>
+                                    <field name="half_year_days"/>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Default Service Quantity for Payment Terms</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Quarterly Service Quantity</span>
+                                    <br/>
+                                    <div class="text-muted">
+                                        Quarterly Utility &amp; Maintenance Services Quantity
+                                    </div>
+                                    <br/>
+                                    <field name="quarterly_service_quantity"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Half Yearly Service Quantity</span>
+                                    <br/>
+                                    <div class="text-muted">
+                                        Half-Yearly Utility &amp; Maintenance Services Quantity
+                                    </div>
+                                    <br/>
+                                    <field name="half_yearly_service_quantity"/>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Invoice Post Type</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Invoice Post</span>
+                                    <div class="text-muted">
+                                        Invoice Post Type
+                                    </div>
+                                    <field name="invoice_post_type" widget="radio"/>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Default Products</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Installment Item</span>
+                                    <div class="text-muted">
+                                        Default Installment Item
+                                    </div>
+                                    <field name="installment_item_id" required="1"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Deposit Item</span>
+                                    <div class="text-muted">
+                                        Default Deposit Item
+                                    </div>
+                                    <field name="deposit_item_id" required="1"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Maintenance Item</span>
+                                    <div class="text-muted">
+                                        Default Maintenance Item
+                                    </div>
+                                    <field name="maintenance_item_id" required="1"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Broker Commission Item</span>
+                                    <div class="text-muted">
+                                        Default Broker Commission Item
+                                    </div>
+                                    <field name="broker_item_id" required="1"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Contract Penalty Item</span>
+                                    <div class="text-muted">
+                                        Default Contract Penalty Item
+                                    </div>
+                                    <field name="contract_penalty_item_id" required="1"/>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Penalty Configurations</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_left_pane">
+                                    <field name="is_penalty_applied"/>
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Is Any Penalty?</span>
+                                    <div class="text-muted">
+                                        Is penalty applicable on contracts ?
+                                    </div>
+                                </div>
+                            </div>
+                            <strong class="col-lg-12 mt-2" invisible="is_penalty_applied == False">
+                                For Rent Contract
+                            </strong>
+                            <div class="col-lg-6 o_setting_box"
+                                 invisible="is_penalty_applied == False">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Apply Penalty After (Days)</span>
+                                    <div class="text-muted">
+                                        Number of extra days allowed after the due date before applying a penalty.
+                                    </div>
+                                    <field name="penalty_days_after_due_for_rent_contract"/>
+                                    <span>Days</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box"
+                                 invisible="is_penalty_applied == False">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Rent Contract Percentage</span>
+                                    <div class="text-muted">
+                                        Penalty Percentage
+                                    </div>
+                                    <field name="penalty_percentage_for_rent_contract"/>
+                                    <span>%</span>
+                                </div>
+                            </div>
+                            <strong class="col-lg-12 mt-2" invisible="is_penalty_applied == False">
+                                For Sale Contract
+                            </strong>
+                            <div class="col-lg-6 o_setting_box"
+                                 invisible="is_penalty_applied == False">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Apply Penalty After (Days)</span>
+                                    <div class="text-muted">
+                                        Number of extra days allowed after the due date before applying a penalty.
+                                    </div>
+                                    <field name="penalty_days_after_due_for_sale_contract"/>
+                                    <span>Days</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box"
+                                 invisible="is_penalty_applied == False">
+                                <div class="o_setting_left_pane">
+                                </div>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Sale Contract Percentage</span>
+                                    <div class="text-muted">
+                                        Penalty Percentage
+                                    </div>
+                                    <field name="penalty_percentage_for_sale_contract"/>
+                                    <span>%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Report Color Detail</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Report Color</span>
+                                    <div class="text-muted">
+                                        Download report of this color
+                                    </div>
+                                    <br/>
+                                    <field name="report_color_config" widget="color"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Contract Report Color</span>
+                                    <div class="text-muted">
+                                        Download Contract report of this color
+                                    </div>
+                                    <br/>
+                                    <field name="contract_report_color" widget="color"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <button icon="fa-repeat"
+                                            string="Reset Color"
+                                            type="object"
+                                            class="btn btn-primary"
+                                            name="action_reset_color"/>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Property Brochure Mail Configurations</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Main Title</span>
+                                    <field
+                                            name="mail_template_title"
+                                            placeholder="Discover Your Ideal Property"
+                                    />
+                                </div>
+                                <br/>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Main Description</span>
+                                    <field
+                                            name="mail_template_description"
+                                            placeholder="Ready-to-move property featuring quality construction, prime location, and excellent lifestyle amenities."/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Mail Template Image</span>
+                                    <br/>
+                                    <br/>
+                                    <field name="template_image" widget="image" style="height:100px; width:100px;"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Section Title</span>
+                                    <field
+                                            name="next_section_title"
+                                            placeholder="Title: e.g. What's Next?"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane ms-5">
+                                    <span class="o_form_label">Section 1</span>
+                                    <field name="mail_template_section_one_title"
+                                           placeholder="Title: e.g. Review the Digital Brochure" style="width:80%;"/>
+                                    <br/>
+                                    <field style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;width:100%;"
+                                           name="mail_template_section_one_description"
+                                           placeholder="Description: e.g. Dive into the high-resolution gallery, floor plans, and neighborhood insights. Every detail of your potential new home is just a click away."/>
+                                </div>
+                                <br/>
+                                <div class="o_setting_right_pane ms-5">
+                                    <span class="o_form_label">Section 2</span>
+                                    <field name="mail_template_section_two_title"
+                                           placeholder="Title: e.g. Schedule a Private Tour" style="width:80%;"/>
+                                    <br/>
+                                    <field style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;width:100%;"
+                                           name="mail_template_section_two_description"
+                                           placeholder="Description: e.g. Nothing beats the feeling of walking through the front door. Pick a time that suits your schedule for a personalized, one-on-one viewing."/>
+                                </div>
+                                <br/>
+                                <div class="o_setting_right_pane ms-5">
+                                    <span class="o_form_label">Section 3</span>
+                                    <field name="mail_template_section_three_title"
+                                           placeholder="Title: e.g. Get Your Questions Answered" style="width:80%;"/>
+                                    <br/>
+                                    <field style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;width:100%;"
+                                           name="mail_template_section_three_description"
+                                           placeholder="Description: e.g. Whether it’s about financing options or local school districts, our team is ready to provide the data you need to make a confident decision."/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <h2>Contract Mail Configurations</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Rent Mail Template</span>
+                                    <div class="text-muted">
+                                        Default Rent mail Template
+                                    </div>
+                                    <field name="mail_template_id" />
+                                </div>
+                                <br/>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Rent Reminder Mail Template</span>
+                                    <div class="text-muted">
+                                        Default Rent Reminder mail Template
+                                    </div>
+                                    <field name="rent_reminder_contract_mail_template_id" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Contract Mail Template Image</span>
+                                    <br/>
+                                    <br/>
+                                    <field name="contract_template_image" widget="image"
+                                           style="height:100px; width:100px;"/>
+                                </div>
+                            </div>
+                        </div>
+                        <h2>Property Booking and Sold Mail Configurations</h2>
+                        <div class="row mt16 o_settings_container">
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Property Booking Mail Template</span>
+                                    <div class="text-muted">
+                                        Default Property Booking Mail Template
+                                    </div>
+                                    <field name="booking_mail_template_id" />
+                                </div>
+                                <br/>
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Property Sold Mail Template</span>
+                                    <div class="text-muted">
+                                        Default Rent Reminder mail Template
+                                    </div>
+                                    <field name="property_sold_mail_template_id" />
+                                </div>
+                            </div>
+                            <div class="col-lg-6 o_setting_box">
+                                <div class="o_setting_right_pane">
+                                    <span class="o_form_label">Property Sold Mail Template Image</span>
+                                    <br/>
+                                    <br/>
+                                    <field name="property_sold_mail_template_image" widget="image"
+                                           style="height:100px; width:100px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

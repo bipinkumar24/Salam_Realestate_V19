@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="crm_room_view" model="ir.ui.view">
+            <field name="name">areas view</field>
+            <field name="model">room.rooms</field>
+            <field name="arch" type="xml">
+                <form string="Voucher">
+                    <sheet>
+                        <div>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="crm_price_view" model="ir.ui.view">
+            <field name="name">budget view</field>
+            <field name="model">price.prices</field>
+            <field name="arch" type="xml">
+                <form string="Voucher">
+                    <sheet>
+                        <div>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="room_tree_view_crm">
+            <field name="name">room_tree_view_crm</field>
+            <field name="model">room.rooms</field>
+            <field name="arch" type="xml">
+                <list string="Interested Areas">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="price_tree_view_crm">
+            <field name="name">budget_tree_view_crm</field>
+            <field name="model">price.prices</field>
+            <field name="arch" type="xml">
+                <list string="Interested Areas">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+
+
+        <record id="action_rooms_crm" model="ir.actions.act_window">
+            <field name="name">rooms</field>
+            <field name="res_model">room.rooms</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="action_budget_crm" model="ir.actions.act_window">
+            <field name="name">budgets</field>
+            <field name="res_model">price.prices</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <menuitem id="rooms" parent="crm.crm_menu_config"
+                  name="Bedrooms Specifications" action="action_rooms_crm"
+                  groups="base.group_system" sequence="2"/>
+
+        <menuitem id="budget" parent="crm.crm_menu_config"
+                  name="Price Ranges" action="action_budget_crm"
+                  groups="base.group_system" sequence="2"/>
+    </data>
+</odoo>

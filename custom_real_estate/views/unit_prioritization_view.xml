@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="unit_prioritization_form" model="ir.ui.view">
+            <field name="name">unit.prioritization</field>
+            <field name="model">unit.prioritization</field>
+            <field name="arch" type="xml">
+                <form string="Prioritization">
+                    <header>
+                        <field name="is_button" invisible="1"/>
+                        <field name="is_last_level" invisible="1"/>
+                        <button name="action_approve" type="object"
+                                invisible="not is_button"
+                                string="Next Stage / Reject" class="oe_highlight"/>
+                        <field name="next_approval_user_ids" invisible="1"/>
+                        <field name="next_approval_id" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div>
+                            <group>
+                                <group>
+                                    <field name="file_number"/>
+                                    <field name="prioritization_number"
+                                           required="is_last_level"
+                                           groups="custom_real_estate.groups_prioritization"/>
+                                    <field name="description"/>
+                                    <field name="customer"/>
+                                    <field name="opportunity_id"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="login_log_seearch_view_ao_ip" model="ir.ui.view">
+            <field name="name">lunit.prioritization.search</field>
+            <field name="model">unit.prioritization</field>
+            <field name="arch" type="xml">
+                <search string="Search">
+                    <field name="file_number"/>
+                    <field name="prioritization_number"/>
+                    <field name="customer"/>
+                    <field name="opportunity_id"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="unit_prioritization_tree">
+            <field name="name">unit_prioritization_tree</field>
+            <field name="model">unit.prioritization</field>
+            <field name="arch" type="xml">
+                <list string="Prioritization">
+                    <field name="file_number" invisible="1"/>
+                    <field name="prioritization_number" groups="custom_real_estate.groups_prioritization"
+                           invisible="1"/>
+
+                    <field name="file_number_int" string="File Number"/>
+                    <field name="prioritization_number_int" string="Prioritization Number"
+                           groups="custom_real_estate.groups_prioritization"/>
+
+                    <field name="customer"/>
+                    <field name="opportunity_id"/>
+
+                </list>
+            </field>
+        </record>
+
+        <record id="action_unit_prioritization" model="ir.actions.act_window">
+            <field name="name">Prioritization</field>
+            <field name="res_model">unit.prioritization</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+        <record id="unit_prioritization_form_action" model="ir.actions.act_window">
+            <field name="name">Prioritization</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">unit.prioritization</field>
+            <field name="view_id" ref="custom_real_estate.unit_prioritization_form"/>
+            <field name="view_mode">form</field>
+            <field name="domain">[('opportunity_id', '=', active_id)]</field>
+            <field name="context">{'search_default_opportunity_id': active_id, 'default_opportunity_id': active_id}
+            </field>
+        </record>
+
+        <menuitem id="menu_prioritization" parent="crm.crm_menu_config"
+                  name="Prioritization" action="action_unit_prioritization" sequence="20"/>
+
+        <menuitem id="prioritization" parent="crm.crm_menu_config"
+                  name="prioritization" action="action_unit_prioritization"
+                  groups="base.group_system" sequence="2"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="my_custom_crm_category" model="ir.module.category">
+            <field name="name">Custom CRM</field>
+        </record>
+        <record id="my_custom_crm_privilege" model="res.groups.privilege">
+            <field name="name">Custom CRM</field>
+            <field name="category_id" ref="custom_real_estate.my_custom_crm_category"/>
+        </record>
+        <record id="cant_delete_lead" model="res.groups">
+            <field name="name">restrict delete</field>
+            <field name="privilege_id" ref="custom_real_estate.my_custom_crm_privilege"/>
+        </record>
+        <record id="groups_prioritization" model="res.groups">
+            <field name="name">Prioritization</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="approval_level_tree_view_prio">
+            <field name="name">approval.level.tree.prio</field>
+            <field name="model">approval.level.prio</field>
+            <field name="arch" type="xml">
+                <list string="Approval Level Form" editable="bottom">
+                    <field name="name" />
+                    <field name="level" />
+                    <field name="is_last_approval" />
+                    <field name="is_reject" />
+<!--                    <field name="is_complete" />-->
+<!--                    <field name="is_customer_doc_required"/>-->
+                    <field name="is_send_email"/>
+                    <field name="approval_user_ids" widget="many2many_tags" required="not is_reject"/>
+                    <field name="fields_ids" widget="many2many_tags" domain="[('model', '=', 'unit.prioritization')]"/>
+                    <field name="display_message"/>
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="approval_level_form_view_prio">
+            <field name="name">approval.level.form.prio</field>
+            <field name="model">approval.level.prio</field>
+            <field name="arch" type="xml">
+                <form string="Approval Level Form">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1" />
+                            <field name="level" required="1" />
+                            <field name="is_last_approval" />
+                            <field name="is_reject" />
+                            <field name="approval_user_ids" required="not is_reject" />
+                            <field name="display_message"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_approval_level_prio" model="ir.actions.act_window">
+            <field name="name">Approval Level</field>
+            <field name="res_model">approval.level.prio</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="menu_approval_level_prio" parent="crm.crm_menu_config"
+                  name="Prioritization Approval Level" action="action_approval_level_prio"
+                  groups="base.group_system" sequence="4" />
+    </data>
+</odoo>

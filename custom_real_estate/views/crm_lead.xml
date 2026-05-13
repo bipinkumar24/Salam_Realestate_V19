@@ -1,0 +1,188 @@
+<odoo>
+    <data>
+        <record id="view_crm_lead_inherit_salam" model="ir.ui.view">
+            <field name="name">crm.lead.inherit.salam</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[2]" position="after">
+                        <group invisible="type == 'lead'">
+                            <field name="valid_until"/>
+                            <field name="prices"/>
+                            <field name="areas_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="bedroom"/>
+                            <field name="type_appartment" widget="many2many_tags" options="{'no_create': True}"/>
+                            <field name="garden" widget="radio"/>
+                            <field name="parking" widget="radio"/>
+                            <field name="description" widget="text"/>
+                            <field name="is_last" invisible="1"/>
+                        </group>
+                </xpath>
+                <xpath expr="//field[@name='date_deadline']" position="before">
+                    <field name="create_date"></field>
+                </xpath>
+                <xpath expr="//field[@name='create_date']" position="attributes">
+                    <attribute name="string">Registration Date</attribute>
+                </xpath>
+                <xpath expr="//field[@name='phone']" position="after">
+                    <field name="address"/>
+                </xpath>
+                <xpath expr="//group/field[@name='parking']" position="after">
+                    <field name="source"/>
+                    <field name="fmode" widget="radio"/>
+                   <field name="deposit_capabilty"/>
+                </xpath>
+                <xpath expr="//field[@name='valid_until']" position="before">
+                    <field name="home_address"/>
+                </xpath>
+                <xpath expr="//field[@name='probability']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='expected_revenue']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//h2" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='campaign_id']" position="replace">
+
+                </xpath>
+                <xpath expr="//notebook/page[3]" position="replace">
+                </xpath>
+                <xpath expr="//notebook/page/group" position="attributes">
+                    <attribute name="invisible">type == 'lead'</attribute>
+                </xpath>
+                <xpath expr="//notebook/page[2]" position="attributes">
+                    <attribute name="invisible">type == 'opportunity'</attribute>
+                </xpath>
+            </field>
+        </record>
+        <record id="oppo_list_view_inherit" model="ir.ui.view">
+            <field name="name">oppo lead View Inherit</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="/*[self::tree or self::list]/field[@name='expected_revenue']" position="replace">
+                    <field name="prices"/>
+                    <field name="areas_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                    <field name="bedroom" placeholder='Example: 4 bedrooms with 2 bathrooms'/>
+                    <field name="garden"/>
+                    <field name="parking"/>
+                    <field name="is_prioritization" invisible="1"/>
+                </xpath>
+                <xpath expr="/*[self::tree or self::list]/field[@name='campaign_id']" position="replace">
+
+                </xpath>
+
+                <xpath expr="/*[self::tree or self::list]/field[@name='contact_name']" position="replace">
+                    <field name="partner_id"/>
+                </xpath>
+                <xpath expr="/*[self::tree or self::list]/field[@name='medium_id']" position="replace">
+
+                </xpath>
+                <xpath expr="/*[self::tree or self::list]/field[@name='probability']" position="replace">
+
+                </xpath>
+                <xpath expr="/*[self::tree or self::list]/field[@name='source_id']" position="replace">
+                    <field name="source"></field>
+
+                </xpath>
+                <xpath expr="/*[self::tree or self::list]/field[@name='user_id']" position="after">
+                    <field name="write_date" string="Last Modification"/>
+                </xpath>
+
+
+            </field>
+        </record>
+        <record id="crm_case_form_view_booking" model="ir.ui.view">
+            <field name="name">crm.lead.book.inherited.crm</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_set_won_rainbowman']" position="before">
+                    <button string="Create Booking" name="action_booking_new" type="object" class="btn btn-success"
+                            title="Create new booking"
+                            invisible="is_last"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm_case_form_view_oppor" model="ir.ui.view">
+            <field name="name">crm.lead.oppor.inherited.crm</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='action_schedule_meeting']" position="before">
+                    <button class="oe_stat_button" type="object"
+                            name="action_prioritization_booking" icon="fa-pencil-square-o"
+                            invisible="type == 'lead' or booking_priority_count &lt; 0">
+                        <field name="booking_priority_count" widget="statinfo" string="Prioritization Bookings"/>
+                    </button>
+                    <button class="oe_stat_button" type="object"
+                            name="action_view_sale_contracts" icon="fa-file-text-o"
+                            invisible="sale_contract_count == 0">
+                        <field name="sale_contract_count" widget="statinfo" string="Contracts"/>
+                    </button>
+                    <button class="oe_stat_button" type="object"
+                            name="action_view_lead_property" icon="fa-home"
+                            invisible="sale_property_count == 0">
+                        <field name="sale_property_count" widget="statinfo" string="Properties"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_crm_case_my_activities_filter_approvel" model="ir.ui.view">
+            <field name="name">crm.lead.search.myactivities</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.view_crm_case_opportunities_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='salesperson']" position="before">
+                    <field name="prices"/>
+                    <field name="bedroom"/>
+                    <field name="prices"/>
+                    <field name="areas_id"/>
+                    <filter string="Has Prioritization Number" name="is_prioritization_number" context="{'group_by':'is_prioritization_number'}"/>
+                    <filter string="Has File Number" name="is_file_number" context="{'group_by':'is_file_number'}"/>
+                    <filter string="Handover Date" name="Valid Until" context="{'group_by':'valid_until'}"/>
+                    <filter string="Budget" name="budget" context="{'group_by':'prices'}"/>
+                    <filter string="Has garden" name="prices" context="{'group_by':'garden'}"/>
+                    <filter string="Has Parking" name="parking" context="{'group_by':'parking'}"/>
+                    <filter string="Location of Interest" name="areas_id" context="{'group_by':'areas_id'}"/>
+                    <filter string="Bedrooms" name="bedroom" context="{'group_by':'bedroom'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm.crm_lead_action_pipeline" model="ir.actions.act_window">
+            <field name="name">Pipeline</field>
+            <field name="res_model">crm.lead</field>
+            <field name="view_mode">kanban,list,form,graph,pivot</field>
+            <field name="domain">[('type','=','opportunity')]</field>
+            <field name="context">{
+                'default_type': 'opportunity',
+                'search_default_assigned_to_me': 1
+                }
+            </field>
+            <field name="search_view_id" ref="crm.view_crm_case_opportunities_filter"/>
+        </record>
+
+        <record id="crm.crm_lead_action_pipeline_view_kanban" model="ir.actions.act_window.view">
+            <field name="sequence" eval="2"/>
+            <field name="view_id" ref="crm.crm_case_kanban_view_leads"/>
+            <field name="view_mode">kanban</field>
+            <field name="act_window_id" ref="crm.crm_lead_action_pipeline"/>
+        </record>
+        
+        <record id="action_appartment_type" model="ir.actions.act_window">
+            <field name="name">Appartment Type</field>
+            <field name="res_model">appart.type</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">list,form</field>
+        </record>
+
+         <menuitem id="appartment_type" parent="crm.crm_menu_config"
+                  name="Appartment Type" action="action_appartment_type"
+                  groups="base.group_system" sequence="2"/>
+    </data>
+</odoo>

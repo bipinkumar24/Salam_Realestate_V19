@@ -1,0 +1,298 @@
+$dashboard-bg : #ffffff !default;
+
+.o_action_manager {
+    overflow: auto !important;
+}
+
+.tk_rental_dash {
+    background: $dashboard-bg !important;
+
+    .tk-charts {
+        width: 100%;
+        height: 90vh;
+    }
+
+    .tk-os-chart {
+        width: 100%;
+        height: 50vh;
+    }
+
+    .tk-property-type-chart {
+        min-height: 360px;
+        padding: 12px 8px 8px;
+    }
+
+    .tk-property-type-plot {
+        display: flex;
+        gap: 16px;
+        min-height: 320px;
+    }
+
+    .tk-property-type-grid {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-width: 42px;
+        font-size: 12px;
+        color: #64748b;
+        padding: 4px 0 24px;
+    }
+
+    .tk-property-type-columns {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-around;
+        gap: 20px;
+        flex: 1;
+        min-height: 320px;
+        padding: 8px 8px 0;
+        border-left: 1px solid #e2e8f0;
+        border-bottom: 1px solid #e2e8f0;
+        background-image: linear-gradient(to top, transparent 19.5%, #eef2f7 20%, transparent 20.5%, transparent 39.5%, #eef2f7 40%, transparent 40.5%, transparent 59.5%, #eef2f7 60%, transparent 60.5%, transparent 79.5%, #eef2f7 80%, transparent 80.5%);
+    }
+
+    .tk-property-type-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        flex: 1;
+        max-width: 120px;
+        min-width: 90px;
+        height: 100%;
+    }
+
+    .tk-property-type-bar-wrap {
+        position: relative;
+        width: 58px;
+        height: 260px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+    }
+
+    .tk-property-type-bar {
+        width: 58px;
+        border-radius: 12px 12px 0 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #1e293b;
+        font-weight: 700;
+        transition: height 0.25s ease;
+        min-height: 4px;
+    }
+
+    .tk-property-type-bar-value {
+        font-size: 14px;
+    }
+
+    .tk-property-type-dot {
+        position: absolute;
+        bottom: -6px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #ffffff;
+        border: 2px solid #374151;
+    }
+
+    .tk-property-type-pill {
+        position: absolute;
+        top: -2px;
+        padding: 4px 8px;
+        border-radius: 8px;
+        color: #1e293b;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .tk-property-type-axis-label {
+        margin-top: 16px;
+        color: #334155;
+        font-size: 14px;
+        font-weight: 500;
+        text-align: center;
+    }
+
+    //d6ffe9
+    //d7f2ff
+    background: $dashboard-bg !important;
+
+    .p-32 {
+        padding: 32px !important;
+    }
+
+    .purple-bg {
+        background-color: #ecf2ff !important;
+        color: #5d87ff !important;
+    }
+
+    .warn-bg {
+        background-color: #fef5e5 !important;
+        color: #ffae1f !important;
+    }
+
+    .info-bg {
+        background-color: #e8f7ff !important;
+        color: #4abeff !important;
+    }
+
+    .danger-bg {
+        background-color: #fdede8 !important;
+        color: #fa896a !important;
+    }
+
+    .success-bg {
+        background-color: #e6fffa !important;
+        color: #17deba !important;
+    }
+
+    .active-bg {
+        background-color: #d6ffe9 !important;
+        color: #04c27a !important;
+    }
+
+    .terminate-bg {
+        background-color: #ffe9eb !important;
+        color: #fd4755 !important;
+    }
+
+    .all-bg {
+        background-color: #d7f2ff !important;
+        color: #2c9ee6 !important;
+    }
+
+    .tk-primary {
+        color: #2b3547 !important;
+        font-family: inherit;
+    }
+
+    .tk-center-primary {
+        color: #2b3547 !important;
+        font-family: inherit;
+        text-align: center;
+    }
+
+    .border-primary {
+        color: #8eafcf !important;
+    } 
+    .border-dash-primary {
+        color: #8eafcf !important;
+    }
+
+    .card {
+        border: 0 !important;
+        height:100%;
+
+        .tk-card-body {
+            text-align: center;
+
+            .tk-st-1 {
+                margin-top: 8px;
+                font-size: 15px;
+            }
+
+            .tk-st-2 {
+                font-weight: 500;
+                font-size: 22px;
+            }
+        }
+    }
+
+    .card-graph {
+        border: 0 !important;
+        .tk-card-body {
+            text-align: center;
+
+            .tk-st-1 {
+                margin-top: 8px;
+                font-size: 15px;
+            }
+
+            .tk-st-2 {
+                font-weight: 500;
+                font-size: 22px;
+            }
+        }
+    }
+
+    .card:hover {
+        transform: translateY(-5px) scale(1.005) translateZ(0);
+        box-shadow: 0 24px 36px rgba(0, 0, 0, 0.11), 0 24px 46px transparent;
+        cursor: pointer;
+    }
+}
+@media (min-width: 1200px) {
+    .rental-dash {
+        max-width: 1307px !important;
+    }
+}
+
+
+/* dashboard map  */
+.map-legend-container {
+    margin-top: 1rem;
+    text-align: center;
+}
+
+.map-legend {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.legend-color {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Status colors */
+.legend-color.available {
+    background-color: #4CAF50;
+}
+
+.legend-color.booked {
+    background-color: #FFC107;
+}
+
+.legend-color.on-lease {
+    background-color: #F44336;
+}
+
+.legend-color.sale {
+    background-color: #9C27B0;
+}
+
+.legend-color.sold {
+    background-color: #FF9800;
+}
+.legend-color.draft {
+    background-color: #0f0f0f;
+}
+
+.bg-gray{
+    border-radius: 10px;
+    border: 1px solid #f9f6f6;
+    height: 100%;
+}
+.custom-card, .custom-rent-card, .custom-sale-card {
+    height: 100%;
+    width: 100% !important;
+}
+
+.tk-hr-border {
+    border-color: #cecece;
+    margin-top: 0;
+}

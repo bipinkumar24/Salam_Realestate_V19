@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="rental_management.RentalPropertyDashboard">
+        <div class="o_rental_property_dashboard container-fluid d-flex flex-column py-4 border-bottom bg-view overflow-auto tk-dash" t-on-click="onDashboardClick">
+            <div class="d-flex flex-column gap-3">
+                <div class="row g-2">
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <div class="bg-gray p-3 d-flex flex-column">
+                            <div class="">
+                                <h5 class="tk-primary">All Statistics</h5>
+                                <hr class="tk-hr-border" />
+                            </div>
+                            <div class="d-flex justify-content-between gap-2 w-100">
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-card bg-total prop-cursor w-100 o_property_status_action"
+                                        data-status="all" title="Total Properties">
+                                        <h4 class="bg-total mb-1">
+                                            <t t-out="state.values['total_prop_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Total</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                                        <div class=" property_type_box bg-land prop-cursor o_property_status_action o_property_type_status_action" title="Land"
+                                            data-status="all" data-type="land">
+                                            <t t-out="state.values['total_land_prop_count']" />
+                                        </div>
+                                        <div class=" property_type_box bg-residential prop-cursor o_property_type_status_action" title="Residential"
+                                            data-status="all" data-type="residential">
+                                            <t t-out="state.values['total_residential_prop_count']" />
+                                        </div>
+                                        <div class=" property_type_box bg-commercial prop-cursor o_property_type_status_action" title="Commercial"
+                                            data-status="all" data-type="commercial">
+                                            <t t-out="state.values['total_commercial_prop_count']" />
+                                        </div>
+                                        <div class=" property_type_box bg-industrial prop-cursor o_property_type_status_action" title="Industrial"
+                                            data-status="all" data-type="industrial">
+                                            <t t-out="state.values['total_industrial_prop_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-card bg-draft prop-cursor w-100 o_property_status_action"
+                                        data-status="draft" title="Draft Properties">
+                                        <h4 class="bg-draft mb-1">
+                                            <t t-out="state.values['draft_prop_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Draft</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2" title="Draft Properties">
+                                        <div class="property_type_box bg-land prop-cursor o_property_type_status_action" title="Land"
+                                            data-status="draft" data-type="land">
+                                            <t t-out="state.values['draft_land_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-residential prop-cursor o_property_type_status_action" title="Residential"
+                                            data-status="draft" data-type="residential">
+                                            <t t-out="state.values['draft_residential_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-commercial prop-cursor o_property_type_status_action" title="Commercial"
+                                            data-status="draft" data-type="commercial">
+                                            <t t-out="state.values['draft_commercial_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-industrial prop-cursor o_property_type_status_action" title="Industrial"
+                                            data-status="draft" data-type="industrial">
+                                            <t t-out="state.values['draft_industrial_prop_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-card bg-available prop-cursor w-100 o_property_status_action"
+                                        data-status="available" title="Available Properties">
+                                        <h4 class="bg-available mb-1">
+                                            <t t-out="state.values['available_prop_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Available</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2" title="Available">
+                                        <div class="property_type_box bg-land prop-cursor o_property_type_status_action" title="Land"
+                                            data-status="available" data-type="land">
+                                            <t t-out="state.values['available_land_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-residential prop-cursor o_property_type_status_action" title="Residential"
+                                            data-status="available" data-type="residential">
+                                            <t t-out="state.values['available_residential_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-commercial prop-cursor o_property_type_status_action" title="Commercial"
+                                            data-status="available" data-type="commercial">
+                                            <t t-out="state.values['available_commercial_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-industrial prop-cursor o_property_type_status_action" title="Industrial"
+                                            data-status="available" data-type="industrial">
+                                            <t t-out="state.values['available_industrial_prop_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-6 col-xl-4">
+                        <div class="bg-gray p-3 d-flex flex-column">
+                            <div class="">
+                                <h5 class="tk-primary">Rent Statistics</h5>
+                                <hr class="tk-hr-border" />
+                            </div>
+                            <div class="d-flex justify-content-between gap-2 w-100">
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-card bg-sale prop-cursor w-100 o_property_for_rent_action"
+                                        data-status="all">
+                                        <h4 class="bg-sale mb-1">
+                                            <t t-out="state.values['total_for_rent_count']" />
+                                        </h4>
+                                        <div class="fw-bold">For Rent</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                                        <div class="property_type_box bg-land prop-cursor o_property_for_rent_action" title="Land"
+                                            data-status="land">
+                                            <t t-out="state.values['total_for_rent_land_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-residential prop-cursor o_property_for_rent_action" title="Residential"
+                                            data-status="residential">
+                                            <t t-out="state.values['total_for_rent_residential_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-commercial prop-cursor o_property_for_rent_action" title="Commercial"
+                                            data-status="commercial">
+                                            <t t-out="state.values['total_for_rent_commercial_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-industrial prop-cursor o_property_for_rent_action" title="Industrial"
+                                            data-status="industrial">
+                                            <t t-out="state.values['total_for_rent_industrial_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-card bg-available prop-cursor w-100 o_property_status_action"
+                                        data-status="on_lease">
+                                        <h4 class="bg-available mb-1">
+                                            <t t-out="state.values['on_lease_prop_count']" />
+                                        </h4>
+                                        <div class="fw-bold">On Rent</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                                        <div class="property_type_box bg-land prop-cursor o_property_type_status_action" title="Land"
+                                            data-status="on_lease" data-type="land">
+                                            <t t-out="state.values['on_lease_land_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-residential prop-cursor o_property_type_status_action" title="Residential"
+                                            data-status="on_lease" data-type="residential">
+                                            <t t-out="state.values['on_lease_residential_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-commercial prop-cursor o_property_type_status_action" title="Commercial"
+                                            data-status="on_lease" data-type="commercial">
+                                            <t t-out="state.values['on_lease_commercial_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-industrial prop-cursor o_property_type_status_action" title="Industrial"
+                                            data-status="on_lease" data-type="industrial">
+                                            <t t-out="state.values['on_lease_industrial_prop_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-12 col-xl-4">
+                        <div class="bg-gray p-3 d-flex flex-column">
+                            <div class="">
+                                <h5 class="tk-primary">Sale Statistics</h5>
+                                <hr class="tk-hr-border" />
+                            </div>
+                            <div class="d-flex justify-content-between gap-2 w-100">
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center bg-sale custom-card prop-cursor w-100 o_property_status_action"
+                                        data-status="sale">
+                                        <h4 class="bg-sale mb-1">
+                                            <t t-out="state.values['sale_prop_count']" />
+                                        </h4>
+                                        <div class="fw-bold">For Sale</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                                        <div class="property_type_box bg-land prop-cursor o_property_type_status_action" title="Land"
+                                            data-status="sale" data-type="land">
+                                            <t t-out="state.values['sale_land_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-residential prop-cursor o_property_type_status_action" title="Residential"
+                                            data-status="sale" data-type="residential">
+                                            <t t-out="state.values['sale_residential_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-commercial prop-cursor o_property_type_status_action" title="Commercial"
+                                            data-status="sale" data-type="commercial">
+                                            <t t-out="state.values['sale_commercial_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-industrial prop-cursor o_property_type_status_action" title="Industrial"
+                                            data-status="sale" data-type="industrial">
+                                            <t t-out="state.values['sale_industrial_prop_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-card bg-booked prop-cursor w-100 o_property_status_action"
+                                        data-status="booked">
+                                        <h4 class="bg-booked mb-1">
+                                            <t t-out="state.values['booked_prop_count']" />
+                                        </h4>
+                                        <div class="fw-bold">Booked</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                                        <div class="property_type_box bg-land prop-cursor o_property_type_status_action" title="Land"
+                                            data-status="booked" data-type="land">
+                                            <t t-out="state.values['booked_land_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-residential prop-cursor o_property_type_status_action" title="Residential"
+                                            data-status="booked" data-type="residential">
+                                            <t t-out="state.values['booked_residential_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-commercial prop-cursor o_property_type_status_action" title="Commercial"
+                                            data-status="booked" data-type="commercial">
+                                            <t t-out="state.values['booked_commercial_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-industrial prop-cursor o_property_type_status_action" title="Industrial"
+                                            data-status="booked" data-type="industrial">
+                                            <t t-out="state.values['booked_industrial_prop_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-column gap-2 w-100">
+                                    <div class="card py-4 px-2 text-center custom-card bg-sold prop-cursor w-100 o_property_status_action"
+                                        data-status="sold">
+                                        <h4 class="bg-sold mb-1">
+                                            <t t-out="state.values['sold_prop_count']" />
+                                        </h4>
+                                        <div class="fw-bold bg-sold">Sold</div>
+                                    </div>
+                                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                                        <div class="property_type_box bg-land prop-cursor o_property_type_status_action" title="Land"
+                                            data-status="sold" data-type="land">
+                                            <t t-out="state.values['sold_land_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-residential prop-cursor o_property_type_status_action" title="Residential"
+                                            data-status="sold" data-type="residential">
+                                            <t t-out="state.values['sold_residential_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-commercial prop-cursor o_property_type_status_action" title="Commercial"
+                                            data-status="sold" data-type="commercial">
+                                            <t t-out="state.values['sold_commercial_prop_count']" />
+                                        </div>
+                                        <div class="property_type_box bg-industrial prop-cursor o_property_type_status_action" title="Industrial"
+                                            data-status="sold" data-type="industrial">
+                                            <t t-out="state.values['sold_industrial_prop_count']" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Legend Row -->
+            <div class="d-flex">
+                <div class="d-flex justify-content-center w-100">
+                    <div class="d-flex m-1 align-items-center">
+                        <div class="legend_box bg-land"></div>
+                        <span class="px-2 text-center">Land</span>
+                    </div>
+                    <div class="d-flex m-1 align-items-center">
+                        <div class="legend_box bg-residential"></div>
+                        <span class="px-2">Residential</span>
+                    </div>
+                    <div class="d-flex m-1 align-items-center">
+                        <div class="legend_box bg-commercial"></div>
+                        <span class="px-2">Commercial</span>
+                    </div>
+                    <div class="d-flex m-1 align-items-center">
+                        <div class="legend_box bg-industrial"></div>
+                        <span class="px-2">Industrial</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

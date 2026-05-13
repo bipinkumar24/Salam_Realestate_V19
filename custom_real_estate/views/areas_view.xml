@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="crm_area_view" model="ir.ui.view">
+            <field name="name">areas view</field>
+            <field name="model">area.areas</field>
+            <field name="arch" type="xml">
+                <form string="Voucher">
+                    <sheet>
+                        <div>
+                            <group>
+                                <field name="name"/>
+                            </group>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="areas_tree_view_crm">
+            <field name="name">areas_tree_view_crm</field>
+            <field name="model">area.areas</field>
+            <field name="arch" type="xml">
+                <list string="Interested Areas">
+                    <field name="name"/>
+                </list>
+            </field>
+        </record>
+        <record id="action_areas_crm" model="ir.actions.act_window">
+            <field name="name">areas</field>
+            <field name="res_model">area.areas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="areas" parent="crm.crm_menu_config"
+                  name="Interested Areas" action="action_areas_crm"
+                  groups="base.group_system" sequence="2"/>
+    </data>
+</odoo>

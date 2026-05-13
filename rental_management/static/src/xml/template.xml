@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="rental_management.RentalDashboard">
+        <section class="section tk_rental_dash tk-dash" t-on-click="onDashboardClick">
+            <div class="container rental-dash">
+                <div class="row">
+                    <div class="col-md-12 mt32">
+                        <h4 class="tk-primary">Statistics</h4>
+                        <hr class="border-dash-primary"/>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 view-region mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/treasure-map.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Regions </h4>
+                                        <h6 class="tk-st-2 info-bg" id="region_count"><t t-out="state.stats ? state.stats.region_count : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 view-project mb-4 px-4">
+                                <div class="card warn-bg p-32">
+                                    <div class="card-body warn-bg tk-card-body">
+                                        <img alt="users" width="40" src="/rental_management/static/src/img/city.svg" />
+                                        <h4 class="tk-st-1 warn-bg"> Projects </h4>
+                                        <h6 class="tk-st-2 warn-bg" id="project_count"><t t-out="state.stats ? state.stats.project_count : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 view-subproject mb-4 px-4">
+                                <div class="card purple-bg p-32">
+                                    <div class="card-body purple-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/office.svg" />
+                                        <h4 class="tk-st-1 purple-bg"> Sub Projects </h4>
+                                        <h6 class="tk-st-2 purple-bg" id="subproject_count"><t t-out="state.stats ? state.stats.subproject_count : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 total-property mb-4 px-4">
+                                <div class="card success-bg p-32">
+                                    <div class="card-body success-bg tk-card-body">
+                                        <img alt="users" width="40" src="/rental_management/static/src/img/town.svg" />
+                                        <h4 class="tk-st-1 success-bg"> Properties </h4>
+                                        <h6 class="tk-st-2 success-bg" id="total_property"><t t-out="state.stats ? state.stats.total_property : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 view-customer mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/people.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Customers </h4>
+                                        <h6 class="tk-st-2 info-bg" id="customer_count"><t t-out="state.stats ? state.stats.customer_count : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 view-landlord mb-4 px-4">
+                                <div class="card danger-bg p-32">
+                                    <div class="card-body danger-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/lender.svg" />
+                                        <h4 class="tk-st-1 danger-bg"> Landlords </h4>
+                                        <h6 class="tk-st-2 danger-bg" id="landlord_count"><t t-out="state.stats ? state.stats.landlord_count : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5 col-md-12 col-sm-12 align-items-stretch px-0">
+                        <div class="col-md-12 mt32">
+                            <h4 class="tk-primary">Property Statics</h4>
+                            <hr class="border-dash-primary"/>
+                        </div>
+                        <div class="row mx-0">
+                            <div class="col-1 col-sm-12 col-md-6 avail-property mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/residential.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Available</h4>
+                                        <h6 class="tk-st-2 info-bg" id="avail_property"><t t-out="state.stats ? state.stats.avail_property : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-12 col-md-6 lease-property mb-4 px-4">
+                                <div class="card warn-bg p-32">
+                                    <div class="card-body warn-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/rental.svg" />
+                                        <h4 class="tk-st-1 warn-bg"> On Lease </h4>
+                                        <h6 class="tk-st-2 warn-bg" id="lease_property"><t t-out="state.stats ? state.stats.lease_property : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-12 col-md-6 sale-property mb-4 px-4">
+                                <div class="card danger-bg p-32">
+                                    <div class="card-body danger-bg tk-card-body">
+                                        <img alt="users" width="40" class="rounded-circle"
+                                            src="/rental_management/static/src/img/sale.svg" />
+                                        <h4 class="tk-st-1 danger-bg"> On Sale </h4>
+                                        <h6 class="tk-st-2 danger-bg" id="sale_property"><t t-out="state.stats ? state.stats.sale_property : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-12 col-md-6 sold-property mb-4 px-4">
+                                <div class="card success-bg p-32">
+                                    <div class="card-body success-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/real-estate.svg" />
+                                        <h4 class="tk-st-1 success-bg"> Sold </h4>
+                                        <h6 class="tk-st-2 success-bg" id="sold_property"><t t-out="state.stats ? state.stats.sold_property : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-md-12 col-sm-12 px-0">
+                        <div class="col-md-12 mt32">
+                            <h4 class="tk-primary">Property Type</h4>
+                            <hr class="border-dash-primary"/>
+                        </div>
+                        <div class="tk-property-type-chart">
+                            <div class="tk-property-type-plot">
+                                <div class="tk-property-type-grid">
+                                    <span>1.0</span>
+                                    <span>0.8</span>
+                                    <span>0.6</span>
+                                    <span>0.4</span>
+                                    <span>0.2</span>
+                                    <span>0.0</span>
+                                </div>
+                                <div class="tk-property-type-columns">
+                                    <t t-foreach="getPropertyTypeBars()" t-as="bar" t-key="bar.key">
+                                        <div class="tk-property-type-column">
+                                            <div class="tk-property-type-bar-wrap">
+                                                <div class="tk-property-type-pill" t-att-style="'background:' + bar.color + ';'">
+                                                    <t t-out="bar.label"/>
+                                                </div>
+                                                <div class="tk-property-type-bar" t-att-style="'height:' + bar.height + '; background:' + bar.color + ';'">
+                                                    <span class="tk-property-type-bar-value"><t t-out="bar.value"/></span>
+                                                </div>
+                                                <div class="tk-property-type-dot"/>
+                                            </div>
+                                            <div class="tk-property-type-axis-label"><t t-out="bar.label"/></div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mt32">
+                        <h4 class="tk-primary">Rent Contract Statics</h4>
+                        <hr class="border-dash-primary"/>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 draft-contract mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/contract_d.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Draft </h4>
+                                        <h6 class="tk-st-2 info-bg" id="draft_contract"><t t-out="state.stats ? state.stats.draft_contract : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 running-contract mb-4 px-4">
+                                <div class="card success-bg p-32">
+                                    <div class="card-body success-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/running_c.svg" />
+                                        <h4 class="tk-st-1 success-bg"> Running</h4>
+                                        <h6 class="tk-st-2 success-bg" id="running_contract"><t t-out="state.stats ? state.stats.running_contract : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 expire-contract mb-4 px-4">
+                                <div class="card danger-bg p-32">
+                                    <div class="card-body danger-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/warning.svg" />
+                                        <h4 class="tk-st-1 danger-bg"> Expire</h4>
+                                        <h6 class="tk-st-2 danger-bg" id="expire_contract"><t t-out="state.stats ? state.stats.expire_contract : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 extend-contract mb-4 px-4">
+                                <div class="card purple-bg p-32">
+                                    <div class="card-body purple-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/renewal_ec.svg" />
+                                        <h4 class="tk-st-1 purple-bg"> Extended</h4>
+                                        <h6 class="tk-st-2 purple-bg" id="extedn_contract"><t t-out="state.stats ? state.stats.extend_contract : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 close-contract mb-4 px-4">
+                                <div class="card warn-bg p-32">
+                                    <div class="card-body warn-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/contract_com.svg" />
+                                        <h4 class="tk-st-1 warn-bg"> Close</h4>
+                                        <h6 class="tk-st-2 warn-bg" id="close_contract"><t t-out="state.stats ? state.stats.close_contract : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-4 col-xl-2 pending-invoice mb-4 px-4">
+                                <div class="card danger-bg p-32">
+                                    <div class="card-body danger-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/pending.svg" />
+                                        <h4 class="tk-st-1 danger-bg"> Invoice Due </h4>
+                                        <h6 class="tk-st-2 danger-bg" id="pending_invoice"><t t-out="state.stats ? state.stats.pending_invoice : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt32">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-4 rent-total mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body align-content-center">
+                                        <img alt="users" width="40" src="/rental_management/static/src/img/cash.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Total Rent Amount </h4>
+                                        <h6 class="tk-st-2 info-bg" id="rent_total"><t t-out="state.stats ? state.stats.rent_total : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-2 mb-4 px-4">
+                                <div class="tk-center-primary">Rent Invoice Due / Paid</div>
+                                <div class="card-graph p-16" id="tenancy_due_paid"></div>
+                            </div>
+                            <div class="col-sm-12 col-md-12 col-lg-6 mb-4 px-4">
+                                <div class="tk-center-primary">Rent Contract Top Broker</div>
+                                <div class="card-graph p-16" id="top_brokers"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mt32">
+                        <h4 class="tk-primary">Sale Contract Statics</h4>
+                        <hr class="border-dash-primary"/>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-1 col-sm-6 col-md-3 col-xl-3 booked-property-sale mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/online-booking.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Booked</h4>
+                                        <h6 class="tk-st-2 info-bg" id="booked"><t t-out="state.stats ? state.stats.booked : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-3 col-xl-3 sale-sold mb-4 px-4">
+                                <div class="card success-bg p-32">
+                                    <div class="card-body success-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/p_sold.svg" />
+                                        <h4 class="tk-st-1 success-bg"> Sold </h4>
+                                        <h6 class="tk-st-2 success-bg" id="sale_sold"><t t-out="state.stats ? state.stats.sale_sold : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-3 col-xl-3 refund-sold mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/refund.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Refund</h4>
+                                        <h6 class="tk-st-2 info-bg" id="refund"><t t-out="state.stats ? state.stats.refund : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1 col-sm-6 col-md-3 col-xl-3 pending-invoice-sale mb-4 px-4">
+                                <div class="card warn-bg p-32">
+                                    <div class="card-body warn-bg tk-card-body">
+                                        <img alt="users" width="40"
+                                            src="/rental_management/static/src/img/pending.svg" />
+                                        <h4 class="tk-st-1 warn-bg"> Invoice Due </h4>
+                                        <h6 class="tk-st-2 warn-bg" id="pending_invoice_sale"><t t-out="state.stats ? state.stats.pending_invoice_sale : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 mt32 mb32">
+                        <div class="row">
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3 sold-total mb-4 px-4">
+                                <div class="card info-bg p-32">
+                                    <div class="card-body info-bg tk-card-body">
+                                        <img alt="users" width="40" src="/rental_management/static/src/img/cash.svg" />
+                                        <h4 class="tk-st-1 info-bg"> Total Sold Amount </h4>
+                                        <h6 class="tk-st-2 info-bg" id="sold_total"><t t-out="state.stats ? state.stats.sold_total : 0"/></h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-lg-3 mb-4 px-4">
+                                <div class="tk-center-primary">Sale Invoice Due / Paid</div>
+                                <div class="card-graph p-16" id="sold_due_paid"></div>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 mb-4 px-4">
+                                <div class="tk-center-primary">Sold Contract Top Broker</div>
+                                <div class="card-graph p-16" id="top_brokers_sale"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </t>
+</templates>
