@@ -24,8 +24,8 @@ class Account(models.Model):
     amount_paid = fields.Float(string="amount_paid")
 
     def _get_default_department(self):
-        user = self.env.user
-        return user.department_id.id if user.department_id else False
+        user = self.env.user.employee_id
+        return user.department_id.id if user and user.department_id else False
 
     def _validate_required_approval_fields(self, vals=None):
         vals = vals or {}
