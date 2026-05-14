@@ -69,7 +69,6 @@ class BoqProject(models.Model):
 
     # Linked docs
     sale_order_id = fields.Many2one('sale.order', string='Sales Order', readonly=True, copy=False)
-    purchase_order_ids = fields.Many2many('purchase.order', string='Purchase Orders', readonly=True, copy=False)
 
     notes = fields.Html()
     template_id = fields.Many2one('ai.boq.template', string='Apply Template')
@@ -136,7 +135,6 @@ class BoqProject(models.Model):
             'confidence_score': 1.0,
             'source_reference': _('From template: %s') % self.template_id.name,
         }) for tl in self.template_id.line_ids]
-        self.line_ids = existing | self.env['ai.boq.line']
         self.line_ids = [(4, l.id) for l in existing] + new_lines
 
     # ------------------------------------------------------------------ #
@@ -409,7 +407,7 @@ class BoqProject(models.Model):
                 'name': '[%s] %s' % (dict(line._fields['category'].selection).get(line.category, ''), line.description),
                 'product_id': line.product_id.id if line.product_id else False,
                 'product_uom_qty': line.quantity,
-                'product_uom_id': line.uom_id.id if line.uom_id else False,
+                'product_uom': line.uom_id.id if line.uom_id else False,
                 'price_unit': line.unit_price,
             }))
         if not order_lines:
@@ -420,8 +418,8 @@ class BoqProject(models.Model):
         for ol in order_lines:
             if not ol[2].get('product_id'):
                 ol[2]['product_id'] = generic.id
-                if not ol[2].get('product_uom_id'):
-                    ol[2]['product_uom_id'] = generic.uom_id.id
+                if not ol[2].get('product_uom'):
+                    ol[2]['product_uom'] = generic.uom_id.id
 
         so = SO.create({
             'partner_id': self.partner_id.id,

@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//block[1]" position="before">
-                <app data-string="BOQ AI Reader" string="BOQ AI Reader" name="ai_boq_reader">
+                <app data-string="BOQ AI Reader" string="BOQ AI Reader" name="ai_boq_reader_v19">
                     <block title="AI Provider" name="ai_provider">
                         <setting>
                             <field name="ai_boq_provider"/>
@@ -43,8 +43,8 @@
         <field name="name">BOQ AI Settings</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
-        <field name="target">inline</field>
-        <field name="context">{'module': 'ai_boq_reader'}</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'ai_boq_reader_v19'}</field>
     </record>
 
 </odoo>

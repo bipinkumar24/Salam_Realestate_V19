@@ -3,7 +3,7 @@
 
     <menuitem id="menu_boq_root"
               name="BOQ AI"
-              web_icon="ai_boq_reader,static/description/icon.png"
+              web_icon="ai_boq_reader_v19,static/description/icon.png"
               sequence="80"/>
 
     <menuitem id="menu_boq_projects"

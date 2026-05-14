@@ -31,7 +31,7 @@
                            t-as="cat">
                             <t t-set="cat_lines" t-value="doc.line_ids.filtered(lambda l, c=cat: l.category == c)"/>
                             <t t-if="cat_lines">
-                                <h4 t-esc="dict(doc.line_ids._fields['category'].selection).get(cat)"/>
+                                <h4 t-out="dict(doc.line_ids._fields['category'].selection).get(cat)"/>
                                 <table class="table table-sm o_main_table">
                                     <thead>
                                         <tr>
@@ -46,7 +46,7 @@
                                     </thead>
                                     <tbody>
                                         <tr t-foreach="cat_lines" t-as="line">
-                                            <td t-esc="line_index + 1"/>
+                                            <td t-out="line_index + 1"/>
                                             <td><span t-field="line.description"/></td>
                                             <td class="text-end"><span t-field="line.quantity"/></td>
                                             <td><span t-field="line.uom_id"/></td>

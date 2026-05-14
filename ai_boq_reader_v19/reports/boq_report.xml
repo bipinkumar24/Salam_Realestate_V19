@@ -5,8 +5,7 @@
         <field name="name">BOQ Document</field>
         <field name="model">ai.boq.project</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">ai_boq_reader.report_boq_document</field>
-        <field name="report_file">ai_boq_reader.report_boq_document</field>
+        <field name="report_name">ai_boq_reader_v19.report_boq_document</field>
         <field name="binding_model_id" ref="model_ai_boq_project"/>
         <field name="binding_type">report</field>
         <field name="print_report_name">'BOQ - %s' % object.name</field>
