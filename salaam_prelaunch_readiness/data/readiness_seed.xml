@@ -1,0 +1,808 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- ============================================================== -->
+    <!-- Phase-1 Lot-1 Pre-Launch Readiness Tracker  (110 items)        -->
+    <!-- Auto-generated from Salaam_City_PreLaunch_Tracker.xlsx          -->
+    <!-- IAFAO  ·  Salaam Real Estate  ·  CONFIDENTIAL                   -->
+    <!-- ============================================================== -->
+
+    <!-- Header tracker record -->
+    <record id="readiness_phase1_lot1" model="salaam.readiness.tracker">
+        <field name="name">Phase-1 Lot-1 Pre-Launch Readiness</field>
+        <field name="phase_label">Phase 1</field>
+        <field name="lot_label">Lot 1</field>
+        <field name="state">draft</field>
+    </record>
+
+    <!-- 14 categories -->
+    <record id="readiness_cat_a" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">A</field>
+        <field name="name">Permits &amp; Regulatory</field>
+        <field name="gate_type">hard</field>
+        <field name="sequence">1</field>
+    </record>
+    <record id="readiness_cat_b" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">B</field>
+        <field name="name">Utilities Agreements</field>
+        <field name="gate_type">hard</field>
+        <field name="sequence">2</field>
+    </record>
+    <record id="readiness_cat_c" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">C</field>
+        <field name="name">Land &amp; Site Readiness</field>
+        <field name="gate_type">hard</field>
+        <field name="sequence">3</field>
+    </record>
+    <record id="readiness_cat_d" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">D</field>
+        <field name="name">Design &amp; Engineering Release</field>
+        <field name="gate_type">hard</field>
+        <field name="sequence">4</field>
+    </record>
+    <record id="readiness_cat_e" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">E</field>
+        <field name="name">Contracting &amp; Procurement</field>
+        <field name="gate_type">parallel</field>
+        <field name="sequence">5</field>
+    </record>
+    <record id="readiness_cat_f" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">F</field>
+        <field name="name">Financial Readiness</field>
+        <field name="gate_type">hard</field>
+        <field name="sequence">6</field>
+    </record>
+    <record id="readiness_cat_g" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">G</field>
+        <field name="name">Sharia &amp; Legal</field>
+        <field name="gate_type">hard</field>
+        <field name="sequence">7</field>
+    </record>
+    <record id="readiness_cat_h" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">H</field>
+        <field name="name">Sales &amp; CRM Readiness</field>
+        <field name="gate_type">parallel</field>
+        <field name="sequence">8</field>
+    </record>
+    <record id="readiness_cat_i" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">I</field>
+        <field name="name">HR &amp; Key Staffing</field>
+        <field name="gate_type">parallel</field>
+        <field name="sequence">9</field>
+    </record>
+    <record id="readiness_cat_j" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">J</field>
+        <field name="name">HSE &amp; Quality</field>
+        <field name="gate_type">parallel</field>
+        <field name="sequence">10</field>
+    </record>
+    <record id="readiness_cat_k" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">K</field>
+        <field name="name">Risk, Insurance &amp; Bonds</field>
+        <field name="gate_type">parallel</field>
+        <field name="sequence">11</field>
+    </record>
+    <record id="readiness_cat_l" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">L</field>
+        <field name="name">IT, Platform &amp; Document Control</field>
+        <field name="gate_type">parallel</field>
+        <field name="sequence">12</field>
+    </record>
+    <record id="readiness_cat_m" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">M</field>
+        <field name="name">Governance &amp; Charter</field>
+        <field name="gate_type">hard</field>
+        <field name="sequence">13</field>
+    </record>
+    <record id="readiness_cat_n" model="salaam.readiness.category">
+        <field name="tracker_id" ref="readiness_phase1_lot1"/>
+        <field name="code">N</field>
+        <field name="name">Site Mobilization</field>
+        <field name="gate_type">mob</field>
+        <field name="sequence">14</field>
+    </record>
+
+    <!-- 110 readiness items -->
+
+    <!-- A. Permits & Regulatory (9 items) -->
+    <record id="readiness_item_a_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">1</field>
+        <field name="name">Land use approval / zoning permits — Zone 2 &amp; 6</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">2</field>
+        <field name="name">Master plan approval (Phase-1 layout)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">3</field>
+        <field name="name">Building permits — residential units (min. Batch-1 = 200 units)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">4</field>
+        <field name="name">Building permits — infrastructure (roads, water, sewage, storm)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">5</field>
+        <field name="name">EIA — internal study completed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">6</field>
+        <field name="name">EIA — official approval (if required)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">7</field>
+        <field name="name">NIPA tax exemption — final approval letter</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">8</field>
+        <field name="name">LCBE Government Lab QC accreditation / MoU</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_a_09" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_a"/>
+        <field name="sequence">9</field>
+        <field name="name">Formal start notification to Authority (post-mobilization)</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- B. Utilities Agreements (6 items) -->
+    <record id="readiness_item_b_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_b"/>
+        <field name="sequence">1</field>
+        <field name="name">EDD — temporary site power</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_b_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_b"/>
+        <field name="sequence">2</field>
+        <field name="name">EDD — permanent network agreement</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_b_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_b"/>
+        <field name="sequence">3</field>
+        <field name="name">ONEAD — water connection &amp; easements</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_b_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_b"/>
+        <field name="sequence">4</field>
+        <field name="name">ONEAD — sewage connection &amp; treatment plan</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_b_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_b"/>
+        <field name="sequence">5</field>
+        <field name="name">Djibouti Telecom — fiber backbone agreement</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_b_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_b"/>
+        <field name="sequence">6</field>
+        <field name="name">Stormwater discharge approval</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- C. Land & Site Readiness (7 items) -->
+    <record id="readiness_item_c_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_c"/>
+        <field name="sequence">1</field>
+        <field name="name">TF (Title File) verification per lot/block</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_c_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_c"/>
+        <field name="sequence">2</field>
+        <field name="name">Topographic survey signed off</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_c_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_c"/>
+        <field name="sequence">3</field>
+        <field name="name">Geotechnical investigation report</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_c_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_c"/>
+        <field name="sequence">4</field>
+        <field name="name">Boundary demarcation &amp; cadastral pegs verified</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_c_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_c"/>
+        <field name="sequence">5</field>
+        <field name="name">Site clearance &amp; tree-removal permit</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_c_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_c"/>
+        <field name="sequence">6</field>
+        <field name="name">Haul-route / access road agreed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_c_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_c"/>
+        <field name="sequence">7</field>
+        <field name="name">Perimeter fencing &amp; hoarding installed</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- D. Design & Engineering Release (7 items) -->
+    <record id="readiness_item_d_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_d"/>
+        <field name="sequence">1</field>
+        <field name="name">Approved master plan — Zone 2 &amp; 6</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_d_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_d"/>
+        <field name="sequence">2</field>
+        <field name="name">Architectural drawings — typical unit (RFC stamp)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_d_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_d"/>
+        <field name="sequence">3</field>
+        <field name="name">Structural calcs &amp; drawings — frame + walls</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_d_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_d"/>
+        <field name="sequence">4</field>
+        <field name="name">Infrastructure designs — roads, water, sewage, storm</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_d_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_d"/>
+        <field name="sequence">5</field>
+        <field name="name">Shop drawing register &amp; release schedule</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_d_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_d"/>
+        <field name="sequence">6</field>
+        <field name="name">BOQs by sub-package (40-unit tranches)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_d_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_d"/>
+        <field name="sequence">7</field>
+        <field name="name">Material specifications &amp; approved-products list</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- E. Contracting & Procurement (11 items) -->
+    <record id="readiness_item_e_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">1</field>
+        <field name="name">PMC engagement contract executed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">2</field>
+        <field name="name">SRE-as-GC operating model documented</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">3</field>
+        <field name="name">Subcontractor pre-qualification list closed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">4</field>
+        <field name="name">SWIFT — site responsibility / equipment agreement</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">5</field>
+        <field name="name">Buruuj Construction — support / xadhigle framework</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">6</field>
+        <field name="name">Buruuj Building Materials — concrete / blocks supply</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">7</field>
+        <field name="name">1–3 startup trade subcontracts signed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">8</field>
+        <field name="name">Standard subcontract template (10% retention, QS certification clause)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_09" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">9</field>
+        <field name="name">Long-lead procurement plan — imported water/sewage materials</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_10" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">10</field>
+        <field name="name">NIPA-exempt import documentation pack</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_e_11" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_e"/>
+        <field name="sequence">11</field>
+        <field name="name">Vendor master loaded in Odoo</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- F. Financial Readiness (9 items) -->
+    <record id="readiness_item_f_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">1</field>
+        <field name="name">Budget v3.4 — Steerco approved</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">2</field>
+        <field name="name">Mudaraba drawdown agreement executed ($5M @ 8.5%)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">3</field>
+        <field name="name">Parallel Istisna structure — Sharia Board approved</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">4</field>
+        <field name="name">Project accounts opened (USD + DJF)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">5</field>
+        <field name="name">Down-payment escrow / collection mechanism live</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">6</field>
+        <field name="name">Cash-flow model linked to construction schedule</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">7</field>
+        <field name="name">Cost-to-Complete (CTC) baseline frozen</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">8</field>
+        <field name="name">Cost code / WBS loaded in Odoo</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_f_09" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_f"/>
+        <field name="sequence">9</field>
+        <field name="name">IRR/NPV stress-tested (incl. 30% collection scenario)</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- G. Sharia & Legal (6 items) -->
+    <record id="readiness_item_g_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_g"/>
+        <field name="sequence">1</field>
+        <field name="name">Supervisory Board fatwa — Wakala back-loaded distribution</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_g_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_g"/>
+        <field name="sequence">2</field>
+        <field name="name">Supervisory Board fatwa — Murabaha structure</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_g_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_g"/>
+        <field name="sequence">3</field>
+        <field name="name">AAOIFI FAS 4/8/10 mapping signed off</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_g_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_g"/>
+        <field name="sequence">4</field>
+        <field name="name">SPA template — Infrastructure Contribution Fee ($10k/unit) embedded</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_g_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_g"/>
+        <field name="sequence">5</field>
+        <field name="name">SPA template — Sharia counsel cleared</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_g_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_g"/>
+        <field name="sequence">6</field>
+        <field name="name">Pricing schedule (Jan-2026 fixed) locked</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- H. Sales & CRM Readiness (6 items) -->
+    <record id="readiness_item_h_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_h"/>
+        <field name="sequence">1</field>
+        <field name="name">Show houses complete (Jul–Dec 2025 milestone)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_h_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_h"/>
+        <field name="sequence">2</field>
+        <field name="name">Marketing collateral approved</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_h_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_h"/>
+        <field name="sequence">3</field>
+        <field name="name">Reservation-to-collection workflow tested in salaam_reservation</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_h_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_h"/>
+        <field name="sequence">4</field>
+        <field name="name">CRM lead pipeline &amp; Five-Cs scoring live</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_h_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_h"/>
+        <field name="sequence">5</field>
+        <field name="name">Sales team trained on SPA &amp; financing options</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_h_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_h"/>
+        <field name="sequence">6</field>
+        <field name="name">Two-track architecture validated (commercial vs construction)</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- I. HR & Key Staffing (9 items) -->
+    <record id="readiness_item_i_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">1</field>
+        <field name="name">Senior Construction Projects Manager — hired/onboarded</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">2</field>
+        <field name="name">Senior QS / Contracts Manager — hired</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">3</field>
+        <field name="name">Infrastructure Engineer — hired</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">4</field>
+        <field name="name">CFO — hired</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">5</field>
+        <field name="name">Real Estate Attorney / Legal Counsel — hired</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">6</field>
+        <field name="name">Site Manager — hired</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">7</field>
+        <field name="name">HSE Officer designated</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">8</field>
+        <field name="name">Org chart approved &amp; populated</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_i_09" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_i"/>
+        <field name="sequence">9</field>
+        <field name="name">JD library complete</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- J. HSE & Quality (8 items) -->
+    <record id="readiness_item_j_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">1</field>
+        <field name="name">HSE plan &amp; policy approved</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_j_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">2</field>
+        <field name="name">Site induction pack ready</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_j_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">3</field>
+        <field name="name">PPE stock procured</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_j_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">4</field>
+        <field name="name">Emergency response plan</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_j_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">5</field>
+        <field name="name">LCBE testing protocols agreed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_j_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">6</field>
+        <field name="name">ITP/ITR templates loaded in salaam_pm_qc_office</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_j_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">7</field>
+        <field name="name">Material submittal &amp; approval workflow live</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_j_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_j"/>
+        <field name="sequence">8</field>
+        <field name="name">Concession &amp; non-conformance workflow tested</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- K. Risk, Insurance & Bonds (8 items) -->
+    <record id="readiness_item_k_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">1</field>
+        <field name="name">CAR (Contractor's All Risks) policy bound</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_k_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">2</field>
+        <field name="name">Public liability cover</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_k_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">3</field>
+        <field name="name">Workers' compensation / employer liability</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_k_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">4</field>
+        <field name="name">Marine cargo cover (imported materials)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_k_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">5</field>
+        <field name="name">Performance bonds from subcontractors</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_k_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">6</field>
+        <field name="name">Advance payment guarantees</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_k_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">7</field>
+        <field name="name">Top-10 Risk Register baselined</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_k_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_k"/>
+        <field name="sequence">8</field>
+        <field name="name">Insurance certificate register</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- L. IT, Platform & Document Control (8 items) -->
+    <record id="readiness_item_l_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">1</field>
+        <field name="name">Odoo 19 — all 31 modules deployed (Waves 0–6)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_l_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">2</field>
+        <field name="name">salaam_contractor_tier_ext cross-module ref verified in production</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_l_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">3</field>
+        <field name="name">IAFAO dashboard live (52 KPIs, 13 alerts)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_l_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">4</field>
+        <field name="name">Document numbering convention published</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_l_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">5</field>
+        <field name="name">3-tier access matrix (user/officer/manager) configured</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_l_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">6</field>
+        <field name="name">Backup &amp; DR tested</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_l_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">7</field>
+        <field name="name">Mobile site-reporting access provisioned</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_l_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_l"/>
+        <field name="sequence">8</field>
+        <field name="name">KYC middleware (watchlist + approved-list) operational</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- M. Governance & Charter (7 items) -->
+    <record id="readiness_item_m_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_m"/>
+        <field name="sequence">1</field>
+        <field name="name">Project Charter signed (Sponsor, GM, CFO, Sharia Board)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_m_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_m"/>
+        <field name="sequence">2</field>
+        <field name="name">Steering Committee constituted with TOR</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_m_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_m"/>
+        <field name="sequence">3</field>
+        <field name="name">Decision Gates calendar published (Gate 0 → Gate 3)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_m_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_m"/>
+        <field name="sequence">4</field>
+        <field name="name">Reporting cadence agreed (weekly site / monthly Steerco / quarterly Board)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_m_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_m"/>
+        <field name="sequence">5</field>
+        <field name="name">Change control workflow live</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_m_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_m"/>
+        <field name="sequence">6</field>
+        <field name="name">Communication &amp; escalation matrix</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_m_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_m"/>
+        <field name="sequence">7</field>
+        <field name="name">Delegation of Authority matrix (spend, hire, change-order limits)</field>
+        <field name="status">not_started</field>
+    </record>
+
+    <!-- N. Site Mobilization (9 items) -->
+    <record id="readiness_item_n_01" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">1</field>
+        <field name="name">Site offices — SRE, PMC, primary subs</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_02" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">2</field>
+        <field name="name">Temp utilities live (power, water, sanitation, comms)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_03" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">3</field>
+        <field name="name">Plant &amp; equipment yard set up</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_04" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">4</field>
+        <field name="name">Material laydown areas demarcated</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_05" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">5</field>
+        <field name="name">Survey instruments calibrated</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_06" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">6</field>
+        <field name="name">Concrete batching arrangement confirmed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_07" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">7</field>
+        <field name="name">First-batch material orders placed (long-lead first)</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_08" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">8</field>
+        <field name="name">Mobilization safety walk-through completed</field>
+        <field name="status">not_started</field>
+    </record>
+    <record id="readiness_item_n_09" model="salaam.readiness.item">
+        <field name="category_id" ref="readiness_cat_n"/>
+        <field name="sequence">9</field>
+        <field name="name">'Day-1' site team briefing delivered</field>
+        <field name="status">not_started</field>
+    </record>
+
+</odoo>

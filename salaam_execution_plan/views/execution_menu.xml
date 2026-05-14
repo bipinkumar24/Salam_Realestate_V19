@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_execution_plan_root"
+              name="Execution Plan"
+              parent="salaam_iafao_dashboard.menu_root_iafao"
+              sequence="20"/>
+
+    <menuitem id="menu_execution_phase"
+              name="Phases"
+              parent="menu_execution_plan_root"
+              action="action_execution_phase"
+              sequence="10"/>
+
+    <menuitem id="menu_execution_lot"
+              name="Lots"
+              parent="menu_execution_plan_root"
+              action="action_execution_lot"
+              sequence="20"/>
+
+    <menuitem id="menu_decision_gate"
+              name="Decision Gates"
+              parent="menu_execution_plan_root"
+              action="action_decision_gate"
+              sequence="30"/>
+
+</odoo>

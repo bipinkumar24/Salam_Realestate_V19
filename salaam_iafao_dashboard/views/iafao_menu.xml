@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_root_iafao"
+              name="IAFAO"
+              sequence="30"
+              web_icon="salaam_iafao_dashboard,static/description/icon.png"/>
+
+    <menuitem id="menu_iafao_dashboard"
+              name="Dashboard"
+              parent="menu_root_iafao"
+              action="action_iafao_dashboard"
+              sequence="10"/>
+
+</odoo>

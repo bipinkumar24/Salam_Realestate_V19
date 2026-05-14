@@ -1,0 +1,46 @@
+/*
+ * Salaam Pre-Launch Readiness - branded styles
+ * Navy #0F243F  ·  Teal #147878  ·  Gold #C09A55
+ */
+
+.salaam_readiness_kanban .salaam_cat_card,
+.salaam_readiness_kanban_inner .salaam_cat_card {
+    border-left: 4px solid #0F243F;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    background: #ffffff;
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.salaam_readiness_kanban .salaam_cat_card:hover {
+    box-shadow: 0 2px 8px rgba(15, 36, 63, 0.15);
+}
+
+.salaam_cat_green {
+    border-left-color: #147878 !important;
+    background: linear-gradient(to right, #f0f8f7 0%, #ffffff 30%);
+}
+
+.salaam_cat_amber {
+    border-left-color: #C09A55 !important;
+    background: linear-gradient(to right, #fdf8ef 0%, #ffffff 30%);
+}
+
+.salaam_cat_red {
+    border-left-color: #b73838 !important;
+    background: linear-gradient(to right, #fdf2f2 0%, #ffffff 30%);
+}
+
+/* Gate-type badges */
+.badge.salaam_gate_hard {
+    background-color: #0F243F !important;
+    color: #ffffff !important;
+}
+.badge.salaam_gate_parallel {
+    background-color: #147878 !important;
+    color: #ffffff !important;
+}
+.badge.salaam_gate_mob {
+    background-color: #C09A55 !important;
+    color: #ffffff !important;
+}

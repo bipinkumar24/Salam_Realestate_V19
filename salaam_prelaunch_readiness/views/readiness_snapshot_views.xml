@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Snapshot list - chronological, read-only -->
+    <record id="view_readiness_snapshot_list" model="ir.ui.view">
+        <field name="name">salaam.readiness.snapshot.list</field>
+        <field name="model">salaam.readiness.snapshot</field>
+        <field name="arch" type="xml">
+            <list string="Lock Snapshots" create="false" edit="false" delete="false"
+                  decoration-success="readiness_status == 'ready'"
+                  decoration-info="readiness_status == 'on_track'"
+                  decoration-warning="readiness_status == 'at_risk'"
+                  decoration-danger="readiness_status == 'blocked'">
+                <field name="snapshot_date"/>
+                <field name="tracker_id"/>
+                <field name="locked_by" widget="many2one_avatar_user"/>
+                <field name="overall_pct" widget="progressbar"/>
+                <field name="hard_gate_pct" widget="progressbar"/>
+                <field name="parallel_pct" widget="progressbar"/>
+                <field name="mob_pct" widget="progressbar"/>
+                <field name="readiness_status" widget="badge"/>
+                <field name="is_ready_to_mobilize" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Snapshot form - frozen view of all fields -->
+    <record id="view_readiness_snapshot_form" model="ir.ui.view">
+        <field name="name">salaam.readiness.snapshot.form</field>
+        <field name="model">salaam.readiness.snapshot</field>
+        <field name="arch" type="xml">
+            <form string="Lock Snapshot" create="false" edit="false">
+                <header>
+                    <button name="action_print_evidence_pack" type="object"
+                            string="Print Evidence Pack" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="READY"
+                            bg_color="bg-success"
+                            invisible="not is_ready_to_mobilize"/>
+                    <widget name="web_ribbon" title="BLOCKED"
+                            bg_color="bg-danger"
+                            invisible="readiness_status != 'blocked'"/>
+                    <div class="oe_title">
+                        <label for="display_name" string="Snapshot"/>
+                        <h1><field name="display_name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Lock Metadata">
+                            <field name="tracker_id" readonly="1"/>
+                            <field name="snapshot_date" readonly="1"/>
+                            <field name="locked_by" widget="many2one_avatar_user" readonly="1"/>
+                        </group>
+                        <group string="Frozen Aggregates">
+                            <field name="total_items" readonly="1"/>
+                            <field name="blocked_count" readonly="1"/>
+                            <field name="readiness_status" widget="badge" readonly="1"/>
+                            <field name="is_ready_to_mobilize" readonly="1"/>
+                        </group>
+                    </group>
+                    <separator string="Gate Percentages (frozen)"/>
+                    <group>
+                        <group>
+                            <label for="overall_pct" string="Overall"/>
+                            <div><field name="overall_pct" widget="progressbar" nolabel="1" readonly="1"/></div>
+                            <label for="hard_gate_pct" string="Hard Gate"/>
+                            <div><field name="hard_gate_pct" widget="progressbar" nolabel="1" readonly="1"/></div>
+                        </group>
+                        <group>
+                            <label for="parallel_pct" string="Parallel"/>
+                            <div><field name="parallel_pct" widget="progressbar" nolabel="1" readonly="1"/></div>
+                            <label for="mob_pct" string="Mobilization"/>
+                            <div><field name="mob_pct" widget="progressbar" nolabel="1" readonly="1"/></div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Items at Lock Time" name="lines">
+                            <field name="line_ids" readonly="1">
+                                <list create="false" edit="false" delete="false"
+                                      decoration-success="status == 'done'"
+                                      decoration-info="status == 'in_progress'"
+                                      decoration-danger="status == 'blocked'"
+                                      decoration-muted="status == 'na'">
+                                    <field name="category_code"/>
+                                    <field name="sequence"/>
+                                    <field name="name"/>
+                                    <field name="gate_type"/>
+                                    <field name="owner_login"/>
+                                    <field name="due_date"/>
+                                    <field name="status"/>
+                                    <field name="pct_complete" widget="progressbar"/>
+                                    <field name="evidence_url" widget="url"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action: top-level snapshots view -->
+    <record id="action_readiness_snapshot" model="ir.actions.act_window">
+        <field name="name">Lock Snapshots</field>
+        <field name="res_model">salaam.readiness.snapshot</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

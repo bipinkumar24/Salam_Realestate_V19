@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_pm_qc_root"
+              name="PM / QC Office"
+              parent="salaam_iafao_dashboard.menu_root_iafao"
+              sequence="40"/>
+
+    <menuitem id="menu_pm_qc_itp_template"
+              name="ITP / ITR Templates"
+              parent="menu_pm_qc_root"
+              action="action_itp_template"
+              sequence="10"/>
+
+</odoo>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Report action - prints from a salaam.readiness.snapshot record -->
+    <record id="action_report_readiness_evidence_pack" model="ir.actions.report">
+        <field name="name">Decision Gate 0 - Evidence Pack</field>
+        <field name="model">salaam.readiness.snapshot</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_prelaunch_readiness.report_readiness_evidence_pack</field>
+        <field name="report_file">salaam_prelaunch_readiness.report_readiness_evidence_pack</field>
+        <field name="binding_model_id" ref="model_salaam_readiness_snapshot"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_us"/>
+    </record>
+
+    <!-- Document template -->
+    <template id="report_readiness_evidence_pack_document">
+        <t t-call="web.external_layout">
+            <t t-set="o" t-value="o"/>
+            <div class="page" style="font-family: Arial, sans-serif;">
+                <div style="border-bottom: 4px solid #C09A55; padding-bottom: 8px; margin-bottom: 12px;">
+                    <h1 style="color: #0F243F; margin-bottom: 4px;">
+                        Decision Gate 0 — Pre-Launch Readiness Evidence Pack
+                    </h1>
+                    <div style="color: #6E6E6E; font-size: 11px;">
+                        SALAAM INVESTMENT BANK · IAFAO · CONFIDENTIAL
+                    </div>
+                </div>
+
+                <h2 style="color: #147878; margin-top: 8px;">
+                    <span t-field="o.tracker_id.display_name"/>
+                </h2>
+
+                <table class="table table-sm" style="margin-top: 12px;">
+                    <tbody>
+                        <tr>
+                            <th style="width: 25%; background-color: #F5F7FA;">Snapshot Time</th>
+                            <td><span t-field="o.snapshot_date"/></td>
+                            <th style="width: 25%; background-color: #F5F7FA;">Locked By</th>
+                            <td><span t-field="o.locked_by.display_name"/></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #F5F7FA;">Tracker State</th>
+                            <td><span t-field="o.tracker_id.state"/></td>
+                            <th style="background-color: #F5F7FA;">Total Items</th>
+                            <td><span t-field="o.total_items"/></td>
+                        </tr>
+                        <tr>
+                            <th style="background-color: #F5F7FA;">Readiness Status</th>
+                            <td>
+                                <span t-if="o.readiness_status == 'ready'"
+                                      style="background:#147878;color:white;padding:2px 6px;">READY TO MOBILIZE</span>
+                                <span t-if="o.readiness_status == 'on_track'"
+                                      style="background:#0F243F;color:white;padding:2px 6px;">ON TRACK</span>
+                                <span t-if="o.readiness_status == 'at_risk'"
+                                      style="background:#C09A55;color:white;padding:2px 6px;">AT RISK</span>
+                                <span t-if="o.readiness_status == 'blocked'"
+                                      style="background:#b73838;color:white;padding:2px 6px;">BLOCKED</span>
+                            </td>
+                            <th style="background-color: #F5F7FA;">Blocked Items</th>
+                            <td><span t-field="o.blocked_count"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: #0F243F; margin-top: 16px;">Gate Percentages (frozen at lock time)</h3>
+                <table class="table table-sm table-bordered" style="margin-top: 4px;">
+                    <thead style="background-color: #0F243F; color: white;">
+                        <tr>
+                            <th>Gate</th>
+                            <th>Required</th>
+                            <th>Achieved</th>
+                            <th>Verdict</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Overall</b></td>
+                            <td>—</td>
+                            <td><span t-esc="'%.1f%%' % o.overall_pct"/></td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td><b>Hard Gate</b> (A B C D F G M)</td>
+                            <td>100.0%</td>
+                            <td><span t-esc="'%.1f%%' % o.hard_gate_pct"/></td>
+                            <td>
+                                <span t-if="o.hard_gate_pct &gt;= 100.0" style="color:#147878;"><b>PASS</b></span>
+                                <span t-if="o.hard_gate_pct &lt; 100.0" style="color:#b73838;"><b>FAIL</b></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Parallel</b> (E H I J K L)</td>
+                            <td>≥ 80.0%</td>
+                            <td><span t-esc="'%.1f%%' % o.parallel_pct"/></td>
+                            <td>
+                                <span t-if="o.parallel_pct &gt;= 80.0" style="color:#147878;"><b>PASS</b></span>
+                                <span t-if="o.parallel_pct &lt; 80.0" style="color:#b73838;"><b>FAIL</b></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Mobilization</b> (N)</td>
+                            <td>100.0%</td>
+                            <td><span t-esc="'%.1f%%' % o.mob_pct"/></td>
+                            <td>
+                                <span t-if="o.mob_pct &gt;= 100.0" style="color:#147878;"><b>PASS</b></span>
+                                <span t-if="o.mob_pct &lt; 100.0" style="color:#b73838;"><b>FAIL</b></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3 style="color: #0F243F; margin-top: 16px;">Item Detail (frozen)</h3>
+                <table class="table table-sm" style="margin-top: 4px; font-size: 9pt;">
+                    <thead style="background-color: #147878; color: white;">
+                        <tr>
+                            <th>Cat</th>
+                            <th>#</th>
+                            <th>Item</th>
+                            <th>Gate</th>
+                            <th>Owner</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                            <th>%</th>
+                            <th>Evidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.line_ids" t-as="line"
+                            t-attf-style="background-color: #{'F5F8FA' if line_index % 2 == 0 else 'FFFFFF'};">
+                            <td><b><span t-field="line.category_code"/></b></td>
+                            <td><span t-field="line.sequence"/></td>
+                            <td><span t-field="line.name"/></td>
+                            <td><span t-field="line.gate_type"/></td>
+                            <td><span t-field="line.owner_login"/></td>
+                            <td><span t-field="line.due_date"/></td>
+                            <td>
+                                <span t-if="line.status == 'done'"
+                                      style="color:#147878;"><b>Done</b></span>
+                                <span t-if="line.status == 'in_progress'"
+                                      style="color:#0F243F;">In Progress</span>
+                                <span t-if="line.status == 'blocked'"
+                                      style="color:#b73838;"><b>BLOCKED</b></span>
+                                <span t-if="line.status == 'not_started'"
+                                      style="color:#6E6E6E;">Not Started</span>
+                                <span t-if="line.status == 'na'"
+                                      style="color:#6E6E6E;">N/A</span>
+                            </td>
+                            <td><span t-esc="'%.0f%%' % line.pct_complete"/></td>
+                            <td>
+                                <span t-if="line.evidence_url" t-field="line.evidence_url"/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 24px; padding: 8px;
+                            border-top: 2px solid #0F243F; font-size: 9pt; color: #6E6E6E;">
+                    <p>
+                        <b>Issued:</b>
+                        <span t-esc="o.snapshot_date.strftime('%Y-%m-%d %H:%M UTC') if o.snapshot_date else ''"/>
+                        ·
+                        <b>Authority:</b> IAFAO — Investment Appraisal &amp; Final Approval Office
+                        ·
+                        <b>Module:</b> salaam_prelaunch_readiness v19.0.1.1.0
+                    </p>
+                    <p style="margin-top: 4px;">
+                        This evidence pack is auto-generated from an immutable
+                        snapshot taken at the moment of Lock-for-Gate-Review.
+                        Subsequent edits to the live tracker do not affect this
+                        document.
+                    </p>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Wrapper that iterates docs - standard QWeb pattern -->
+    <template id="report_readiness_evidence_pack">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="salaam_prelaunch_readiness.report_readiness_evidence_pack_document"
+                   t-lang="o.tracker_id.company_id.partner_id.lang or 'en_US'"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_execution_phase_user,execution.phase.user,model_salaam_execution_phase,base.group_user,1,0,0,0
+access_execution_phase_manager,execution.phase.manager,model_salaam_execution_phase,base.group_system,1,1,1,1
+access_execution_lot_user,execution.lot.user,model_salaam_execution_lot,base.group_user,1,0,0,0
+access_execution_lot_manager,execution.lot.manager,model_salaam_execution_lot,base.group_system,1,1,1,1
+access_decision_gate_user,decision.gate.user,model_salaam_execution_decision_gate,base.group_user,1,0,0,0
+access_decision_gate_manager,decision.gate.manager,model_salaam_execution_decision_gate,base.group_system,1,1,1,1

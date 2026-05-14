@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_decision_gate" model="ir.actions.act_window">
+        <field name="name">Decision Gates</field>
+        <field name="res_model">salaam.execution.decision.gate</field>
+        <field name="view_mode">list,form,kanban</field>
+    </record>
+
+    <record id="view_decision_gate_list" model="ir.ui.view">
+        <field name="name">salaam.execution.decision.gate.list</field>
+        <field name="model">salaam.execution.decision.gate</field>
+        <field name="arch" type="xml">
+            <list string="Decision Gates" decoration-success="state == 'approved'" decoration-danger="state == 'rejected'" decoration-warning="state == 'under_review'">
+                <field name="gate_number"/>
+                <field name="name"/>
+                <field name="lot_id"/>
+                <field name="phase_id"/>
+                <field name="target_date"/>
+                <field name="decision_date"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_decision_gate_form" model="ir.ui.view">
+        <field name="name">salaam.execution.decision.gate.form</field>
+        <field name="model">salaam.execution.decision.gate</field>
+        <field name="arch" type="xml">
+            <form string="Decision Gate">
+                <header>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,under_review,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Gate 0 - Mobilization Approval"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="gate_number"/>
+                            <field name="lot_id"/>
+                            <field name="phase_id"/>
+                        </group>
+                        <group>
+                            <field name="target_date"/>
+                            <field name="decision_date"/>
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+</odoo>

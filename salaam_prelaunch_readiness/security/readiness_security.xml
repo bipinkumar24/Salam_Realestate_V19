@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- ============================================================== -->
+    <!-- Salaam Pre-Launch Readiness - Security Groups (3-tier)         -->
+    <!-- ============================================================== -->
+
+    <record id="module_category_salaam_readiness" model="ir.module.category">
+        <field name="name">Salaam Pre-Launch Readiness</field>
+        <field name="description">Phase-1 Lot-1 Pre-Launch Readiness Tracker (IAFAO)</field>
+        <field name="sequence">90</field>
+    </record>
+        <record id="privilege_salaam_readiness" model="res.groups.privilege">
+            <field name="name">Salaam Pre-Launch Readiness</field>
+            <field name="category_id" ref="module_category_salaam_readiness"/>
+        </record>
+
+
+    <!-- Tier 1: User - sees the tracker, edits items they own -->
+    <record id="group_readiness_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="privilege_id" ref="privilege_salaam_readiness"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Read all readiness items. Edit items where the user is the assigned Owner.</field>
+    </record>
+
+    <!-- Tier 2: Officer - edits any item but cannot lock/close trackers -->
+    <record id="group_readiness_officer" model="res.groups">
+        <field name="name">Officer</field>
+        <field name="privilege_id" ref="privilege_salaam_readiness"/>
+        <field name="implied_ids" eval="[(4, ref('group_readiness_user'))]"/>
+        <field name="comment">Edit any readiness item. Cannot change tracker workflow state.</field>
+    </record>
+
+    <!-- Tier 3: Manager - full control, including lock and close -->
+    <record id="group_readiness_manager" model="res.groups">
+        <field name="name">Manager (IAFAO)</field>
+        <field name="privilege_id" ref="privilege_salaam_readiness"/>
+        <field name="implied_ids" eval="[(4, ref('group_readiness_officer'))]"/>
+        <field name="comment">Full access. Activate, lock for gate review, close trackers. Sole approver of Decision Gate 0 evidence packs.</field>
+    </record>
+
+    <!-- ============================================================== -->
+    <!-- Record rules                                                    -->
+    <!-- ============================================================== -->
+
+    <!-- User tier: edit items only where they are the owner =========== -->
+    <record id="rule_item_user_edit_own" model="ir.rule">
+        <field name="name">Readiness Item: users edit own items</field>
+        <field name="model_id" ref="model_salaam_readiness_item"/>
+        <field name="domain_force">[('owner_id','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('group_readiness_user'))]"/>
+        <field name="perm_read" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Users can read all items regardless of owner =================== -->
+    <record id="rule_item_user_read_all" model="ir.rule">
+        <field name="name">Readiness Item: users read all</field>
+        <field name="model_id" ref="model_salaam_readiness_item"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_readiness_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <!-- Officer / Manager: full read + write across the company ======= -->
+    <record id="rule_item_officer_all" model="ir.rule">
+        <field name="name">Readiness Item: officer/manager full</field>
+        <field name="model_id" ref="model_salaam_readiness_item"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_readiness_officer'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_item_manager_unlink" model="ir.rule">
+        <field name="name">Readiness Item: manager can delete</field>
+        <field name="model_id" ref="model_salaam_readiness_item"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('group_readiness_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Multi-company isolation on the tracker ======================== -->
+    <record id="rule_tracker_company" model="ir.rule">
+        <field name="name">Readiness Tracker: multi-company</field>
+        <field name="model_id" ref="model_salaam_readiness_tracker"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','in',company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+
+</odoo>

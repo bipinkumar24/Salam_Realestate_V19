@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================== -->
+    <!-- Menus                                                           -->
+    <!-- ============================================================== -->
+
+    <!-- Try to embed under the existing IAFAO root menu if it exists,
+         otherwise create a top-level Pre-Launch Readiness menu.
+         The id of the existing IAFAO menu is referenced by external id;
+         if salaam_iafao_dashboard is loaded first this works, otherwise
+         the parent will be empty and Odoo will fall back to root. -->
+
+    <record id="menu_root_readiness" model="ir.ui.menu">
+        <field name="name">Pre-Launch Readiness</field>
+        <field name="sequence">35</field>
+        <field name="web_icon">salaam_prelaunch_readiness,static/description/icon.png</field>
+        <field name="group_ids" eval="[(4, ref('group_readiness_user'))]"/>
+    </record>
+
+    <menuitem id="menu_readiness_dashboard"
+              name="Dashboard"
+              parent="menu_root_readiness"
+              action="action_readiness_category"
+              sequence="10"/>
+
+    <menuitem id="menu_readiness_trackers"
+              name="Trackers"
+              parent="menu_root_readiness"
+              action="action_readiness_tracker"
+              sequence="20"/>
+
+    <menuitem id="menu_readiness_items"
+              name="All Items"
+              parent="menu_root_readiness"
+              action="action_readiness_item"
+              sequence="30"/>
+
+    <menuitem id="menu_readiness_my_items"
+              name="My Items"
+              parent="menu_root_readiness"
+              action="action_readiness_item"
+              sequence="40"/>
+
+    <menuitem id="menu_readiness_snapshots"
+              name="Lock Snapshots"
+              parent="menu_root_readiness"
+              action="action_readiness_snapshot"
+              sequence="50"/>
+
+    <menuitem id="menu_readiness_config"
+              name="Configuration"
+              parent="menu_root_readiness"
+              sequence="90"
+              groups="salaam_prelaunch_readiness.group_readiness_manager"/>
+
+    <menuitem id="menu_readiness_excel_import"
+              name="Import from Excel"
+              parent="menu_readiness_config"
+              action="action_readiness_excel_import"
+              sequence="10"
+              groups="salaam_prelaunch_readiness.group_readiness_manager"/>
+
+    <menuitem id="menu_readiness_clone"
+              name="Clone Tracker"
+              parent="menu_readiness_config"
+              action="action_readiness_clone_wizard"
+              sequence="20"
+              groups="salaam_prelaunch_readiness.group_readiness_manager"/>
+
+</odoo>

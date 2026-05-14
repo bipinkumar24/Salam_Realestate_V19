@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================== -->
+    <!-- Readiness Category - Kanban  (replaces the Excel Dashboard)     -->
+    <!-- ============================================================== -->
+    <record id="view_readiness_category_kanban" model="ir.ui.view">
+        <field name="name">salaam.readiness.category.kanban</field>
+        <field name="model">salaam.readiness.category</field>
+        <field name="arch" type="xml">
+            <kanban default_order="sequence,code"
+                    class="o_kanban_dashboard salaam_readiness_kanban"
+                    quick_create="false" sample="1">
+                <field name="status_color"/>
+                <field name="gate_type"/>
+                <field name="required_pct"/>
+                <field name="total_count"/>
+                <field name="done_count"/>
+                <field name="in_progress_count"/>
+                <field name="blocked_count"/>
+                <field name="pct_complete"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click salaam_cat_card salaam_cat_{{record.status_color.raw_value}}">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="display_name"/>
+                                    </strong>
+                                </div>
+                                <div class="o_dropdown_kanban">
+                                    <span t-attf-class="badge salaam_gate_{{record.gate_type.raw_value}}">
+                                        <field name="gate_type"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body mt-2">
+                                <div class="d-flex justify-content-between">
+                                    <span><b><field name="done_count"/></b> / <field name="total_count"/> done</span>
+                                    <span class="text-muted">
+                                        Required: <field name="required_pct"/>%
+                                    </span>
+                                </div>
+                                <div class="mt-2">
+                                    <field name="pct_complete" widget="progressbar"/>
+                                </div>
+                                <div class="mt-2 small">
+                                    <span t-if="record.in_progress_count.raw_value &gt; 0"
+                                          class="badge text-bg-info me-1">
+                                        <field name="in_progress_count"/> in progress
+                                    </span>
+                                    <span t-if="record.blocked_count.raw_value &gt; 0"
+                                          class="badge text-bg-danger">
+                                        <field name="blocked_count"/> blocked
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom mt-2">
+                                <div class="oe_kanban_bottom_left">
+                                    <button name="action_open_items" type="object"
+                                            class="btn btn-sm btn-link p-0">
+                                        Open items →
+                                    </button>
+                                </div>
+                                <div class="oe_kanban_bottom_right"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- List view (admin / debug) =================================== -->
+    <record id="view_readiness_category_list" model="ir.ui.view">
+        <field name="name">salaam.readiness.category.list</field>
+        <field name="model">salaam.readiness.category</field>
+        <field name="arch" type="xml">
+            <list string="Categories"
+                  decoration-success="status_color == 'green'"
+                  decoration-warning="status_color == 'amber'"
+                  decoration-danger="status_color == 'red'">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="gate_type"/>
+                <field name="required_pct"/>
+                <field name="total_count"/>
+                <field name="done_count"/>
+                <field name="in_progress_count"/>
+                <field name="blocked_count"/>
+                <field name="pct_complete" widget="progressbar"/>
+                <field name="status_color"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Form view (admin) ============================================ -->
+    <record id="view_readiness_category_form" model="ir.ui.view">
+        <field name="name">salaam.readiness.category.form</field>
+        <field name="model">salaam.readiness.category</field>
+        <field name="arch" type="xml">
+            <form string="Category">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" class="me-2" placeholder="A"/>
+                            <field name="name" placeholder="Permits &amp; Regulatory"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Classification">
+                            <field name="tracker_id"/>
+                            <field name="sequence"/>
+                            <field name="gate_type"/>
+                            <field name="required_pct"/>
+                        </group>
+                        <group string="Progress">
+                            <field name="total_count"/>
+                            <field name="done_count"/>
+                            <field name="in_progress_count"/>
+                            <field name="blocked_count"/>
+                            <field name="not_started_count"/>
+                            <field name="na_count"/>
+                            <field name="overdue_count"/>
+                            <field name="pct_complete" widget="progressbar"/>
+                            <field name="status_color"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Items" name="items">
+                            <field name="item_ids">
+                                <list editable="bottom"
+                                      decoration-success="status == 'done'"
+                                      decoration-info="status == 'in_progress'"
+                                      decoration-danger="status == 'blocked' or is_overdue"
+                                      decoration-muted="status == 'na'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="owner_id" widget="many2one_avatar_user"/>
+                                    <field name="due_date"/>
+                                    <field name="status"/>
+                                    <field name="pct_complete" widget="progressbar"/>
+                                    <field name="evidence_url" widget="url" optional="hide"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Search view: filter / group categories by tracker -->
+    <record id="view_readiness_category_search" model="ir.ui.view">
+        <field name="name">salaam.readiness.category.search</field>
+        <field name="model">salaam.readiness.category</field>
+        <field name="arch" type="xml">
+            <search string="Search Categories">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="tracker_id"/>
+                <separator/>
+                <filter name="filter_hard_gate" string="Hard Gate"
+                        domain="[('gate_type','=','hard')]"/>
+                <filter name="filter_parallel" string="Parallel"
+                        domain="[('gate_type','=','parallel')]"/>
+                <filter name="filter_mob" string="Mobilization"
+                        domain="[('gate_type','=','mob')]"/>
+                <separator/>
+                <filter name="filter_red" string="Red (Blocked / Behind)"
+                        domain="[('status_color','=','red')]"/>
+                <filter name="filter_amber" string="Amber (At Risk)"
+                        domain="[('status_color','=','amber')]"/>
+                <filter name="filter_green" string="Green (On Target)"
+                        domain="[('status_color','=','green')]"/>
+                <group>
+                    <filter name="group_tracker" string="Tracker"
+                            context="{'group_by': 'tracker_id'}"/>
+                    <filter name="group_gate" string="Gate Type"
+                            context="{'group_by': 'gate_type'}"/>
+                    <filter name="group_status" string="Status Color"
+                            context="{'group_by': 'status_color'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action ======================================================= -->
+    <record id="action_readiness_category" model="ir.actions.act_window">
+        <field name="name">Categories (Dashboard)</field>
+        <field name="res_model">salaam.readiness.category</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_readiness_category_search"/>
+        <field name="context">{'search_default_group_tracker': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No readiness categories yet.
+            </p>
+            <p>
+                The 14 categories (A-N) are seeded with the Phase-1 Lot-1
+                tracker on module install.
+            </p>
+        </field>
+    </record>
+
+</odoo>
