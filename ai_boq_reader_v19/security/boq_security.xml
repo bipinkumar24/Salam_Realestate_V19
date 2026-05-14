@@ -28,7 +28,6 @@
             <field name="sequence">20</field>
             <field name="privilege_id" ref="boq_privilege"/>
             <field name="implied_ids" eval="[(4, ref('group_boq_user'))]"/>
-            <field name="users" eval="[(4, ref('base.user_admin'))]"/>
         </record>
 
         <!-- BOQ project: users see their own; managers see everything -->
