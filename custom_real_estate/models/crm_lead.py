@@ -21,7 +21,7 @@ class Rooms(models.Model):
     _name = 'room.rooms'
     _description = 'bedroom Specification'
 
-    name = fields.Char(string='Bedroom Specification', placeholder='Example: 3 Bedrooms with 2 bathrooms')
+    name = fields.Char(string='Bedroom Specification')
             
 class Typeappartment(models.Model):
     _name = 'appart.type'

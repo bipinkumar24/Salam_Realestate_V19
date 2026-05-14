@@ -144,6 +144,7 @@ class Account(models.Model):
         default="new",
     )
     hide_hide_gm = fields.Boolean(string="Hide Gm", compute="_compute_hide_hide_gm")
+    next_is_reject = fields.Boolean(related='next_approval_id.is_reject', string='Next Is Reject', readonly=True )
 
     def _send_group_notification(self, group_xmlid, subject, body_prefix):
         partner_ids = self.env.ref(group_xmlid).users.mapped('partner_id').ids

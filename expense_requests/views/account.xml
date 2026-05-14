@@ -18,6 +18,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='state']" position="after">
                     <field name="hide_hide_gm" invisible="1"/>
+                    <field name="next_is_reject" invisible="1"/>
                     <field name="next_approval_id" widget="statusbar"
                            invisible="is_last_level or not is_expense or require_hr or (require_hr and state_2 == 'finance')"/>
                 </xpath>
