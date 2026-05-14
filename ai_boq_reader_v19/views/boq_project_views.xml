@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TREE -->
+    <record id="view_boq_project_list" model="ir.ui.view">
+        <field name="name">ai.boq.project.list</field>
+        <field name="model">ai.boq.project</field>
+        <field name="arch" type="xml">
+            <list decoration-info="state=='analyzing'"
+                  decoration-success="state=='approved'"
+                  decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="project_id" optional="show"/>
+                <field name="user_id" optional="show"/>
+                <field name="line_count"/>
+                <field name="average_confidence" widget="percentage"/>
+                <field name="total_amount" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="analyzed_on" optional="hide"/>
+                <field name="state" widget="badge"
+                       decoration-info="state=='analyzing'"
+                       decoration-success="state=='approved'"
+                       decoration-warning="state=='reviewed'"
+                       decoration-muted="state=='cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- KANBAN -->
+    <record id="view_boq_project_kanban" model="ir.ui.view">
+        <field name="name">ai.boq.project.kanban</field>
+        <field name="model">ai.boq.project</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="total_amount"/>
+                <field name="currency_id"/>
+                <field name="line_count"/>
+                <field name="average_confidence"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_record_top">
+                            <div class="o_kanban_record_headings">
+                                <strong class="o_kanban_record_title"><field name="name"/></strong>
+                            </div>
+                        </div>
+                        <div class="o_kanban_record_body">
+                            <div t-if="record.partner_id.value">
+                                <i class="fa fa-user"/> <field name="partner_id"/>
+                            </div>
+                            <div>
+                                <i class="fa fa-list"/> <field name="line_count"/> lines
+                            </div>
+                            <div>
+                                <i class="fa fa-money"/>
+                                <field name="total_amount" widget="monetary"/>
+                            </div>
+                            <div t-if="record.average_confidence.raw_value">
+                                AI conf: <field name="average_confidence" widget="percentage"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- FORM -->
+    <record id="view_boq_project_form" model="ir.ui.view">
+        <field name="name">ai.boq.project.form</field>
+        <field name="model">ai.boq.project</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_analyze" type="object" string="Analyse Design"
+                            class="oe_highlight" invisible="state not in ('draft','reviewed')"/>
+                    <button name="action_pricelist_check" type="object" string="Re-price from Pricelist"
+                            invisible="state != 'reviewed' or not pricelist_id"/>
+                    <button name="action_approve" type="object" string="Approve"
+                            class="oe_highlight" invisible="state != 'reviewed'"/>
+                    <button name="action_create_sale_order" type="object" string="Create Sales Order"
+                            invisible="state != 'approved' or sale_order_id"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state in ('draft','analyzing')"/>
+                    <button name="action_cancel" type="object" string="Cancel"
+                            invisible="state in ('cancelled','approved')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,analyzing,reviewed,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_raw_response" type="object"
+                                class="oe_stat_button" icon="fa-code"
+                                invisible="not ai_raw_response">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">AI Response</span>
+                            </div>
+                        </button>
+                    </div>
+                    <field name="design_preview" widget="image" class="oe_avatar"
+                           options="{'preview_image': 'design_preview'}"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="project_id"/>
+                            <field name="user_id"/>
+                            <field name="template_id" invisible="state not in ('draft','reviewed')"/>
+                            <field name="pricelist_id"/>
+                        </group>
+                        <group>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="total_amount" widget="monetary"/>
+                            <field name="line_count"/>
+                            <field name="average_confidence" widget="percentage"/>
+                            <field name="analyzed_on" readonly="1"/>
+                            <field name="price_check_state" readonly="1" widget="badge"
+                                   decoration-success="price_check_state=='matched'"
+                                   decoration-warning="price_check_state=='partial'"
+                                   decoration-danger="price_check_state=='failed'"
+                                   invisible="price_check_state=='not_run'"/>
+                            <field name="job_uuid" readonly="1" invisible="not job_uuid"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Design File" name="design">
+                            <group>
+                                <field name="design_file" filename="design_filename"/>
+                                <field name="design_filename" invisible="1"/>
+                            </group>
+                            <div class="alert alert-info" role="alert"
+                                 invisible="state != 'draft'">
+                                Upload a PDF or image of the architectural / engineering layout,
+                                then click <b>Analyse Design</b> to extract a BOQ automatically.
+                            </div>
+                        </page>
+                        <page string="BOQ Lines" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom"
+                                      decoration-danger="confidence_band=='low'"
+                                      decoration-warning="confidence_band=='medium'"
+                                      decoration-success="confidence_band=='high'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category"/>
+                                    <field name="description"/>
+                                    <field name="product_id" optional="show"/>
+                                    <field name="uom_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price" widget="monetary"/>
+                                    <field name="subtotal" widget="monetary" sum="Total"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="confidence_score" widget="percentage" optional="show"/>
+                                    <field name="confidence_band" invisible="1"/>
+                                    <field name="source_reference" optional="show"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total_amount" widget="monetary"/>
+                            </group>
+                        </page>
+                        <page string="Pricing" name="pricing"
+                              invisible="price_check_state=='not_run'">
+                            <group>
+                                <field name="price_check_state" readonly="1"/>
+                            </group>
+                            <separator string="Cross-check Summary"/>
+                            <field name="price_check_summary" readonly="1" nolabel="1"
+                                   widget="text"/>
+                        </page>
+                        <page string="AI Analysis" name="ai">
+                            <group>
+                                <group>
+                                    <field name="ai_provider" readonly="1"/>
+                                    <field name="ai_model_used" readonly="1"/>
+                                    <field name="pages_analyzed" readonly="1"/>
+                                    <field name="ai_scale_detected" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="ai_summary" readonly="1"/>
+                                </group>
+                            </group>
+                            <separator string="Warnings"/>
+                            <field name="ai_warnings" readonly="1" nolabel="1"/>
+                            <separator string="Raw Response (truncated)"/>
+                            <field name="ai_raw_response" readonly="1" nolabel="1"
+                                   widget="text" options="{'resizable': true}"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH -->
+    <record id="view_boq_project_search" model="ir.ui.view">
+        <field name="name">ai.boq.project.search</field>
+        <field name="model">ai.boq.project</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="project_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Draft" name="filter_draft" domain="[('state','=','draft')]"/>
+                <filter string="Reviewed" name="filter_reviewed" domain="[('state','=','reviewed')]"/>
+                <filter string="Approved" name="filter_approved" domain="[('state','=','approved')]"/>
+                <filter string="Cancelled" name="filter_cancelled" domain="[('state','=','cancelled')]"/>
+                <separator/>
+                <filter string="My BOQs" name="filter_my" domain="[('user_id','=',uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Customer" name="group_partner" context="{'group_by': 'partner_id'}"/>
+                    <filter string="Responsible" name="group_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_boq_project" model="ir.actions.act_window">
+        <field name="name">BOQ Projects</field>
+        <field name="res_model">ai.boq.project</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="search_view_id" ref="view_boq_project_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Create your first AI-powered BOQ project</p>
+            <p>Upload an architectural or engineering layout and let AI extract a Bill of Quantities for you.</p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_boq_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Bill of Quantities</h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Reference:</strong> <span t-field="doc.name"/><br/>
+                                <strong>Customer:</strong> <span t-field="doc.partner_id"/><br/>
+                                <strong>Project:</strong> <span t-field="doc.project_id"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Date:</strong> <span t-field="doc.analyzed_on"/><br/>
+                                <strong>Status:</strong> <span t-field="doc.state"/><br/>
+                                <strong>Total:</strong>
+                                <span t-field="doc.total_amount"
+                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </div>
+                        </div>
+
+                        <p t-if="doc.ai_summary">
+                            <em><span t-field="doc.ai_summary"/></em>
+                        </p>
+
+                        <t t-set="categories" t-value="set(doc.line_ids.mapped('category'))"/>
+                        <t t-foreach="['structural','civil','electrical','plumbing','finishes','other']"
+                           t-as="cat">
+                            <t t-set="cat_lines" t-value="doc.line_ids.filtered(lambda l, c=cat: l.category == c)"/>
+                            <t t-if="cat_lines">
+                                <h4 t-esc="dict(doc.line_ids._fields['category'].selection).get(cat)"/>
+                                <table class="table table-sm o_main_table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Description</th>
+                                            <th class="text-end">Qty</th>
+                                            <th>UoM</th>
+                                            <th class="text-end">Unit Price</th>
+                                            <th class="text-end">Subtotal</th>
+                                            <th>Ref.</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="cat_lines" t-as="line">
+                                            <td t-esc="line_index + 1"/>
+                                            <td><span t-field="line.description"/></td>
+                                            <td class="text-end"><span t-field="line.quantity"/></td>
+                                            <td><span t-field="line.uom_id"/></td>
+                                            <td class="text-end">
+                                                <span t-field="line.unit_price"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                            <td class="text-end">
+                                                <span t-field="line.subtotal"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                            <td><small t-field="line.source_reference"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </t>
+
+                        <div class="row">
+                            <div class="col-6 offset-6">
+                                <table class="table table-sm">
+                                    <tr class="border-black">
+                                        <td><strong>Grand Total</strong></td>
+                                        <td class="text-end">
+                                            <strong>
+                                                <span t-field="doc.total_amount"
+                                                      t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </strong>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div t-if="doc.ai_warnings" class="mt16">
+                            <h5>AI Warnings</h5>
+                            <pre style="white-space: pre-wrap;"><span t-field="doc.ai_warnings"/></pre>
+                        </div>
+
+                        <div class="row mt64">
+                            <div class="col-6">
+                                <p>__________________________</p>
+                                <p>Prepared by</p>
+                            </div>
+                            <div class="col-6">
+                                <p>__________________________</p>
+                                <p>Approved by</p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

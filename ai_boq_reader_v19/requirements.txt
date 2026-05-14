@@ -1,0 +1,6 @@
+anthropic>=0.39.0
+Pillow>=10.0.0
+# Optional — only needed for OpenAI/Azure with PDFs, or if ai_boq.force_rasterize=True.
+# Anthropic supports PDFs natively, so most installs do not need these.
+openai>=1.40.0
+pdf2image>=1.17.0

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_boq" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ai.boq</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[1]" position="before">
+                <app data-string="BOQ AI Reader" string="BOQ AI Reader" name="ai_boq_reader">
+                    <block title="AI Provider" name="ai_provider">
+                        <setting>
+                            <field name="ai_boq_provider"/>
+                        </setting>
+                        <setting>
+                            <field name="ai_boq_model" placeholder="claude-sonnet-4-5"/>
+                        </setting>
+                        <setting>
+                            <label for="ai_boq_api_key"/>
+                            <div>
+                                <field name="ai_boq_api_key" password="True"/>
+                            </div>
+                        </setting>
+                        <setting invisible="ai_boq_provider != 'azure_openai'">
+                            <field name="ai_boq_azure_endpoint"
+                                   placeholder="https://YOUR-RESOURCE.openai.azure.com"/>
+                        </setting>
+                    </block>
+                    <block title="Workflow" name="ai_workflow">
+                        <setting>
+                            <field name="ai_boq_auto_create_so"/>
+                        </setting>
+                        <setting>
+                            <field name="ai_boq_use_queue_job"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_boq_settings" model="ir.actions.act_window">
+        <field name="name">BOQ AI Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ai_boq_reader'}</field>
+    </record>
+
+</odoo>

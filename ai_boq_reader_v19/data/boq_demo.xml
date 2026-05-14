@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="boq_template_residential" model="ai.boq.template">
+            <field name="name">Residential Villa - Standard</field>
+            <field name="description">Baseline BOQ for a single-storey residential villa, ~200 m².</field>
+        </record>
+
+        <record id="boq_template_residential_l1" model="ai.boq.template.line">
+            <field name="template_id" ref="boq_template_residential"/>
+            <field name="sequence">10</field>
+            <field name="category">structural</field>
+            <field name="description">Reinforced concrete foundation (C30)</field>
+            <field name="default_quantity">25</field>
+            <field name="default_unit_price">120</field>
+        </record>
+        <record id="boq_template_residential_l2" model="ai.boq.template.line">
+            <field name="template_id" ref="boq_template_residential"/>
+            <field name="sequence">20</field>
+            <field name="category">structural</field>
+            <field name="description">Reinforcement steel Y12 / Y16</field>
+            <field name="default_quantity">2500</field>
+            <field name="default_unit_price">1.2</field>
+        </record>
+        <record id="boq_template_residential_l3" model="ai.boq.template.line">
+            <field name="template_id" ref="boq_template_residential"/>
+            <field name="sequence">30</field>
+            <field name="category">civil</field>
+            <field name="description">Block masonry walls (200mm)</field>
+            <field name="default_quantity">180</field>
+            <field name="default_unit_price">35</field>
+        </record>
+        <record id="boq_template_residential_l4" model="ai.boq.template.line">
+            <field name="template_id" ref="boq_template_residential"/>
+            <field name="sequence">40</field>
+            <field name="category">finishes</field>
+            <field name="description">Internal plaster &amp; paint</field>
+            <field name="default_quantity">450</field>
+            <field name="default_unit_price">12</field>
+        </record>
+        <record id="boq_template_residential_l5" model="ai.boq.template.line">
+            <field name="template_id" ref="boq_template_residential"/>
+            <field name="sequence">50</field>
+            <field name="category">electrical</field>
+            <field name="description">Electrical first &amp; second fix (lump sum)</field>
+            <field name="default_quantity">1</field>
+            <field name="default_unit_price">8500</field>
+        </record>
+        <record id="boq_template_residential_l6" model="ai.boq.template.line">
+            <field name="template_id" ref="boq_template_residential"/>
+            <field name="sequence">60</field>
+            <field name="category">plumbing</field>
+            <field name="description">Plumbing rough-in and fixtures (lump sum)</field>
+            <field name="default_quantity">1</field>
+            <field name="default_unit_price">6500</field>
+        </record>
+
+        <record id="boq_demo_project_1" model="ai.boq.project">
+            <field name="name">BOQ/DEMO/00001</field>
+            <field name="partner_id" ref="base.res_partner_2"/>
+            <field name="state">draft</field>
+            <field name="notes">&lt;p&gt;Demo BOQ for a small office fit-out. Upload your drawing and click Analyse.&lt;/p&gt;</field>
+        </record>
+
+    </data>
+</odoo>

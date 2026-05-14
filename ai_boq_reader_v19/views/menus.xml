@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_boq_root"
+              name="BOQ AI"
+              web_icon="ai_boq_reader,static/description/icon.png"
+              sequence="80"/>
+
+    <menuitem id="menu_boq_projects"
+              name="BOQ Projects"
+              parent="menu_boq_root"
+              action="action_boq_project"
+              sequence="10"/>
+
+    <menuitem id="menu_boq_import_wizard"
+              name="Bulk Import Drawings"
+              parent="menu_boq_root"
+              action="action_boq_import_wizard"
+              sequence="20"/>
+
+    <menuitem id="menu_boq_config"
+              name="Configuration"
+              parent="menu_boq_root"
+              sequence="90"
+              groups="group_boq_manager"/>
+
+    <menuitem id="menu_boq_templates"
+              name="Templates"
+              parent="menu_boq_config"
+              action="action_boq_template"
+              sequence="10"/>
+
+    <menuitem id="menu_boq_settings"
+              name="Settings"
+              parent="menu_boq_config"
+              action="action_boq_settings"
+              sequence="20"/>
+
+</odoo>

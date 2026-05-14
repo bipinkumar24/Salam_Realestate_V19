@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_boq_project_user,boq.project.user,model_ai_boq_project,group_boq_user,1,1,1,0
+access_boq_project_manager,boq.project.manager,model_ai_boq_project,group_boq_manager,1,1,1,1
+access_boq_line_user,boq.line.user,model_ai_boq_line,group_boq_user,1,1,1,1
+access_boq_line_manager,boq.line.manager,model_ai_boq_line,group_boq_manager,1,1,1,1
+access_boq_template_user,boq.template.user,model_ai_boq_template,group_boq_user,1,0,0,0
+access_boq_template_manager,boq.template.manager,model_ai_boq_template,group_boq_manager,1,1,1,1
+access_boq_template_line_user,boq.template.line.user,model_ai_boq_template_line,group_boq_user,1,0,0,0
+access_boq_template_line_manager,boq.template.line.manager,model_ai_boq_template_line,group_boq_manager,1,1,1,1
+access_boq_import_wizard,boq.import.wizard,model_boq_import_wizard,group_boq_user,1,1,1,1

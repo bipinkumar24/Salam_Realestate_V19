@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_boq_template_list" model="ir.ui.view">
+        <field name="name">ai.boq.template.list</field>
+        <field name="model">ai.boq.template</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_boq_template_form" model="ir.ui.view">
+        <field name="name">ai.boq.template.form</field>
+        <field name="model">ai.boq.template</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                            invisible="active"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Template name"/></h1>
+                    </div>
+                    <group>
+                        <field name="active" invisible="1"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="description"/>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category"/>
+                                    <field name="description"/>
+                                    <field name="product_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="default_quantity"/>
+                                    <field name="default_unit_price"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_boq_template" model="ir.actions.act_window">
+        <field name="name">BOQ Templates</field>
+        <field name="res_model">ai.boq.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>
