@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════
+         FORM VIEW — Tabbed layout matching the spreadsheet sections
+         ══════════════════════════════════════════════════════════ -->
+    <record id="view_investment_application_form" model="ir.ui.view">
+        <field name="name">property.investment.application.form</field>
+        <field name="model">property.investment.application</field>
+        <field name="arch" type="xml">
+            <form string="Investment Application">
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                        invisible="state != 'draft'" class="btn-primary"
+                            groups="property_investment_appraisal.group_credit_officer"/>
+                    <button name="action_review" string="Start Review" type="object"
+                        invisible="state != 'submitted'" class="btn-primary"
+                            groups="property_investment_appraisal.group_credit_manager"/>
+                    <button name="action_approve" string="Approve" type="object"
+                        invisible="state != 'review'" class="btn-success"
+                            groups="property_investment_appraisal.group_credit_manager"/>
+                    <button name="action_conditional" string="Approve with Condition" type="object"
+                        invisible="state != 'review'" class="btn-warning"
+                            groups="property_investment_appraisal.group_credit_manager"/>
+                    <button name="action_reject" string="Reject" type="object"
+                        invisible="state not in ['review', 'submitted']" class="btn-danger"
+                            groups="property_investment_appraisal.group_credit_manager"/>
+                    <button name="action_reset_draft" string="Reset to Draft" type="object"
+                        invisible="state not in ['submitted', 'rejected']"
+                            groups="property_investment_appraisal.group_credit_admin"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,review,approved"/>
+                </header>
+
+                <sheet>
+                    <!-- Title banner -->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                        <h2>
+                            <field name="partner_id" placeholder="Select Customer..."/>
+                        </h2>
+                    </div>
+
+                    <!-- Quick summary ribbon -->
+                    <group>
+                        <group>
+                            <field name="date_application"/>
+                            <field name="financing_type"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                        <group>
+                            <field name="sector_id" string="Business Sector"/>
+                            <field name="employment_type"/>
+                            <field name="iir" widget="percentage" decoration-success="iir &lt;= 0.35"
+                                   decoration-warning="iir &gt; 0.35 and iir &lt;= 0.40"
+                                   decoration-danger="iir &gt; 0.40"/>
+                            <field name="iir_status" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <!-- ── TAB 1: General Information (Character 5%) ── -->
+                        <page string="General Info (Character 5%)" name="tab_character">
+                            <group string="Applicant Profile">
+                                <group>
+                                    <field name="partner_id"/>
+                                    <field name="phone"/>
+                                    <field name="gender"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="age" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="marital_status"/>
+                                    <field name="dependents_count"/>
+                                    <field name="education_level"/>
+                                    <field name="residence_type"/>
+                                    <field name="repayment_rate" widget="percentage"/>
+                                </group>
+                            </group>
+                            <group string="Account Details">
+                                <group>
+                                    <field name="account_no"/>
+                                    <field name="date_account_opened"/>
+                                    <field name="account_id_ref"/>
+                                </group>
+                                <group>
+                                    <field name="account_statement_balance"/>
+                                    <field name="avg_balance"/>
+                                    <field name="previous_loan_amount"/>
+                                    <field name="existing_monthly_payment"/>
+                                </group>
+                            </group>
+                            <group string="Scoring — Character  (weight: 5%)">
+                                <label for="score_character" string="Applicant Score (0.00 – 1.00)"/>
+                                <field name="score_character" widget="percentage" nolabel="1"
+                                       help="Enter the applicant's Character score: 0.00 = 0%, 1.00 = 100%"/>
+                            </group>
+                        </page>
+
+                        <!-- ── TAB 2: Employment & Business (Condition 5%) ── -->
+                        <page string="Employment (Condition 5%)" name="tab_condition">
+                            <group string="Employment Details">
+                                <group>
+                                    <field name="employer_name"/>
+                                    <field name="job_title"/>
+                                    <field name="employment_years"/>
+                                    <field name="employment_type"/>
+                                </group>
+                                <group>
+                                    <field name="business_name"/>
+                                    <field name="sector_id"/>
+                                    <field name="business_years"/>
+                                </group>
+                            </group>
+                            <group string="Scoring — Condition  (weight: 5%)">
+                                <label for="score_condition" string="Applicant Score (0.00 – 1.00)"/>
+                                <field name="score_condition" widget="percentage" nolabel="1"
+                                       help="Enter the applicant's Condition score: 0.00 = 0%, 1.00 = 100%"/>
+                            </group>
+                        </page>
+
+                        <!-- ── TAB 3: Assets & Liabilities (Capital 15%) ── -->
+                        <page string="Capital (15%)" name="tab_capital">
+                            <group string="Personal Assets">
+                                <group>
+                                    <field name="asset_cash"/>
+                                    <field name="asset_shares"/>
+                                    <field name="asset_real_estate"/>
+                                    <field name="asset_personal_biz"/>
+                                </group>
+                                <group>
+                                    <field name="asset_house"/>
+                                    <field name="asset_automobiles"/>
+                                    <field name="asset_other"/>
+                                    <field name="total_assets" readonly="1" class="oe_subtotal_footer"/>
+                                </group>
+                            </group>
+
+                            <separator string="Liabilities"/>
+                            <field name="liability_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="creditor_name"/>
+                                    <field name="monthly_payment"/>
+                                    <field name="months_remaining"/>
+                                    <field name="outstanding_balance"/>
+                                    <field name="notes"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_monthly_liability_payment" readonly="1"/>
+                                <field name="total_liabilities" readonly="1"/>
+                                <field name="net_worth" readonly="1"
+                                       decoration-success="net_worth &gt; 0"
+                                       decoration-danger="net_worth &lt; 0"/>
+                            </group>
+                            <group string="Scoring — Capital  (weight: 15%)">
+                                <label for="score_capital" string="Applicant Score (0.00 – 1.00)"/>
+                                <field name="score_capital" widget="percentage" nolabel="1"
+                                       help="Enter the applicant's Capital score: 0.00 = 0%, 1.00 = 100%"/>
+                            </group>
+                        </page>
+
+                        <!-- ── TAB 4: Income & Expenses (Capacity 50%) ── -->
+                        <page string="Capacity (50%)" name="tab_capacity">
+                            <group string="Gross Monthly Income">
+                                <group>
+                                    <field name="income_salary"/>
+                                    <field name="income_commission"/>
+                                    <field name="income_business"/>
+                                </group>
+                                <group>
+                                    <field name="income_rental"/>
+                                    <field name="income_other"/>
+                                    <field name="total_gross_income" readonly="1" class="oe_subtotal_footer"/>
+                                </group>
+                            </group>
+
+                            <group string="Monthly Expenses &amp; Disposable Income">
+                                <group>
+                                    <field name="expense_basic_living"/>
+                                    <field name="expense_loan_advance" readonly="1"
+                                           help="Auto-filled from Liabilities tab"/>
+                                    <field name="total_monthly_expenses" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="contingency_rate" widget="percentage"/>
+                                    <field name="contingency_amount" readonly="1"/>
+                                    <field name="disposable_personal_income" readonly="1"/>
+                                    <field name="net_disposable_income" readonly="1"
+                                           class="oe_subtotal_footer"
+                                           decoration-success="net_disposable_income &gt; 0"
+                                           decoration-danger="net_disposable_income &lt;= 0"/>
+                                </group>
+                            </group>
+                            <group string="Scoring — Capacity  (weight: 50%)">
+                                <label for="score_capacity" string="Applicant Score (0.00 – 1.00)"/>
+                                <field name="score_capacity" widget="percentage" nolabel="1"
+                                       help="Enter the applicant's Capacity score: 0.00 = 0%, 1.00 = 100%"/>
+                            </group>
+                        </page>
+
+                        <!-- ── TAB 5: Financing Terms & IIR ── -->
+                        <page string="Financing Terms" name="tab_financing">
+                            <group string="Financing Parameters">
+                                <group>
+                                    <field name="financing_required_amount"/>
+                                    <field name="profit_rate" widget="percentage"/>
+                                    <field name="advance_payment_pct" widget="percentage"/>
+                                    <field name="financing_period_months"/>
+                                </group>
+                                <group>
+                                    <field name="advance_payment_amount" readonly="1"/>
+                                    <field name="profit_amount" readonly="1"/>
+                                    <field name="total_price" readonly="1"/>
+                                    <field name="monthly_installment" readonly="1" class="oe_subtotal_footer"/>
+                                </group>
+                            </group>
+                            <group string="Installment-to-Income Ratio (IIR)">
+                                <group>
+                                    <field name="iir" widget="percentage" readonly="1"
+                                           decoration-success="iir &lt;= 0.35"
+                                           decoration-warning="iir &gt; 0.35 and iir &lt;= 0.40"
+                                           decoration-danger="iir &gt; 0.40"/>
+                                    <field name="iir_status" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="net_disposable_income" readonly="1"/>
+                                    <field name="monthly_installment" readonly="1"/>
+                                </group>
+                            </group>
+                            <div class="alert alert-warning" role="alert"
+                                invisible ="iir &lt;= 0.40">
+                                <strong>⚠ Warning:</strong> IIR exceeds 40% maximum threshold.
+                                This application cannot be approved in its current state.
+                            </div>
+                        </page>
+
+                        <!-- ── TAB 6: Collateral (25%) ── -->
+                        <page string="Collateral (25%)" name="tab_collateral">
+                            <field name="collateral_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="location"/>
+                                    <field name="title_number"/>
+                                    <field name="area_sqm"/>
+                                    <field name="market_value_per_sqm"/>
+                                    <field name="haircut_rate" widget="percentage"/>
+                                    <field name="total_market_value" readonly="1"/>
+                                    <field name="adjusted_value" readonly="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="total_collateral_market_value" readonly="1"/>
+                                <field name="total_collateral_adjusted_value" readonly="1"/>
+                            </group>
+                            <group string="Scoring — Collateral  (weight: 25%)">
+                                <label for="score_collateral" string="Applicant Score (0.00 – 1.00)"/>
+                                <field name="score_collateral" widget="percentage" nolabel="1"
+                                       help="Enter the applicant's Collateral score: 0.00 = 0%, 1.00 = 100%"/>
+                            </group>
+                        </page>
+
+                        <!-- ── TAB 7: Five Cs Score & Decision ── -->
+                        <page string="Credit Score &amp; Decision" name="tab_score">
+                            <div class="alert alert-info" role="alert" style="margin-bottom:16px">
+                                <strong>How to score:</strong> Enter the applicant's score for each criterion
+                                as a value between <strong>0.00</strong> (0%) and <strong>1.00</strong> (100%).
+                                Example: if the applicant scores 80% on Character, enter <strong>0.80</strong>.
+                                The weighted total is computed automatically using the fixed weights shown below.
+                            </div>
+                            <group string="Five Cs — Applicant Scores × Weights">
+                                <group>
+                                    <label for="score_character" string="Character Score  (weight 5%)"/>
+                                    <field name="score_character" widget="percentage" nolabel="1"
+                                           help="Applicant score for Character. Weight = 5%. Enter 0.00 to 1.00"/>
+                                    <label for="score_condition" string="Condition Score  (weight 5%)"/>
+                                    <field name="score_condition" widget="percentage" nolabel="1"
+                                           help="Applicant score for Condition. Weight = 5%. Enter 0.00 to 1.00"/>
+                                    <label for="score_capital" string="Capital Score  (weight 15%)"/>
+                                    <field name="score_capital" widget="percentage" nolabel="1"
+                                           help="Applicant score for Capital. Weight = 15%. Enter 0.00 to 1.00"/>
+                                    <label for="score_capacity" string="Capacity Score  (weight 50%)"/>
+                                    <field name="score_capacity" widget="percentage" nolabel="1"
+                                           help="Applicant score for Capacity. Weight = 50%. Enter 0.00 to 1.00"/>
+                                    <label for="score_collateral" string="Collateral Score  (weight 25%)"/>
+                                    <field name="score_collateral" widget="percentage" nolabel="1"
+                                           help="Applicant score for Collateral. Weight = 25%. Enter 0.00 to 1.00"/>
+                                </group>
+                                <group string="Result">
+                                    <field name="total_score" widget="percentage" readonly="1"
+                                           string="Total Weighted Score"
+                                           decoration-success="total_score &gt;= 0.80"
+                                           decoration-warning="total_score &gt;= 0.70 and total_score &lt; 0.80"
+                                           decoration-danger="total_score &lt; 0.70"/>
+                                    <field name="score_decision" readonly="1"
+                                           string="Recommendation"/>
+                                    <field name="iir" widget="percentage" readonly="1"
+                                           string="IIR (Installment / NDI)"
+                                           decoration-success="iir &lt;= 0.35"
+                                           decoration-warning="iir &gt; 0.35 and iir &lt;= 0.40"
+                                           decoration-danger="iir &gt; 0.40"/>
+                                </group>
+                            </group>
+                            <group string="Notes">
+                                <field name="analyst_notes" nolabel="1"/>
+                            </group>
+                            <group string="Rejection / Condition Reason"
+                                   invisible = "state not in ['rejected', 'conditional']">
+                                <field name="rejection_reason" nolabel="1"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         LIST VIEW
+         ══════════════════════════════════════════════════════════ -->
+    <record id="view_investment_application_list" model="ir.ui.view">
+        <field name="name">property.investment.application.list</field>
+        <field name="model">property.investment.application</field>
+        <field name="arch" type="xml">
+            <list string="Investment Applications"
+                  decoration-success="state == 'approved'"
+                  decoration-warning="state == 'conditional'"
+                  decoration-danger="state == 'rejected'"
+                  decoration-muted="state == 'draft'">
+                <field name="name"/>
+                <field name="date_application"/>
+                <field name="partner_id"/>
+                <field name="financing_type"/>
+                <field name="financing_required_amount"/>
+                <field name="monthly_installment"/>
+                <field name="iir" widget="percentage"
+                       decoration-success="iir &lt;= 0.35"
+                       decoration-warning="iir &gt; 0.35 and iir &lt;= 0.40"
+                       decoration-danger="iir &gt; 0.40"/>
+                <field name="total_score" widget="percentage"
+                       decoration-success="total_score &gt;= 0.80"
+                       decoration-warning="total_score &gt;= 0.70 and total_score &lt; 0.80"
+                       decoration-danger="total_score &lt; 0.70"/>
+                <field name="score_decision"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'approved'"
+                       decoration-warning="state in ['conditional', 'review']"
+                       decoration-danger="state == 'rejected'"
+                       decoration-info="state == 'submitted'"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════
+         KANBAN VIEW
+         ══════════════════════════════════════════════════════════ -->
+    <record id="view_investment_application_kanban" model="ir.ui.view">
+        <field name="name">property.investment.application.kanban</field>
+        <field name="model">property.investment.application</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="financing_required_amount"/>
+                <field name="iir"/>
+                <field name="total_score"/>
+                <field name="state"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <strong><field name="name"/></strong>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <field name="partner_id"/>
+                                <br/>
+                                Amount: <field name="financing_required_amount"/>
+                                <br/>
+                                IIR: <field name="iir" widget="percentage"/>
+                                | Score: <field name="total_score" widget="percentage"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_investment_application_search" model="ir.ui.view">
+        <field name="name">property.investment.application.search</field>
+        <field name="model">property.investment.application</field>
+        <field name="arch" type="xml">
+            <search string="Investment Applications">
+                <field name="name" string="Application No."/>
+                <field name="partner_id" string="Customer"/>
+                <field name="financing_type"/>
+                <filter string="Draft" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state','=','submitted')]"/>
+                <filter string="Under Review" name="review" domain="[('state','=','review')]"/>
+                <filter string="Approved" name="approved" domain="[('state','=','approved')]"/>
+                <filter string="Conditional" name="conditional" domain="[('state','=','conditional')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state','=','rejected')]"/>
+                <separator/>
+                <filter string="IIR &gt; 40%" name="iir_exceeded" domain="[('iir','&gt;',0.40)]"/>
+                <filter string="High Score ≥ 80%" name="high_score" domain="[('total_score','&gt;=',0.80)]"/>
+                <group>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Financing Type" name="group_type" context="{'group_by': 'financing_type'}"/>
+                    <filter string="Sector" name="group_sector" context="{'group_by': 'sector_id'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'date_application:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_investment_application" model="ir.actions.act_window">
+        <field name="name">Investment Applications</field>
+        <field name="res_model">property.investment.application</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first Investment Application
+            </p>
+            <p>
+                Record and assess individual investment proposals using the
+                Five Cs credit framework.
+            </p>
+        </field>
+    </record>
+
+</odoo>

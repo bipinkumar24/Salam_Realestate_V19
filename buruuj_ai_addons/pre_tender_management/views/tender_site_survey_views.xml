@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_site_survey_list" model="ir.ui.view">
+        <field name="name">tender.site.survey.list</field>
+        <field name="model">tender.site.survey</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'done'" decoration-info="state == 'in_progress'" decoration-muted="state == 'waived'">
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <field name="survey_date"/>
+                <field name="team_lead_id"/>
+                <field name="location"/>
+                <field name="line_count"/>
+                <field name="risk_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_site_survey_form" model="ir.ui.view">
+        <field name="name">tender.site.survey.form</field>
+        <field name="model">tender.site.survey</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" type="object" string="Start Survey" class="oe_highlight" invisible="state != 'planned'"/>
+                    <button name="action_complete" type="object" string="Complete" class="oe_highlight" invisible="state != 'in_progress'"/>
+                    <button name="action_waive" type="object" string="Waive" invisible="state in ('done','waived')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="planned,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="survey_date"/>
+                            <field name="team_lead_id"/>
+                            <field name="team_member_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="location"/>
+                            <field name="geo_latitude"/>
+                            <field name="geo_longitude"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Planning">
+                        <field name="equipment_required" nolabel="1" placeholder="Equipment, permits, transport, accommodations…"/>
+                    </group>
+                    <notebook>
+                        <page string="Findings" name="findings">
+                            <field name="line_ids">
+                                <list editable="bottom" decoration-warning="has_risk" decoration-danger="boq_discrepancy">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category"/>
+                                    <field name="observation"/>
+                                    <field name="has_risk"/>
+                                    <field name="boq_discrepancy"/>
+                                    <field name="risk_id"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="category"/>
+                                            <field name="has_risk"/>
+                                            <field name="risk_id" invisible="not has_risk"/>
+                                            <field name="boq_discrepancy"/>
+                                        </group>
+                                        <group>
+                                            <field name="voice_note_attachment_id"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="observation" nolabel="1"/>
+                                    </group>
+                                    <group string="BoQ Notes" invisible="not boq_discrepancy">
+                                        <field name="boq_notes" nolabel="1"/>
+                                    </group>
+                                    <group string="Photos">
+                                        <field name="photo_attachment_ids" nolabel="1" widget="many2many_binary"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Summary" name="summary">
+                            <field name="summary_findings" nolabel="1"/>
+                        </page>
+                        <page string="Exclusions &amp; Clarifications" name="excl">
+                            <group>
+                                <field name="exclusions" nolabel="1" placeholder="Items explicitly excluded from our scope…"/>
+                            </group>
+                            <group>
+                                <field name="clarifications_needed" nolabel="1" placeholder="Questions to raise with the client…"/>
+                            </group>
+                        </page>
+                        <page string="Reports" name="reports">
+                            <field name="report_attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Waiver" name="waiver" invisible="state != 'waived'">
+                            <field name="waiver_reason" nolabel="1" placeholder="Why was the survey waived?"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_site_survey" model="ir.actions.act_window">
+        <field name="name">Site Surveys</field>
+        <field name="res_model">tender.site.survey</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dev_contract_istisna_form" model="ir.ui.view">
+        <field name="name">dev.contract.istisna.form</field>
+        <field name="model">dev.contract.istisna</field>
+        <field name="arch" type="xml">
+            <form string="Istisna Contract">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_under_review" string="Under Review" type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary"
+                            groups="salaam_dev_contracts.group_dev_contracts_manager"
+                            invisible="state != 'under_review'"/>
+                    <button name="action_sign" string="Mark Signed" type="object"
+                            invisible="state != 'approved'"/>
+                    <button name="action_activate" string="Activate" type="object"
+                            invisible="state != 'signed'"/>
+                    <button name="action_complete" string="Complete / Handover" type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_certify_sharia" string="☽ Certify Sharia" type="object"
+                            groups="salaam_dev_contracts.group_dev_contracts_sharia"
+                            invisible="sharia_certified"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ['completed','cancelled']"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,under_review,approved,signed,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_milestones" type="object"
+                                class="oe_stat_button" icon="fa-flag">
+                            <field name="milestone_count" widget="statinfo" string="Milestones"/>
+                        </button>
+                        <button name="action_open_subcontracts" type="object"
+                                class="oe_stat_button" icon="fa-sitemap">
+                            <field name="subcontract_count" widget="statinfo" string="Sub-Contracts"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3>Istisna — Construction Finance</h3>
+                    </div>
+                    <group>
+                        <group string="Parties">
+                            <field name="contractor_id"/>
+                            <field name="officer_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="property_id"/>
+                            <field name="bre_application_id"/>
+                        </group>
+                        <group string="Sharia Compliance">
+                            <field name="sharia_required" readonly="1"/>
+                            <field name="sharia_certified" readonly="1"/>
+                            <field name="sharia_ref"/>
+                            <field name="aaoifi_standard_ref"/>
+                            <field name="sharia_certified_by" readonly="1"/>
+                            <field name="sharia_certified_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Construction Details">
+                            <group>
+                                <group string="Scope">
+                                    <field name="works_category"/>
+                                    <field name="total_built_area"/>
+                                    <field name="construction_start"/>
+                                    <field name="expected_completion"/>
+                                    <field name="handover_date_actual"/>
+                                </group>
+                                <group string="Contract Dates">
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                </group>
+                            </group>
+                            <separator string="Technical Specification"/>
+                            <field name="construction_spec"/>
+                        </page>
+                        <page string="Financial Terms">
+                            <group>
+                                <group>
+                                    <field name="currency_id"/>
+                                    <field name="contract_value"/>
+                                    <field name="payment_basis"/>
+                                    <field name="retention_rate"/>
+                                </group>
+                                <group>
+                                    <field name="delay_penalty_rate"/>
+                                    <field name="defect_liability_months"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Milestones">
+                            <field name="milestone_ids" context="{'default_res_model': 'dev.contract.istisna', 'default_res_id': id}">
+                                <list editable="bottom"
+                                      decoration-success="state=='paid'"
+                                      decoration-warning="state=='overdue'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="planned_date"/>
+                                    <field name="actual_date"/>
+                                    <field name="payment_amount"/>
+                                    <field name="payment_pct" readonly="1"/>
+                                    <field name="retention_held"/>
+                                    <field name="net_payable" readonly="1"/>
+                                    <field name="state"/>
+                                    <field name="res_model" invisible="1"/>
+                                    <field name="res_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Clauses">
+                            <field name="clause_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+               <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dev_contract_istisna_tree" model="ir.ui.view">
+        <field name="name">dev.contract.istisna.tree</field>
+        <field name="model">dev.contract.istisna</field>
+        <field name="arch" type="xml">
+            <list string="Istisna Contracts"
+                  decoration-success="state in ('signed','active','completed')"
+                  decoration-warning="state=='under_review'"
+                  decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="contractor_id"/>
+                <field name="property_id"/>
+                <field name="contract_value" sum="Total"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="construction_start"/>
+                <field name="expected_completion"/>
+                <field name="sharia_certified" widget="boolean_toggle"/>
+                <field name="officer_id"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('signed','active','completed')"
+                       decoration-warning="state=='under_review'"
+                       decoration-danger="state=='cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dev_contract_istisna" model="ir.actions.act_window">
+        <field name="name">Istisna Contracts</field>
+        <field name="res_model">dev.contract.istisna</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'default_contract_type': 'istisna'}</field>
+    </record>
+
+</odoo>

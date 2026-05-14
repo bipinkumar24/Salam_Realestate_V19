@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ===== PROJECTS ===== -->
+  <template id="portal_my_projects" name="My Projects">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">My Projects</h2>
+        <div t-if="not projects" class="alert alert-info">
+          No projects to display.
+        </div>
+        <div class="row">
+          <t t-foreach="projects" t-as="proj">
+            <div class="col-md-6">
+              <div class="buruuj-portal-card">
+                <h4>
+                  <a t-attf-href="/my/projects/#{proj.id}" t-esc="proj.name"/>
+                </h4>
+                <div t-if="proj.buruuj_project_code" class="text-muted">
+                  Project Code: <t t-esc="proj.buruuj_project_code"/>
+                </div>
+                <div class="buruuj-readonly-row">
+                  <span class="buruuj-readonly-label">Contract Value:</span>
+                  <span t-field="proj.buruuj_contract_value"/>
+                </div>
+                <div class="buruuj-readonly-row">
+                  <span class="buruuj-readonly-label">Progress:</span>
+                  <span t-esc="proj.buruuj_physical_progress"/>%
+                </div>
+                <div class="buruuj-readonly-row">
+                  <span class="buruuj-readonly-label">Planned End:</span>
+                  <span t-field="proj.buruuj_planned_end"/>
+                </div>
+              </div>
+            </div>
+          </t>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_project_detail" name="Project Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/projects" class="btn btn-sm btn-link">← Back to projects</a>
+        <h2 class="buruuj-section-title" t-esc="project.name"/>
+        <div class="buruuj-portal-summary">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Project Code:</span>
+                <span t-esc="project.buruuj_project_code"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Contract Value:</span>
+                <span t-field="project.buruuj_contract_value"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Progress:</span>
+                <span t-esc="project.buruuj_physical_progress"/>%
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Planned Start:</span>
+                <span t-field="project.buruuj_planned_start"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Planned End:</span>
+                <span t-field="project.buruuj_planned_end"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Status:</span>
+                <span class="buruuj-status-badge buruuj-status-active"
+                      t-esc="project.buruuj_health"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4>Phases</h4>
+        <table class="table table-sm" t-if="project.buruuj_phase_ids">
+          <thead><tr><th>Code</th><th>Name</th><th>Progress</th><th>State</th></tr></thead>
+          <tbody>
+            <tr t-foreach="project.buruuj_phase_ids" t-as="ph">
+              <td><span t-esc="ph.code"/></td>
+              <td><span t-esc="ph.name"/></td>
+              <td><t t-esc="ph.progress"/>%</td>
+              <td><span t-esc="ph.state"/></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Milestones</h4>
+        <table class="table table-sm" t-if="project.buruuj_milestone_ids">
+          <thead><tr><th>Name</th><th>Date</th><th>Amount</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr t-foreach="project.buruuj_milestone_ids" t-as="m">
+              <td><span t-esc="m.name"/></td>
+              <td><span t-field="m.date"/></td>
+              <td><span t-field="m.amount"/></td>
+              <td><span t-esc="m.state"/></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <!-- ===== IPCs ===== -->
+  <template id="portal_my_ipcs" name="My Client IPCs">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">Client IPCs</h2>
+        <div t-if="not ipcs" class="alert alert-info">No IPCs to display.</div>
+        <table class="table" t-if="ipcs">
+          <thead>
+            <tr>
+              <th>IPC #</th><th>Project</th><th>Period</th>
+              <th>Net Amount</th><th>Status</th><th>Approved by Client</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="ipcs" t-as="i">
+              <td><a t-attf-href="/my/ipcs/#{i.id}">
+                <t t-esc="i.name"/> (#<t t-esc="i.sequence_no"/>)
+              </a></td>
+              <td><span t-esc="i.project_id.name"/></td>
+              <td><t t-field="i.period_from"/> – <t t-field="i.period_to"/></td>
+              <td><span t-field="i.net_amount"/></td>
+              <td>
+                <span class="buruuj-status-badge"
+                      t-attf-class="buruuj-status-#{'approved' if i.state == 'finance_approved' else 'pending'}">
+                  <t t-esc="i.state"/>
+                </span>
+              </td>
+              <td>
+                <span t-if="i.portal_approved_by_partner" class="text-success">
+                  ✓ <t t-field="i.portal_approved_at"/>
+                </span>
+                <span t-else="" class="text-muted">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_ipc_detail" name="IPC Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/ipcs" class="btn btn-sm btn-link">← Back to IPCs</a>
+        <h2 class="buruuj-section-title">
+          IPC <t t-esc="ipc.name"/> — #<t t-esc="ipc.sequence_no"/>
+        </h2>
+        <div class="buruuj-portal-summary">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Project:</span>
+                <span t-esc="ipc.project_id.name"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Period:</span>
+                <span t-field="ipc.period_from"/> – <span t-field="ipc.period_to"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Status:</span>
+                <span class="buruuj-status-badge"
+                      t-attf-class="buruuj-status-#{'approved' if ipc.state == 'finance_approved' else 'pending'}">
+                  <t t-esc="ipc.state"/>
+                </span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Cumulative Amount:</span>
+                <span t-field="ipc.cumulative_amount"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Retention:</span>
+                <span t-field="ipc.retention_amount"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Net Amount:</span>
+                <strong t-field="ipc.net_amount"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Total Payable (incl VAT):</span>
+                <strong t-field="ipc.total_payable"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4>Lines</h4>
+        <table class="table table-sm">
+          <thead>
+            <tr><th>Item</th><th>Description</th><th>Qty</th><th>Rate</th>
+              <th>Cum. Qty</th><th>Period Amount</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="ipc.line_ids" t-as="ln">
+              <td><span t-esc="ln.item_no"/></td>
+              <td><span t-esc="ln.description"/></td>
+              <td><span t-esc="ln.contract_qty"/></td>
+              <td><span t-field="ln.unit_rate"/></td>
+              <td><span t-esc="ln.cumulative_qty"/></td>
+              <td><span t-field="ln.period_amount"/></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div t-if="ipc.state == 'finance_approved' and not ipc.portal_approved_by_partner"
+             class="buruuj-action-bar">
+          <h4>Approve this IPC</h4>
+          <p>By approving, you confirm the work done in this period and authorize payment as shown above.</p>
+          <form t-attf-action="/my/ipcs/#{ipc.id}/approve" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <button type="submit" class="btn btn-primary">Approve IPC</button>
+          </form>
+        </div>
+        <div t-if="ipc.portal_approved_by_partner" class="alert alert-success">
+          ✓ Approved on <t t-field="ipc.portal_approved_at"/>
+          by <t t-esc="ipc.portal_approved_user_id.name"/>.
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <!-- ===== RFIs ===== -->
+  <template id="portal_my_rfis" name="My RFIs">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">RFIs Awaiting Your Response</h2>
+        <div t-if="not rfis" class="alert alert-info">No RFIs.</div>
+        <table class="table" t-if="rfis">
+          <thead>
+            <tr><th>Ref</th><th>Project</th><th>Title</th><th>Sent Date</th>
+              <th>Due</th><th>State</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="rfis" t-as="r">
+              <td><a t-attf-href="/my/rfis/#{r.id}" t-esc="r.name"/></td>
+              <td><span t-esc="r.project_id.name"/></td>
+              <td><span t-esc="r.title"/></td>
+              <td><span t-field="r.date"/></td>
+              <td><span t-field="r.response_due"/></td>
+              <td>
+                <span class="buruuj-status-badge"
+                      t-attf-class="buruuj-status-#{'pending' if r.state == 'sent' else 'active'}">
+                  <t t-esc="r.state"/>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_rfi_detail" name="RFI Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/rfis" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title" t-esc="rfi.title"/>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Project:</span>
+          <span t-esc="rfi.project_id.name"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Sent:</span>
+          <span t-field="rfi.date"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Due By:</span>
+          <span t-field="rfi.response_due"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Discipline:</span>
+          <span t-esc="rfi.discipline"/>
+        </div>
+        <div class="mt-4">
+          <h4>Question</h4>
+          <div t-field="rfi.question"/>
+        </div>
+        <div t-if="rfi.response" class="mt-4">
+          <h4>Existing Response</h4>
+          <div t-field="rfi.response"/>
+        </div>
+
+        <div t-if="rfi.state == 'sent'" class="buruuj-action-bar mt-4">
+          <h4>Submit Response</h4>
+          <form t-attf-action="/my/rfis/#{rfi.id}/respond" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <textarea name="response_text" class="form-control" rows="6"
+                        placeholder="Your response..."></textarea>
+            <button type="submit" class="btn btn-primary mt-3">Submit Response</button>
+          </form>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <!-- ===== VARIATIONS ===== -->
+  <template id="portal_my_variations" name="Variation Orders">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">Variation Orders</h2>
+        <div t-if="not variations" class="alert alert-info">None.</div>
+        <table class="table" t-if="variations">
+          <thead>
+            <tr><th>Ref</th><th>Project</th><th>Title</th><th>Cost Impact</th>
+              <th>Time Impact (days)</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="variations" t-as="v">
+              <td><a t-attf-href="/my/variations/#{v.id}" t-esc="v.name"/></td>
+              <td><span t-esc="v.project_id.name"/></td>
+              <td><span t-esc="v.title"/></td>
+              <td><span t-field="v.vo_amount"/></td>
+              <td><span t-esc="v.time_impact"/></td>
+              <td>
+                <span class="buruuj-status-badge"
+                      t-attf-class="buruuj-status-#{'approved' if v.state == 'approved' else 'pending'}">
+                  <t t-esc="v.state"/>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_variation_detail" name="Variation Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/variations" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title" t-esc="vo.title"/>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Project:</span>
+          <span t-esc="vo.project_id.name"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Date:</span>
+          <span t-field="vo.date"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">VO Amount:</span>
+          <span t-field="vo.vo_amount"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Time Impact (days):</span>
+          <span t-esc="vo.time_impact"/>
+        </div>
+        <div class="mt-4"><h4>Description</h4><div t-field="vo.description"/></div>
+
+        <div t-if="vo.state == 'submitted' and vo.portal_decision == 'pending'"
+             class="buruuj-action-bar mt-4">
+          <h4>Decision</h4>
+          <form t-attf-action="/my/variations/#{vo.id}/decide" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <textarea name="notes" class="form-control" rows="3"
+                        placeholder="Optional notes..."></textarea>
+            <div class="mt-3">
+              <button type="submit" name="decision" value="approved"
+                        class="btn btn-success">Approve</button>
+              <button type="submit" name="decision" value="rejected"
+                        class="btn btn-danger ml-2">Reject</button>
+            </div>
+          </form>
+        </div>
+        <div t-if="vo.portal_decision != 'pending'" class="alert alert-info mt-3">
+          Decision: <strong t-esc="vo.portal_decision"/>
+          on <t t-field="vo.portal_decision_at"/>.
+          <span t-if="vo.portal_decision_notes">Notes: <t t-esc="vo.portal_decision_notes"/></span>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <!-- ===== DRAWINGS ===== -->
+  <template id="portal_my_drawings" name="Drawings">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">Drawings for Approval</h2>
+        <div t-if="not drawings" class="alert alert-info">No drawings.</div>
+        <table class="table" t-if="drawings">
+          <thead>
+            <tr><th>Drawing No.</th><th>Title</th><th>Project</th><th>Rev</th>
+              <th>Status</th><th>Your Response</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="drawings" t-as="d">
+              <td><a t-attf-href="/my/drawings/#{d.id}" t-esc="d.drawing_no"/></td>
+              <td><span t-esc="d.title"/></td>
+              <td><span t-esc="d.project_id.name"/></td>
+              <td><span t-esc="d.revision"/></td>
+              <td><span class="buruuj-status-badge buruuj-status-pending"
+                          t-esc="d.status"/></td>
+              <td><span t-esc="d.portal_response"/></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_drawing_detail" name="Drawing Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/drawings" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title">
+          <t t-esc="drawing.drawing_no"/> — <t t-esc="drawing.title"/>
+        </h2>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Project:</span>
+          <span t-esc="drawing.project_id.name"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Revision:</span>
+          <span t-esc="drawing.revision"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Discipline:</span>
+          <span t-esc="drawing.discipline"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Status:</span>
+          <span t-esc="drawing.status"/>
+        </div>
+
+        <div t-if="drawing.portal_response == 'pending'"
+             class="buruuj-action-bar mt-4">
+          <h4>Your Review</h4>
+          <form t-attf-action="/my/drawings/#{drawing.id}/review" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <textarea name="notes" class="form-control" rows="3"
+                        placeholder="Comments (optional for approve, required for rejection)..."></textarea>
+            <div class="mt-3">
+              <button type="submit" name="response" value="approved"
+                        class="btn btn-success">Approve</button>
+              <button type="submit" name="response" value="approved_comments"
+                        class="btn btn-warning ml-2">Approve with Comments</button>
+              <button type="submit" name="response" value="rejected"
+                        class="btn btn-danger ml-2">Reject</button>
+            </div>
+          </form>
+        </div>
+        <div t-if="drawing.portal_response != 'pending'" class="alert alert-info mt-3">
+          Response: <strong t-esc="drawing.portal_response"/>
+          on <t t-field="drawing.portal_response_at"/>.
+          <span t-if="drawing.portal_response_notes">Notes: <t t-esc="drawing.portal_response_notes"/></span>
+        </div>
+      </div>
+    </t>
+  </template>
+
+</odoo>

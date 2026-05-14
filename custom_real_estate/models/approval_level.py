@@ -29,7 +29,7 @@ class RemarksRefund(models.Model):
     name = fields.Char('Remarks')
     user_id = fields.Many2one('res.users', string='User')
     remark_datettime = fields.Datetime(string='Remark Datetime')
-    from_stage_id = fields.Many2one('approval.level.prio', string='From Stage', required=0)
+    from_stage_id = fields.Many2one('approval.level.prio', string='From Stage', required=False)
     to_stage_id = fields.Many2one('approval.level.prio', string='To Stage')
     consumed_hours = fields.Char(string='Consumed Time')
     remark_type = fields.Selection([('approve', 'Approved'), ('previous', 'Previous'), ('reject', 'Reject'), ('complete', 'Completed')])

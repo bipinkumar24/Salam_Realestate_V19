@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_labor_trade_list" model="ir.ui.view">
+        <field name="name">buruuj.labor.trade.list</field>
+        <field name="model">buruuj.labor.trade</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="skill_level"/>
+                <field name="typical_daily_rate"/>
+                <field name="active"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_labor_trade" model="ir.actions.act_window">
+        <field name="name">Labor Trades</field>
+        <field name="res_model">buruuj.labor.trade</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_alw_type_list" model="ir.ui.view">
+        <field name="name">buruuj.allowance.type.list</field>
+        <field name="model">buruuj.allowance.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="direction"/>
+                <field name="is_taxable"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_alw_type" model="ir.actions.act_window">
+        <field name="name">Allowance Types</field>
+        <field name="res_model">buruuj.allowance.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

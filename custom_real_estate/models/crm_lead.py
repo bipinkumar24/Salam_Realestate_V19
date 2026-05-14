@@ -231,10 +231,10 @@ class UnitPrioritization(models.Model):
     file_number_int = fields.Integer(compute='_compute_number', store=True)
     prioritization_number_int = fields.Integer(compute='_compute_number', store=True)
 
-    _sql_constraints = [
-        ('file_number_uniq', 'UNIQUE (file_number)', 'The File Number must be unique!'),
-        ('prioritization_number_uniq', 'UNIQUE (prioritization_number)', 'The Prioritization Number must be unique!'),
-    ]
+    _name_unique = models.Constraint(
+        ('unique(file_number)', 'The File Number must be unique!'),
+        ('unique(prioritization_number)', 'The Prioritization Number must be unique!')
+    )
 
     @api.depends('next_approval_id', 'next_approval_user_ids')
     def _compute_is_button(self):

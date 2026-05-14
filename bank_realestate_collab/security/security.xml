@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Module Category -->
+        <record id="module_category_bre" model="ir.module.category">
+            <field name="name">Bank and Real Estate Collaboration</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <!-- Privilege -->
+        <record id="privilege_bank_realestate_collab" model="res.groups.privilege">
+            <field name="name">Bank and Real Estate Collaboration</field>
+            <field name="category_id" ref="bank_realestate_collab.module_category_bre"/>
+            <field name="sequence">10</field>
+        </record>
+
+        <!-- Security Groups -->
+        <record id="group_bre_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="privilege_id" ref="bank_realestate_collab.privilege_bank_realestate_collab"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_bre_real_estate_agent" model="res.groups">
+            <field name="name">Real Estate Agent</field>
+            <!-- <field name="category_id" ref="module_category_bre"/> -->
+            <field name="privilege_id" ref="bank_realestate_collab.privilege_bank_realestate_collab"/>
+            <field name="implied_ids" eval="[(4, ref('group_bre_user'))]"/>
+        </record>
+
+        <record id="group_bre_bank_officer" model="res.groups">
+            <field name="name">Bank Officer</field>
+            <!-- <field name="category_id" ref="module_category_bre"/> -->
+            <field name="privilege_id" ref="bank_realestate_collab.privilege_bank_realestate_collab"/>
+            <field name="implied_ids" eval="[(4, ref('group_bre_user'))]"/>
+        </record>
+
+        <record id="group_bre_manager" model="res.groups">
+            <field name="name">Manager / Administrator</field>
+            <!-- <field name="category_id" ref="module_category_bre"/> -->
+            <field name="privilege_id" ref="bank_realestate_collab.privilege_bank_realestate_collab"/>
+            <field name="implied_ids" eval="[(4, ref('group_bre_real_estate_agent')), (4, ref('group_bre_bank_officer'))]"/>
+        </record>
+
+        <!-- ══════════════════════════════════════════════
+             Record Rules
+             NOTE: Rules only apply to non-superuser accounts.
+             Admins / superusers always see everything.
+        ══════════════════════════════════════════════ -->
+
+        <!-- Real Estate Agents: see only their own applications -->
+        <record id="rule_application_agent" model="ir.rule">
+            <field name="name">Applications: Agent sees own records</field>
+            <field name="model_id" ref="bank_realestate_collab.model_bre_customer_application"/>
+            <field name="domain_force">[('agent_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_bre_real_estate_agent'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Bank Officers: see all submitted applications -->
+        <record id="rule_application_bank" model="ir.rule">
+            <field name="name">Applications: Bank sees submitted applications</field>
+            <field name="model_id" ref="bank_realestate_collab.model_bre_customer_application"/>
+            <field name="domain_force">[('bank_status', '!=', 'not_submitted')]</field>
+            <field name="groups" eval="[(4, ref('group_bre_bank_officer'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Managers: see everything -->
+        <record id="rule_application_manager" model="ir.rule">
+            <field name="name">Applications: Manager sees all</field>
+            <field name="model_id" ref="bank_realestate_collab.model_bre_customer_application"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_bre_manager'))]"/>
+        </record>
+
+    </data>
+</odoo>

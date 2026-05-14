@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_wbs_list" model="ir.ui.view">
+        <field name="name">buruuj.wbs.list</field>
+        <field name="model">buruuj.wbs</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="trade_id"/>
+                <field name="planned_qty"/>
+                <field name="actual_qty"/>
+                <field name="uom_id"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="planned_cost" sum="Planned"/>
+                <field name="actual_cost" sum="Actual"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_wbs_form" model="ir.ui.view">
+        <field name="name">buruuj.wbs.form</field>
+        <field name="model">buruuj.wbs</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="project_id"/>
+                            <field name="phase_id"/>
+                            <field name="parent_id"/>
+                            <field name="trade_id"/>
+                        </group>
+                        <group>
+                            <field name="uom_id"/>
+                            <field name="planned_qty"/>
+                            <field name="actual_qty"/>
+                            <field name="progress"/>
+                            <field name="planned_cost"/>
+                            <field name="actual_cost"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Schedule">
+                            <field name="planned_start"/>
+                            <field name="planned_end"/>
+                        </group>
+                        <group string="Actuals">
+                            <field name="actual_start"/>
+                            <field name="actual_end"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_wbs" model="ir.actions.act_window">
+        <field name="name">WBS</field>
+        <field name="res_model">buruuj.wbs</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_bid_bond_list" model="ir.ui.view">
+        <field name="name">tender.bid.bond.list</field>
+        <field name="model">tender.bid.bond</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'issued'" decoration-info="state == 'submitted'" decoration-danger="state in ('forfeited','expired')">
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <field name="bond_type"/>
+                <field name="required_amount" widget="monetary"/>
+                <field name="issued_amount" widget="monetary"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="issuer_id"/>
+                <field name="validity_to"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_bid_bond_form" model="ir.ui.view">
+        <field name="name">tender.bid.bond.form</field>
+        <field name="model">tender.bid.bond</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_mark_issued" type="object" string="Mark Issued" class="oe_highlight" invisible="state != 'requested'"/>
+                    <button name="action_mark_submitted" type="object" string="Mark Submitted" class="oe_highlight" invisible="state != 'issued'"/>
+                    <button name="action_mark_returned" type="object" string="Mark Returned" invisible="state != 'submitted'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="requested,issued,submitted,returned"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="bond_type"/>
+                            <field name="reference"/>
+                            <field name="beneficiary_id"/>
+                            <field name="issuer_id"/>
+                        </group>
+                        <group>
+                            <field name="required_amount"/>
+                            <field name="issued_amount"/>
+                            <field name="currency_id"/>
+                            <field name="validity_from"/>
+                            <field name="validity_to"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Attachments" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_bid_bond" model="ir.actions.act_window">
+        <field name="name">Bid Bonds</field>
+        <field name="res_model">tender.bid.bond</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

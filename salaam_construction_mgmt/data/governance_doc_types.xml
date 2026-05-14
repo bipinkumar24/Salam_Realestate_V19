@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Constitutional -->
+        <record id="doctype_moa" model="salaam.governance.doc.type">
+            <field name="name">Memorandum of Association (MOA)</field>
+            <field name="code">MOA</field>
+            <field name="category">constitutional</field>
+        </record>
+        <record id="doctype_aoa" model="salaam.governance.doc.type">
+            <field name="name">Articles of Association (AOA)</field>
+            <field name="code">AOA</field>
+            <field name="category">constitutional</field>
+        </record>
+        <record id="doctype_charter" model="salaam.governance.doc.type">
+            <field name="name">Project Charter</field>
+            <field name="code">CHARTER</field>
+            <field name="category">constitutional</field>
+        </record>
+        <record id="doctype_jv_agreement" model="salaam.governance.doc.type">
+            <field name="name">Joint Venture Agreement</field>
+            <field name="code">JVA</field>
+            <field name="category">jv</field>
+        </record>
+        <record id="doctype_shareholder" model="salaam.governance.doc.type">
+            <field name="name">Shareholders Agreement</field>
+            <field name="code">SHA</field>
+            <field name="category">jv</field>
+        </record>
+
+        <!-- Board & Shareholder -->
+        <record id="doctype_board_resolution" model="salaam.governance.doc.type">
+            <field name="name">Board Resolution</field>
+            <field name="code">BR</field>
+            <field name="category">board</field>
+        </record>
+        <record id="doctype_agm_minutes" model="salaam.governance.doc.type">
+            <field name="name">AGM / EGM Minutes</field>
+            <field name="code">AGM</field>
+            <field name="category">board</field>
+        </record>
+        <record id="doctype_poa" model="salaam.governance.doc.type">
+            <field name="name">Power of Attorney</field>
+            <field name="code">POA</field>
+            <field name="category">legal</field>
+        </record>
+
+        <!-- Regulatory -->
+        <record id="doctype_construction_permit" model="salaam.governance.doc.type">
+            <field name="name">Construction Permit</field>
+            <field name="code">CP</field>
+            <field name="category">regulatory</field>
+        </record>
+        <record id="doctype_env_approval" model="salaam.governance.doc.type">
+            <field name="name">Environmental Impact Assessment</field>
+            <field name="code">EIA</field>
+            <field name="category">regulatory</field>
+        </record>
+        <record id="doctype_land_title" model="salaam.governance.doc.type">
+            <field name="name">Land Title / Title Deed</field>
+            <field name="code">TITLE</field>
+            <field name="category">regulatory</field>
+        </record>
+        <record id="doctype_occupation_cert" model="salaam.governance.doc.type">
+            <field name="name">Occupation Certificate</field>
+            <field name="code">OC</field>
+            <field name="category">regulatory</field>
+        </record>
+
+        <!-- Sharia Governance -->
+        <record id="doctype_ssb_minutes" model="salaam.governance.doc.type">
+            <field name="name">Sharia Supervisory Board Minutes</field>
+            <field name="code">SSB-MIN</field>
+            <field name="category">sharia</field>
+        </record>
+        <record id="doctype_ssb_fatwa" model="salaam.governance.doc.type">
+            <field name="name">Sharia Fatwa / Opinion</field>
+            <field name="code">FATWA</field>
+            <field name="category">sharia</field>
+        </record>
+        <record id="doctype_aaoifi_cert" model="salaam.governance.doc.type">
+            <field name="name">AAOIFI Compliance Certificate</field>
+            <field name="code">AAOIFI</field>
+            <field name="category">sharia</field>
+        </record>
+
+        <!-- Financial -->
+        <record id="doctype_audit_report" model="salaam.governance.doc.type">
+            <field name="name">Audit Report</field>
+            <field name="code">AUDIT</field>
+            <field name="category">financial</field>
+        </record>
+        <record id="doctype_financial_statement" model="salaam.governance.doc.type">
+            <field name="name">Financial Statement</field>
+            <field name="code">FS</field>
+            <field name="category">financial</field>
+        </record>
+
+    </data>
+</odoo>

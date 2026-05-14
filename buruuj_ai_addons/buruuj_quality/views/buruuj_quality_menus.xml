@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_buruuj_drawing" name="Drawing Register"
+              parent="buruuj_base.menu_buruuj_quality_root"
+              action="action_buruuj_drawing" sequence="10"/>
+    <menuitem id="menu_buruuj_transmittal" name="Transmittals"
+              parent="buruuj_base.menu_buruuj_quality_root"
+              action="action_buruuj_transmittal" sequence="20"/>
+    <menuitem id="menu_buruuj_submittal" name="Submittals"
+              parent="buruuj_base.menu_buruuj_quality_root"
+              action="action_buruuj_submittal" sequence="30"/>
+</odoo>

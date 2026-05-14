@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_buruuj_tender" name="Tenders"
+              parent="buruuj_base.menu_buruuj_tendering"
+              action="action_buruuj_tender" sequence="10"/>
+
+    <menuitem id="menu_buruuj_boq" name="Bills of Quantities"
+              parent="buruuj_base.menu_buruuj_tendering"
+              action="action_buruuj_boq" sequence="20"/>
+
+    <menuitem id="menu_buruuj_rate" name="Master Rate Database"
+              parent="buruuj_base.menu_buruuj_tendering"
+              action="action_buruuj_rate" sequence="30"/>
+
+</odoo>

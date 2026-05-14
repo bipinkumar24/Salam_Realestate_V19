@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="sector_professional" model="property.sector">
+            <field name="name">Professional, Scientific &amp; Technical Activities</field>
+            <field name="code">PST</field>
+        </record>
+        <record id="sector_commerce" model="property.sector">
+            <field name="name">General Commerce</field>
+            <field name="code">GCO</field>
+        </record>
+        <record id="sector_micro" model="property.sector">
+            <field name="name">Micro-enterprise</field>
+            <field name="code">MIC</field>
+        </record>
+        <record id="sector_realestate" model="property.sector">
+            <field name="name">Real Estate</field>
+            <field name="code">REA</field>
+        </record>
+        <record id="sector_transport" model="property.sector">
+            <field name="name">Transportation &amp; Storage</field>
+            <field name="code">TRS</field>
+        </record>
+        <record id="sector_education" model="property.sector">
+            <field name="name">Education</field>
+            <field name="code">EDU</field>
+        </record>
+        <record id="sector_tourism" model="property.sector">
+            <field name="name">Tourism, Restaurant, Hotels</field>
+            <field name="code">TRH</field>
+        </record>
+        <record id="sector_energy" model="property.sector">
+            <field name="name">Power &amp; Energy</field>
+            <field name="code">POE</field>
+        </record>
+        <record id="sector_oilgas" model="property.sector">
+            <field name="name">Oil &amp; Gas</field>
+            <field name="code">OIL</field>
+        </record>
+        <record id="sector_construction" model="property.sector">
+            <field name="name">Construction</field>
+            <field name="code">CON</field>
+        </record>
+        <record id="sector_manufacturing" model="property.sector">
+            <field name="name">Manufacturing</field>
+            <field name="code">MAN</field>
+        </record>
+        <record id="sector_health" model="property.sector">
+            <field name="name">Human Health &amp; Social Activities</field>
+            <field name="code">HEA</field>
+        </record>
+        <record id="sector_agriculture" model="property.sector">
+            <field name="name">Agriculture, Forestry &amp; Fishing</field>
+            <field name="code">AGR</field>
+        </record>
+        <record id="sector_mining" model="property.sector">
+            <field name="name">Mining &amp; Quarrying</field>
+            <field name="code">MIN</field>
+        </record>
+        <record id="sector_finance" model="property.sector">
+            <field name="name">Finance &amp; Insurance</field>
+            <field name="code">FIN</field>
+        </record>
+        <record id="sector_trade" model="property.sector">
+            <field name="name">International Trade</field>
+            <field name="code">INT</field>
+        </record>
+        <record id="sector_water" model="property.sector">
+            <field name="name">Water Supply; Sewerage &amp; Waste Management</field>
+            <field name="code">WAT</field>
+        </record>
+        <record id="sector_ict" model="property.sector">
+            <field name="name">Information &amp; Communication</field>
+            <field name="code">ICT</field>
+        </record>
+        <record id="sector_admin" model="property.sector">
+            <field name="name">Administrative &amp; Support Service Activities</field>
+            <field name="code">ADM</field>
+        </record>
+        <record id="sector_arts" model="property.sector">
+            <field name="name">Arts, Entertainment &amp; Recreation</field>
+            <field name="code">ART</field>
+        </record>
+        <record id="sector_government" model="property.sector">
+            <field name="name">Government</field>
+            <field name="code">GOV</field>
+        </record>
+        <record id="sector_other" model="property.sector">
+            <field name="name">Other Services</field>
+            <field name="code">OTH</field>
+        </record>
+    </data>
+</odoo>

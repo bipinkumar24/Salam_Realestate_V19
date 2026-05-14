@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="module_category_dev_contracts" model="ir.module.category">
+            <field name="name">Developer Contracts</field>
+            <field name="description">Salaam Investment Bank — Developer and Contractor Contract Management</field>
+            <field name="sequence">100</field>
+        </record>
+
+        <record id="group_dev_contracts_viewer" model="res.groups">
+            <field name="name">Viewer</field>
+            <field name="comment">Read-only access to all Developer Contracts</field>
+        </record>
+
+        <record id="group_dev_contracts_officer" model="res.groups">
+            <field name="name">Officer</field>
+            <field name="implied_ids" eval="[(4, ref('group_dev_contracts_viewer'))]"/>
+            <field name="comment">Create, read, and edit contracts. Cannot approve.</field>
+        </record>
+
+        <record id="group_dev_contracts_sharia" model="res.groups">
+            <field name="name">Sharia Officer</field>
+            <field name="implied_ids" eval="[(4, ref('group_dev_contracts_viewer'))]"/>
+            <field name="comment">Can certify contracts as Sharia-compliant</field>
+        </record>
+
+        <record id="group_dev_contracts_manager" model="res.groups">
+            <field name="name">Manager</field>
+            <field name="implied_ids" eval="[(4, ref('group_dev_contracts_officer'))]"/>
+            <field name="comment">Full access including approval up to configured thresholds</field>
+        </record>
+
+        <record id="group_dev_contracts_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="implied_ids" eval="[(4, ref('group_dev_contracts_manager')), (4, ref('group_dev_contracts_sharia'))]"/>
+            <field name="comment">Board / BCC level approval. Configuration access. Required for Musharaka approval.</field>
+        </record>
+
+    </data>
+</odoo>

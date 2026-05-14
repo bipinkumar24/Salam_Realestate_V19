@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_buruuj_equipment" name="Equipment Register"
+              parent="buruuj_base.menu_buruuj_plant_root"
+              action="action_buruuj_equipment" sequence="10"/>
+    <menuitem id="menu_buruuj_allocation" name="Allocations"
+              parent="buruuj_base.menu_buruuj_plant_root"
+              action="action_buruuj_allocation" sequence="20"/>
+    <menuitem id="menu_buruuj_fuel" name="Fuel Logs"
+              parent="buruuj_base.menu_buruuj_plant_root"
+              action="action_buruuj_fuel_log" sequence="30"/>
+    <menuitem id="menu_buruuj_maint" name="Maintenance"
+              parent="buruuj_base.menu_buruuj_plant_root"
+              action="action_buruuj_maintenance" sequence="40"/>
+</odoo>

@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="report_investment_proposal_template">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+
+                    <!-- ══════════ HEADER ══════════ -->
+                    <div class="text-center mb-4">
+                        <h2 class="text-uppercase font-weight-bold">Individual Investment Proposal</h2>
+                        <h4>Credit Appraisal — Five Cs Framework</h4>
+                        <hr/>
+                    </div>
+
+                    <!-- Application Reference Row -->
+                    <table class="table table-sm table-bordered mb-3">
+                        <tr>
+                            <td class="font-weight-bold" style="width:20%">Application No.</td>
+                            <td><t t-esc="doc.name"/></td>
+                            <td class="font-weight-bold" style="width:20%">Date</td>
+                            <td><t t-esc="doc.date_application"/></td>
+                            <td class="font-weight-bold" style="width:20%">Financing Type</td>
+                            <td><t t-esc="dict(doc._fields['financing_type'].selection).get(doc.financing_type, '')"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Customer</td>
+                            <td colspan="3"><t t-esc="doc.partner_id.name"/></td>
+                            <td class="font-weight-bold">Status</td>
+                            <td><t t-esc="dict(doc._fields['state'].selection).get(doc.state, '')"/></td>
+                        </tr>
+                    </table>
+
+                    <!-- ══════════ SECTION 1: CHARACTER (5%) ══════════ -->
+                    <h5 class="bg-primary text-white p-2 mt-3">1. General Information — Character (5%)</h5>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td class="font-weight-bold" style="width:25%">Phone</td>
+                            <td><t t-esc="doc.phone"/></td>
+                            <td class="font-weight-bold" style="width:25%">Gender</td>
+                            <td><t t-esc="dict(doc._fields['gender'].selection).get(doc.gender, '')"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Date of Birth</td>
+                            <td><t t-esc="doc.date_of_birth"/></td>
+                            <td class="font-weight-bold">Age</td>
+                            <td><t t-esc="doc.age"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Marital Status</td>
+                            <td><t t-esc="dict(doc._fields['marital_status'].selection).get(doc.marital_status, '')"/></td>
+                            <td class="font-weight-bold">Dependents</td>
+                            <td><t t-esc="doc.dependents_count"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Education Level</td>
+                            <td><t t-esc="dict(doc._fields['education_level'].selection).get(doc.education_level, '')"/></td>
+                            <td class="font-weight-bold">Residence Type</td>
+                            <td><t t-esc="dict(doc._fields['residence_type'].selection).get(doc.residence_type, '')"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Account No.</td>
+                            <td><t t-esc="doc.account_no"/></td>
+                            <td class="font-weight-bold">Account ID</td>
+                            <td><t t-esc="doc.account_id_ref"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Average Balance</td>
+                            <td><t t-esc="doc.avg_balance" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                            <td class="font-weight-bold">Previous Loan</td>
+                            <td><t t-esc="doc.previous_loan_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Repayment Rate</td>
+                            <td><t t-esc="'{:.0f}%'.format(doc.repayment_rate * 100)"/></td>
+                            <td class="font-weight-bold">Score (5%)</td>
+                            <td class="font-weight-bold"><t t-esc="'{:.0f}%'.format(doc.score_character * 100)"/></td>
+                        </tr>
+                    </table>
+
+                    <!-- ══════════ SECTION 2: CONDITION (5%) ══════════ -->
+                    <h5 class="bg-primary text-white p-2 mt-3">2. Employment &amp; Business — Condition (5%)</h5>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td class="font-weight-bold" style="width:25%">Employer</td>
+                            <td><t t-esc="doc.employer_name"/></td>
+                            <td class="font-weight-bold" style="width:25%">Job Title</td>
+                            <td><t t-esc="doc.job_title"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Length of Employment</td>
+                            <td><t t-esc="doc.employment_years"/> years</td>
+                            <td class="font-weight-bold">Employment Type</td>
+                            <td><t t-esc="dict(doc._fields['employment_type'].selection).get(doc.employment_type, '')"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Business Name</td>
+                            <td><t t-esc="doc.business_name"/></td>
+                            <td class="font-weight-bold">Sector</td>
+                            <td><t t-esc="doc.sector_id.name"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Years in Business</td>
+                            <td><t t-esc="doc.business_years"/> years</td>
+                            <td class="font-weight-bold">Score (5%)</td>
+                            <td class="font-weight-bold"><t t-esc="'{:.0f}%'.format(doc.score_condition * 100)"/></td>
+                        </tr>
+                    </table>
+
+                    <!-- ══════════ SECTION 3: CAPITAL (15%) ══════════ -->
+                    <h5 class="bg-primary text-white p-2 mt-3">3. Personal Assets &amp; Liabilities — Capital (15%)</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-light">
+                                    <tr><th colspan="2">Assets</th></tr>
+                                    <tr><th>Category</th><th class="text-right">Amount (<t t-esc="doc.currency_id.name"/>)</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Cash &amp; Equivalents</td><td class="text-right"><t t-esc="doc.asset_cash" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Business Shares</td><td class="text-right"><t t-esc="doc.asset_shares" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Real Estate</td><td class="text-right"><t t-esc="doc.asset_real_estate" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Personal Business</td><td class="text-right"><t t-esc="doc.asset_personal_biz" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>House / Residence</td><td class="text-right"><t t-esc="doc.asset_house" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Automobiles</td><td class="text-right"><t t-esc="doc.asset_automobiles" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Other Assets</td><td class="text-right"><t t-esc="doc.asset_other" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="font-weight-bold">
+                                        <td>Total Assets (A)</td>
+                                        <td class="text-right"><t t-esc="doc.total_assets" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-light">
+                                    <tr><th colspan="3">Liabilities</th></tr>
+                                    <tr><th>Creditor</th><th class="text-right">Monthly Pmt</th><th class="text-right">Balance</th></tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.liability_ids" t-as="lib">
+                                        <tr>
+                                            <td><t t-esc="lib.creditor_name"/></td>
+                                            <td class="text-right"><t t-esc="lib.monthly_payment" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                            <td class="text-right"><t t-esc="lib.outstanding_balance" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="font-weight-bold">
+                                        <td>Total Liabilities (B)</td>
+                                        <td class="text-right"><t t-esc="doc.total_monthly_liability_payment" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                        <td class="text-right"><t t-esc="doc.total_liabilities" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                    </tr>
+                                    <tr class="font-weight-bold">
+                                        <td colspan="2">Net Worth (A − B)</td>
+                                        <td class="text-right"><t t-esc="doc.net_worth" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <p class="text-right"><strong>Capital Score (15%): <t t-esc="'{:.0f}%'.format(doc.score_capital * 100)"/></strong></p>
+                        </div>
+                    </div>
+
+                    <!-- ══════════ SECTION 4: CAPACITY (50%) ══════════ -->
+                    <h5 class="bg-primary text-white p-2 mt-3">4. Monthly Income &amp; Expenses — Capacity (50%)</h5>
+                    <div class="row">
+                        <div class="col-6">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-light">
+                                    <tr><th>Income Source</th><th class="text-right">Amount</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Monthly Salary</td><td class="text-right"><t t-esc="doc.income_salary" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Commissions / Bonus</td><td class="text-right"><t t-esc="doc.income_commission" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Business Income</td><td class="text-right"><t t-esc="doc.income_business" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Rental Income</td><td class="text-right"><t t-esc="doc.income_rental" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Other Income</td><td class="text-right"><t t-esc="doc.income_other" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="font-weight-bold"><td>Total Gross Income (I)</td><td class="text-right"><t t-esc="doc.total_gross_income" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-6">
+                            <table class="table table-sm table-bordered">
+                                <thead class="thead-light">
+                                    <tr><th>Expense / Derived</th><th class="text-right">Amount</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>Basic Living Expenses</td><td class="text-right"><t t-esc="doc.expense_basic_living" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Advance Loan Payment (FA)</td><td class="text-right"><t t-esc="doc.expense_loan_advance" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Total Monthly Expenses (ME)</td><td class="text-right"><t t-esc="doc.total_monthly_expenses" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Disposable Personal Income (DPI)</td><td class="text-right"><t t-esc="doc.disposable_personal_income" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                    <tr><td>Contingency Rate</td><td class="text-right"><t t-esc="'{:.0f}%'.format(doc.contingency_rate * 100)"/></td></tr>
+                                    <tr><td>Less: Contingency Amount</td><td class="text-right"><t t-esc="doc.contingency_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr class="font-weight-bold"><td>Net Disposable Income (NDI)</td><td class="text-right"><t t-esc="doc.net_disposable_income" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td></tr>
+                                </tfoot>
+                            </table>
+                            <p class="text-right"><strong>Capacity Score (50%): <t t-esc="'{:.0f}%'.format(doc.score_capacity * 100)"/></strong></p>
+                        </div>
+                    </div>
+
+                    <!-- ══════════ SECTION 5: FINANCING TERMS & IIR ══════════ -->
+                    <h5 class="bg-primary text-white p-2 mt-3">5. Financing Terms &amp; IIR</h5>
+                    <table class="table table-sm table-bordered">
+                        <tr>
+                            <td class="font-weight-bold" style="width:25%">Required Amount (A)</td>
+                            <td><t t-esc="doc.financing_required_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                            <td class="font-weight-bold" style="width:25%">Annual Profit Rate</td>
+                            <td><t t-esc="'{:.2f}%'.format(doc.profit_rate * 100)"/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Advance Payment % </td>
+                            <td><t t-esc="'{:.0f}%'.format(doc.advance_payment_pct * 100)"/></td>
+                            <td class="font-weight-bold">Advance Payment (C)</td>
+                            <td><t t-esc="doc.advance_payment_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Financing Period</td>
+                            <td><t t-esc="doc.financing_period_months"/> months</td>
+                            <td class="font-weight-bold">Profit Amount (B)</td>
+                            <td><t t-esc="doc.profit_amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Total Price (A+B−C)</td>
+                            <td><t t-esc="doc.total_price" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                            <td class="font-weight-bold">Monthly Installment</td>
+                            <td><t t-esc="doc.monthly_installment" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">IIR (Installment / NDI)</td>
+                            <td>
+                                <t t-esc="'{:.1f}%'.format(doc.iir * 100)"/>
+                                <t t-if="doc.iir &gt; 0.40">
+                                    <span class="badge badge-danger ml-2">EXCEEDS 40% LIMIT</span>
+                                </t>
+                                <t t-elif="doc.iir &gt; 0.35">
+                                    <span class="badge badge-warning ml-2">CAUTION</span>
+                                </t>
+                                <t t-else="">
+                                    <span class="badge badge-success ml-2">OK</span>
+                                </t>
+                            </td>
+                            <td class="font-weight-bold">Net Disposable Income</td>
+                            <td><t t-esc="doc.net_disposable_income" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                        </tr>
+                    </table>
+
+                    <!-- ══════════ SECTION 6: COLLATERAL (25%) ══════════ -->
+                    <h5 class="bg-primary text-white p-2 mt-3">6. Investment Security — Collateral (25%)</h5>
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Location / Area</th>
+                                <th>Title / TF No.</th>
+                                <th class="text-right">Area (m²)</th>
+                                <th class="text-right">Value/m²</th>
+                                <th class="text-right">Haircut</th>
+                                <th class="text-right">Market Value</th>
+                                <th class="text-right">Adjusted Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.collateral_ids" t-as="col">
+                                <tr>
+                                    <td><t t-esc="col.location"/></td>
+                                    <td><t t-esc="col.title_number"/></td>
+                                    <td class="text-right"><t t-esc="'%.2f' % col.area_sqm"/></td>
+                                    <td class="text-right"><t t-esc="col.market_value_per_sqm" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                    <td class="text-right"><t t-esc="'{:.0f}%'.format(col.haircut_rate * 100)"/></td>
+                                    <td class="text-right"><t t-esc="col.total_market_value" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                    <td class="text-right"><t t-esc="col.adjusted_value" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-weight-bold">
+                                <td colspan="5">Totals</td>
+                                <td class="text-right"><t t-esc="doc.total_collateral_market_value" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                                <td class="text-right"><t t-esc="doc.total_collateral_adjusted_value" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <p class="text-right"><strong>Collateral Score (25%): <t t-esc="'{:.0f}%'.format(doc.score_collateral * 100)"/></strong></p>
+
+                    <!-- ══════════ SECTION 7: FIVE Cs CREDIT DECISION ══════════ -->
+                    <h5 class="bg-primary text-white p-2 mt-3">7. Five Cs Credit Analysis &amp; Decision</h5>
+                    <table class="table table-sm table-bordered">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Dimension</th>
+                                <th class="text-center">Weight</th>
+                                <th class="text-center">Sub-Score</th>
+                                <th class="text-center">Weighted Contribution</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Character</td>
+                                <td class="text-center">5%</td>
+                                <td class="text-center"><t t-esc="'{:.0f}%'.format(doc.score_character * 100)"/></td>
+                                <td class="text-center"><t t-esc="'{:.2f}%'.format(doc.score_character * 5)"/></td>
+                            </tr>
+                            <tr>
+                                <td>Condition</td>
+                                <td class="text-center">5%</td>
+                                <td class="text-center"><t t-esc="'{:.0f}%'.format(doc.score_condition * 100)"/></td>
+                                <td class="text-center"><t t-esc="'{:.2f}%'.format(doc.score_condition * 5)"/></td>
+                            </tr>
+                            <tr>
+                                <td>Capital</td>
+                                <td class="text-center">15%</td>
+                                <td class="text-center"><t t-esc="'{:.0f}%'.format(doc.score_capital * 100)"/></td>
+                                <td class="text-center"><t t-esc="'{:.2f}%'.format(doc.score_capital * 15)"/></td>
+                            </tr>
+                            <tr>
+                                <td>Capacity</td>
+                                <td class="text-center">50%</td>
+                                <td class="text-center"><t t-esc="'{:.0f}%'.format(doc.score_capacity * 100)"/></td>
+                                <td class="text-center"><t t-esc="'{:.2f}%'.format(doc.score_capacity * 50)"/></td>
+                            </tr>
+                            <tr>
+                                <td>Collateral</td>
+                                <td class="text-center">25%</td>
+                                <td class="text-center"><t t-esc="'{:.0f}%'.format(doc.score_collateral * 100)"/></td>
+                                <td class="text-center"><t t-esc="'{:.2f}%'.format(doc.score_collateral * 25)"/></td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-weight-bold">
+                                <td>TOTAL WEIGHTED SCORE</td>
+                                <td class="text-center">100%</td>
+                                <td class="text-center">—</td>
+                                <td class="text-center" style="font-size:1.2em;">
+                                    <t t-esc="'{:.1f}%'.format(doc.total_score * 100)"/>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                    <!-- Decision Box -->
+                    <div class="mt-3 p-3 border"
+                         t-attf-style="background-color: #{doc.total_score >= 0.80 and '#d4edda' or (doc.total_score >= 0.70 and '#fff3cd' or '#f8d7da')};">
+                        <div class="row">
+                            <div class="col-6">
+                                <h5>CREDIT RECOMMENDATION</h5>
+                                <h3>
+                                    <t t-if="doc.total_score &gt;= 0.80">
+                                        ✅ APPROVED
+                                    </t>
+                                    <t t-elif="doc.total_score &gt;= 0.70">
+                                        ⚠ APPROVED WITH CONDITIONS
+                                    </t>
+                                    <t t-else="">
+                                        ❌ REJECTED
+                                    </t>
+                                </h3>
+                                <p>Total Score: <strong><t t-esc="'{:.1f}%'.format(doc.total_score * 100)"/></strong></p>
+                                <p>IIR: <strong><t t-esc="'{:.1f}%'.format(doc.iir * 100)"/></strong></p>
+                            </div>
+                            <div class="col-6">
+                                <h5>Analyst Notes</h5>
+                                <p><t t-esc="doc.analyst_notes or '—'"/></p>
+                                <t t-if="doc.rejection_reason">
+                                    <h5>Condition / Rejection Reason</h5>
+                                    <p><t t-esc="doc.rejection_reason"/></p>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Signature Block -->
+                    <div class="row mt-5">
+                        <div class="col-4 text-center">
+                            <div style="border-top: 1px solid #000; margin-top: 40px; padding-top: 5px;">
+                                Credit Officer
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div style="border-top: 1px solid #000; margin-top: 40px; padding-top: 5px;">
+                                Credit Manager
+                            </div>
+                        </div>
+                        <div class="col-4 text-center">
+                            <div style="border-top: 1px solid #000; margin-top: 40px; padding-top: 5px;">
+                                General Manager
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center text-muted mt-3" style="font-size: 0.8em;">
+                        Generated on <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y %H:%M')"/>
+                        | Application: <t t-esc="doc.name"/>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+</odoo>

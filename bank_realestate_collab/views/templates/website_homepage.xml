@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="sre_homepage" name="SRE Real Estate Homepage">
+        <t t-call="website.layout">
+            <t t-set="head">
+                <link rel="preconnect" href="https://fonts.googleapis.com"/>
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+                <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&amp;family=Outfit:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+            </t>
+            <style>
+            .sre-page *{box-sizing:border-box}
+            .sre-page{font-family:'Outfit',sans-serif;color:#1a1a2e;overflow-x:hidden}
+
+            /* HERO */
+            .sre-hero{position:relative;min-height:100vh;background:linear-gradient(160deg,#0d1b2a 0%,#1a3a5c 50%,#0d2b45 100%);display:flex;align-items:center;overflow:hidden}
+            .sre-hero-grid{position:absolute;inset:0;opacity:.07;background-image:linear-gradient(rgba(255,255,255,.3) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.3) 1px,transparent 1px);background-size:60px 60px}
+            .sre-orb{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(23,165,137,.22) 0%,transparent 70%);animation:srePulse 8s ease-in-out infinite}
+            .sre-orb-1{width:600px;height:600px;top:-200px;right:-100px}
+            .sre-orb-2{width:400px;height:400px;bottom:-100px;left:10%;animation-delay:-4s}
+            @keyframes srePulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.15);opacity:1}}
+            .sre-hero-inner{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr 420px;gap:80px;align-items:center}
+            .sre-tag{display:inline-flex;align-items:center;gap:8px;background:rgba(23,165,137,.15);border:1px solid rgba(23,165,137,.3);color:#17a589;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:24px}
+            .sre-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:#17a589;animation:sreBlink 2s infinite}
+            @keyframes sreBlink{0%,100%{opacity:1}50%{opacity:.2}}
+            .sre-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(46px,6vw,80px);font-weight:300;line-height:1.05;color:#fff;margin:0 0 24px;letter-spacing:-1px}
+            .sre-h1 em{font-style:italic;color:#17a589}
+            .sre-hero-sub{font-size:16px;color:rgba(255,255,255,.65);line-height:1.8;margin:0 0 40px;max-width:480px;font-weight:300}
+            .sre-btns{display:flex;gap:14px;flex-wrap:wrap}
+            .sre-btn-p{padding:14px 32px;background:#17a589;color:#fff !important;border-radius:4px;font-size:14px;font-weight:600;letter-spacing:.5px;text-decoration:none !important;display:inline-flex;align-items:center;gap:8px;border:none;cursor:pointer;transition:all .3s}
+            .sre-btn-p:hover{background:#1abc9c;transform:translateY(-2px);box-shadow:0 12px 32px rgba(23,165,137,.4);text-decoration:none !important}
+            .sre-btn-g{padding:14px 32px;background:transparent;color:rgba(255,255,255,.85) !important;border:1px solid rgba(255,255,255,.3);border-radius:4px;font-size:14px;font-weight:500;text-decoration:none !important;display:inline-flex;align-items:center;gap:8px;transition:all .3s}
+            .sre-btn-g:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.6);color:#fff !important;text-decoration:none !important}
+
+            /* SEARCH CARD */
+            .sre-scard{background:rgba(255,255,255,.97);border-radius:16px;padding:32px;box-shadow:0 32px 80px rgba(0,0,0,.4)}
+            .sre-scard-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#0d2b45;margin:0 0 20px}
+            .sre-sf{margin-bottom:14px}
+            .sre-sf label{display:block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#5d6d7e;margin-bottom:6px}
+            .sre-sf select,.sre-sf input{width:100%;padding:10px 12px;border:1.5px solid #dce3ec;border-radius:8px;font-size:14px;color:#0d2b45;font-family:'Outfit',sans-serif;background:#f7fafd;outline:none;transition:border .2s;-webkit-appearance:none;appearance:none}
+            .sre-sf select:focus,.sre-sf input:focus{border-color:#17a589;background:#fff}
+            .sre-sgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+            .sre-ssub{width:100%;padding:13px;background:#0d2b45;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;letter-spacing:.5px;transition:background .3s;margin-top:4px}
+            .sre-ssub:hover{background:#17a589}
+
+            /* STATS */
+            .sre-stats-bar{background:#fff;border-bottom:1px solid #eef2f7}
+            .sre-stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+            .sre-stat{padding:28px 32px;border-right:1px solid #eef2f7;display:flex;align-items:center;gap:16px}
+            .sre-stat:last-child{border-right:none}
+            .sre-stat-ico{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0d2b45,#1a5276);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+            .sre-stat-n{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:#0d2b45;line-height:1}
+            .sre-stat-l{font-size:11px;font-weight:600;color:#7f8c8d;text-transform:uppercase;letter-spacing:.8px;margin-top:2px}
+
+            /* SECTIONS */
+            .sre-sec{padding:96px 40px}
+            .sre-sec-inner{max-width:1200px;margin:0 auto}
+            .sre-sec-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:#17a589;margin-bottom:12px}
+            .sre-sec-h2{font-family:'Cormorant Garamond',serif;font-size:clamp(32px,4vw,52px);font-weight:300;color:#0d2b45;margin:0 0 16px;line-height:1.15}
+            .sre-sec-h2 em{font-style:italic;color:#17a589}
+            .sre-sec-sub{font-size:15px;color:#5d6d7e;line-height:1.8;font-weight:300}
+
+            /* PROPERTY CARDS */
+            .sre-ph{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:48px;gap:24px}
+            .sre-pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+            .sre-pcard{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(13,43,69,.06);border:1px solid #eef2f7;text-decoration:none !important;color:inherit !important;display:flex;flex-direction:column;transition:all .35s}
+            .sre-pcard:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(13,43,69,.14);text-decoration:none !important;color:inherit !important}
+            .sre-pimg{height:200px;position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0d1b2a,#1a3a5c);overflow:hidden}
+            .sre-pimg img{width:100%;height:100%;object-fit:cover}
+            .sre-pimg-placeholder{font-size:52px;opacity:.25}
+            .sre-pbadge{position:absolute;top:14px;left:14px;background:#17a589;color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:4px 10px;border-radius:3px}
+            .sre-pbody{padding:20px;flex:1}
+            .sre-pprice{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:#0d2b45;margin-bottom:4px}
+            .sre-pname{font-size:14px;font-weight:600;color:#1a3a5c;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+            .sre-ploc{font-size:12px;color:#7f8c8d;margin-bottom:14px}
+            .sre-pspecs{display:flex;gap:14px;font-size:12px;color:#5d6d7e;padding-top:14px;border-top:1px solid #f0f4f8;flex-wrap:wrap}
+            .sre-pfoot{padding:12px 20px;background:#f7fafd;border-top:1px solid #eef2f7;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;color:#1a5276}
+
+            /* HOW IT WORKS */
+            .sre-how{background:#f7fafd}
+            .sre-how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px;margin-top:56px}
+            .sre-how-step{text-align:center}
+            .sre-how-num{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#0d2b45,#17a589);color:#fff;font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+            .sre-how-step h4{font-size:15px;font-weight:600;color:#0d2b45;margin:0 0 8px}
+            .sre-how-step p{font-size:13px;color:#5d6d7e;line-height:1.7;margin:0}
+
+            /* FEATURES */
+            .sre-fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:56px}
+            .sre-feat{padding:32px;border:1px solid #eef2f7;border-radius:12px;transition:all .3s;background:#fff}
+            .sre-feat:hover{border-color:#17a589;box-shadow:0 8px 32px rgba(23,165,137,.1)}
+            .sre-feat-ico{font-size:32px;margin-bottom:16px}
+            .sre-feat h4{font-size:16px;font-weight:600;color:#0d2b45;margin:0 0 8px}
+            .sre-feat p{font-size:13px;color:#5d6d7e;line-height:1.7;margin:0}
+
+            /* CTA */
+            .sre-cta{background:linear-gradient(135deg,#0d1b2a,#0d2b45 50%,#1a5276);padding:96px 40px;text-align:center;position:relative;overflow:hidden}
+            .sre-cta::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:40px 40px}
+            .sre-cta-inner{position:relative;z-index:1;max-width:680px;margin:0 auto}
+            .sre-cta h2{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,5vw,58px);font-weight:300;color:#fff;margin:0 0 16px}
+            .sre-cta h2 em{font-style:italic;color:#17a589}
+            .sre-cta p{font-size:15px;color:rgba(255,255,255,.65);margin:0 0 40px;line-height:1.8;font-weight:300}
+            .sre-cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+
+            /* RESPONSIVE */
+            @media(max-width:1024px){
+                .sre-hero-inner{grid-template-columns:1fr;gap:40px}
+                .sre-stats-inner{grid-template-columns:repeat(2,1fr)}
+                .sre-pgrid{grid-template-columns:repeat(2,1fr)}
+                .sre-how-grid{grid-template-columns:repeat(2,1fr)}
+                .sre-fgrid{grid-template-columns:repeat(2,1fr)}
+            }
+            @media(max-width:640px){
+                .sre-sec{padding:60px 20px}
+                .sre-pgrid,.sre-how-grid,.sre-fgrid{grid-template-columns:1fr}
+                .sre-stats-inner{grid-template-columns:1fr}
+                .sre-hero-inner{padding:70px 20px}
+                .sre-sgrid{grid-template-columns:1fr}
+                .sre-ph{flex-direction:column;align-items:flex-start}
+            }
+            </style>
+
+            <div class="sre-page">
+
+                <!-- ══ HERO ════════════════════════════════════════════ -->
+                <section class="sre-hero">
+                    <div class="sre-hero-grid"/>
+                    <div class="sre-orb sre-orb-1"/>
+                    <div class="sre-orb sre-orb-2"/>
+                    <div class="sre-hero-inner">
+                        <div>
+                            <div class="sre-tag">Live · Available Properties</div>
+                            <h1 class="sre-h1">
+                                Find Your<br/>
+                                <em>Dream Property</em><br/>
+                                in Djibouti
+                            </h1>
+                            <p class="sre-hero-sub">
+                                Sharia-compliant financing, transparent process, and dedicated support —
+                                from selection to ownership, we guide every step.
+                            </p>
+                            <div class="sre-btns">
+                                <a href="/properties" class="sre-btn-p">Browse Properties →</a>
+                                <a href="/my/applications/new" class="sre-btn-g">Apply for Financing</a>
+                            </div>
+                        </div>
+
+                        <div class="sre-scard">
+                            <p class="sre-scard-title">Find a Property</p>
+                            <div class="sre-sf">
+                                <label>Property Type</label>
+                                <select onchange="if(this.value) window.location='/properties?ptype='+this.value">
+                                    <option value="">All Types</option>
+                                    <option value="residential">Residential</option>
+                                    <option value="commercial">Commercial</option>
+                                    <option value="land">Land</option>
+                                    <option value="industrial">Industrial</option>
+                                </select>
+                            </div>
+                            <div class="sre-sgrid">
+                                <div class="sre-sf">
+                                    <label>Min Price (DJF)</label>
+                                    <input type="number" placeholder="0"/>
+                                </div>
+                                <div class="sre-sf">
+                                    <label>Max Price (DJF)</label>
+                                    <input type="number" placeholder="Any"/>
+                                </div>
+                            </div>
+                            <div class="sre-sf">
+                                <label>Financing Type</label>
+                                <select>
+                                    <option>All Financing Types</option>
+                                    <option>Murabaha (Islamic)</option>
+                                    <option>Ijara</option>
+                                    <option>Diminishing Musharaka</option>
+                                    <option>Conventional</option>
+                                </select>
+                            </div>
+                            <button class="sre-ssub" onclick="window.location='/properties'">
+                                Search Available Properties
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ══ STATS BAR ══════════════════════════════════════ -->
+                <div class="sre-stats-bar">
+                    <div class="sre-stats-inner">
+                        <div class="sre-stat">
+                            <div class="sre-stat-ico">🏠</div>
+                            <div>
+                                <div class="sre-stat-n">500+</div>
+                                <div class="sre-stat-l">Properties Listed</div>
+                            </div>
+                        </div>
+                        <div class="sre-stat">
+                            <div class="sre-stat-ico">✅</div>
+                            <div>
+                                <div class="sre-stat-n">320+</div>
+                                <div class="sre-stat-l">Families Housed</div>
+                            </div>
+                        </div>
+                        <div class="sre-stat">
+                            <div class="sre-stat-ico">🏦</div>
+                            <div>
+                                <div class="sre-stat-n">100%</div>
+                                <div class="sre-stat-l">Sharia Compliant</div>
+                            </div>
+                        </div>
+                        <div class="sre-stat">
+                            <div class="sre-stat-ico">⚡</div>
+                            <div>
+                                <div class="sre-stat-n">7 Days</div>
+                                <div class="sre-stat-l">Avg. Approval Time</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══ AVAILABLE PROPERTIES ═══════════════════════════ -->
+                <section class="sre-sec" style="background:#fff">
+                    <div class="sre-sec-inner">
+                        <div class="sre-ph">
+                            <div>
+                                <div class="sre-sec-label">Featured Listings</div>
+                                <h2 class="sre-sec-h2">Available <em>Properties</em></h2>
+                                <p class="sre-sec-sub">Browse our curated selection of available properties ready for Sharia-compliant financing.</p>
+                            </div>
+                            <a href="/properties" class="sre-btn-p" style="flex-shrink:0">
+                                View All Properties →
+                            </a>
+                        </div>
+
+                        <div class="sre-pgrid">
+                            <t t-if="properties">
+                                <t t-foreach="properties" t-as="p">
+                                    <a t-attf-href="/properties/#{p.id}" class="sre-pcard">
+                                        <div class="sre-pimg">
+                                            <t t-if="p.image">
+                                                <img t-att-src="'/web/image/property.details/' + str(p.id) + '/image/600x300'" alt=""/>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="sre-pimg-placeholder">🏠</div>
+                                            </t>
+                                            <span class="sre-pbadge">Available</span>
+                                        </div>
+                                        <div class="sre-pbody">
+                                            <div class="sre-pprice">
+                                                <t t-esc="'{:,.0f}'.format(p.price)"/> DJF
+                                            </div>
+                                            <div class="sre-pname" t-esc="p.name"/>
+                                            <div class="sre-ploc">
+                                                <t t-if="p.property_project_id">
+                                                    <t t-esc="p.property_project_id.name"/> ·
+                                                </t>
+                                                <t t-esc="p.city or 'Djibouti'"/>
+                                            </div>
+                                            <div class="sre-pspecs">
+                                                <t t-if="p.total_area">
+                                                    <span>📐 <t t-esc="int(p.total_area)"/> m²</span>
+                                                </t>
+                                                <t t-if="p.bed">
+                                                    <span>🛏 <t t-esc="p.bed"/> rooms</span>
+                                                </t>
+                                                <t t-if="p.bathroom">
+                                                    <span>🚿 <t t-esc="p.bathroom"/> bath</span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                        <div class="sre-pfoot">
+                                            <span>View Details →</span>
+                                            <span style="color:#17a589">Available</span>
+                                        </div>
+                                    </a>
+                                </t>
+                            </t>
+                            <t t-if="not properties">
+                                <div style="grid-column:1/-1;text-align:center;padding:48px;color:#5d6d7e">
+                                    <div style="font-size:48px;margin-bottom:12px">🏠</div>
+                                    <p>No properties currently available. Check back soon!</p>
+                                    <a href="/properties" class="sre-btn-p" style="display:inline-flex;margin-top:16px">
+                                        Browse All Properties
+                                    </a>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ══ HOW IT WORKS ═══════════════════════════════════ -->
+                <section class="sre-sec sre-how">
+                    <div class="sre-sec-inner">
+                        <div style="text-align:center;max-width:600px;margin:0 auto">
+                            <div class="sre-sec-label">Simple Process</div>
+                            <h2 class="sre-sec-h2">From <em>Selection</em> to Ownership</h2>
+                            <p class="sre-sec-sub" style="margin:0 auto">Four clear steps — transparent, efficient, and fully Sharia-compliant.</p>
+                        </div>
+                        <div class="sre-how-grid">
+                            <div class="sre-how-step">
+                                <div class="sre-how-num">01</div>
+                                <h4>Get Prioritized</h4>
+                                <p>Receive your Prioritization Number through our real estate agents to unlock property selection.</p>
+                            </div>
+                            <div class="sre-how-step">
+                                <div class="sre-how-num">02</div>
+                                <h4>Select a Property</h4>
+                                <p>Browse available listings and reserve your preferred property directly from the portal.</p>
+                            </div>
+                            <div class="sre-how-step">
+                                <div class="sre-how-num">03</div>
+                                <h4>Submit Application</h4>
+                                <p>Complete your financing application online — personal, employment, and financial details in one form.</p>
+                            </div>
+                            <div class="sre-how-step">
+                                <div class="sre-how-num">04</div>
+                                <h4>Bank Approval</h4>
+                                <p>Our bank officers conduct a Five Cs credit assessment and communicate the decision within 7 working days.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ══ FEATURES ════════════════════════════════════════ -->
+                <section class="sre-sec" style="background:#fff">
+                    <div class="sre-sec-inner">
+                        <div style="text-align:center;max-width:540px;margin:0 auto 56px">
+                            <div class="sre-sec-label">Why Choose Us</div>
+                            <h2 class="sre-sec-h2">Built for <em>Trust</em> &amp; Transparency</h2>
+                        </div>
+                        <div class="sre-fgrid">
+                            <div class="sre-feat">
+                                <div class="sre-feat-ico">🕌</div>
+                                <h4>Sharia-Compliant Financing</h4>
+                                <p>Murabaha, Ijara, and Diminishing Musharaka structures approved for full Islamic compliance.</p>
+                            </div>
+                            <div class="sre-feat">
+                                <div class="sre-feat-ico">🔒</div>
+                                <h4>Secure Property Reservation</h4>
+                                <p>Your selected property is immediately reserved upon application and protected until your financing decision.</p>
+                            </div>
+                            <div class="sre-feat">
+                                <div class="sre-feat-ico">📊</div>
+                                <h4>Five Cs Credit Assessment</h4>
+                                <p>Rigorous evaluation of Character, Condition, Capital, Capacity, and Collateral for fair decisions.</p>
+                            </div>
+                            <div class="sre-feat">
+                                <div class="sre-feat-ico">📱</div>
+                                <h4>Full Portal Access</h4>
+                                <p>Track your application, view documents, and communicate with your agent entirely online, 24/7.</p>
+                            </div>
+                            <div class="sre-feat">
+                                <div class="sre-feat-ico">⚡</div>
+                                <h4>Fast Approval</h4>
+                                <p>Streamlined digital workflow means financing decisions in as few as 7 working days from submission.</p>
+                            </div>
+                            <div class="sre-feat">
+                                <div class="sre-feat-ico">🤝</div>
+                                <h4>Dedicated Agents</h4>
+                                <p>Every applicant is assigned a real estate agent who guides them through the entire process personally.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ══ CTA ════════════════════════════════════════════ -->
+                <section class="sre-cta">
+                    <div class="sre-cta-inner">
+                        <h2>Ready to Find Your <em>Home</em>?</h2>
+                        <p>Log in to browse available properties, check your prioritization number, and submit your financing application — all in one place.</p>
+                        <div class="sre-cta-btns">
+                            <a href="/properties" class="sre-btn-p">Browse Properties →</a>
+                            <a href="/my" class="sre-btn-g">My Portal</a>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

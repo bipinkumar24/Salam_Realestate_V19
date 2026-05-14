@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_approval_level_ownership2,access.approval.level.ownership2,model_approval_level_ownership2,,1,1,1,1
+access_remarks_approval_ownership2,access.remarks.approval.ownership2,model_remarks_approval_ownership2,,1,1,1,1
+access_ownership_remark_wizard2,access.ownership.remark.wizard2,model_ownership_remark_wizard2,,1,1,1,1

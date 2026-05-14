@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TOP LEVEL -->
+    <menuitem id="menu_construction_root"
+              name="Construction"
+              sequence="86"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <!-- PROJECTS -->
+    <menuitem id="menu_construction_projects"
+              name="Projects"
+              parent="menu_construction_root"
+              action="action_construction_project"
+              sequence="10"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <!-- PHASES -->
+    <menuitem id="menu_construction_phases"
+              name="Phases"
+              parent="menu_construction_root"
+              action="action_construction_phase"
+              sequence="20"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <!-- TASKS -->
+    <menuitem id="menu_construction_tasks"
+              name="Tasks"
+              parent="menu_construction_root"
+              action="action_construction_task"
+              sequence="30"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <!-- BUDGET -->
+    <menuitem id="menu_construction_budget"
+              name="Budget Tracker"
+              parent="menu_construction_root"
+              action="action_budget_line"
+              sequence="40"
+              groups="salaam_construction_mgmt.group_construction_officer"/>
+
+    <!-- SITE REPORTS -->
+    <menuitem id="menu_construction_site_reports"
+              name="Site Reports"
+              parent="menu_construction_root"
+              action="action_site_report"
+              sequence="50"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <!-- DRAWING REGISTER -->
+    <menuitem id="menu_drawing_register"
+              name="Drawing Register"
+              parent="menu_construction_root"
+              action="action_drawing_register"
+              sequence="60"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <!-- GOVERNANCE -->
+    <menuitem id="menu_governance_docs"
+              name="Governance Documents"
+              parent="menu_construction_root"
+              action="action_governance_document"
+              sequence="70"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <!-- CONFIGURATION -->
+    <menuitem id="menu_construction_config"
+              name="Configuration"
+              parent="menu_construction_root"
+              sequence="100"
+              groups="salaam_construction_mgmt.group_construction_admin"/>
+
+    <menuitem id="menu_construction_config_doc_types"
+              name="Governance Document Types"
+              parent="menu_construction_config"
+              action="action_governance_doc_type"
+              sequence="10"
+              groups="salaam_construction_mgmt.group_construction_admin"/>
+
+</odoo>

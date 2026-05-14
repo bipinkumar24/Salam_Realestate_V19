@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>    <!-- Phase form -->
+    <record id="view_construction_phase_form" model="ir.ui.view">
+        <field name="name">salaam.construction.phase.form</field>
+        <field name="model">salaam.construction.phase</field>
+        <field name="arch" type="xml">
+            <form string="Construction Phase">
+                <header>
+                    <button name="action_start" string="Start Phase" type="object" class="btn-primary" invisible = "state != 'pending'"/>
+                    <button name="action_complete" string="Complete Phase" type="object" class="btn-primary" invisible = "state != 'active'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="pending,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_tasks" type="object" class="oe_stat_button" icon="fa-check-square-o">
+                            <field name="task_count" widget="statinfo" string="Tasks"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Phase Details">
+                            <field name="project_id"/>
+                            <field name="phase_type"/>
+                            <field name="sequence"/>
+                            <field name="weight"/>
+                        </group>
+                        <group string="Budget">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="budget_allocated"/>
+                            <field name="budget_spent" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Planned Dates">
+                            <field name="date_start_planned"/>
+                            <field name="date_end_planned"/>
+                        </group>
+                        <group string="Actual Dates">
+                            <field name="date_start_actual"/>
+                            <field name="date_end_actual"/>
+                            <field name="delay_days" readonly="1" decoration-danger="delay_days &gt; 0"/>
+                        </group>
+                    </group>
+                    <group string="Progress">
+                        <field name="progress" widget="progressbar"/>
+                    </group>
+                    <group string="Contract Links">
+                        <field name="istisna_milestone_id"/>
+                        <field name="subcontract_ids" widget="many2many_tags"/>
+                    </group>
+                    <field name="istisna_contract_id" invisible="1"/>
+                    <notebook>
+                        <page string="Tasks">
+                            <field name="task_ids">
+                                <list editable="bottom" decoration-success="state=='done'" decoration-warning="state=='blocked'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="task_type"/>
+                                    <field name="assigned_to_id"/>
+                                    <field name="subcontract_id"/>
+                                    <field name="date_start_planned"/>
+                                    <field name="date_end_planned"/>
+                                    <field name="budget_cost" sum="Budget"/>
+                                    <field name="actual_cost" sum="Spent"/>
+                                    <field name="progress" widget="progressbar"/>
+                                    <field name="state" widget="badge" decoration-success="state=='done'" decoration-warning="state=='blocked'"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_construction_phase" model="ir.actions.act_window">
+        <field name="name">Construction Phases</field>
+        <field name="res_model">salaam.construction.phase</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <menuitem id="menu_contractor_root" name="Contractor" parent="salaam_construction_mgmt.menu_construction_root" sequence="55"/>
+  <menuitem id="menu_site_instructions" name="Site Instructions" parent="menu_contractor_root" action="action_site_instruction" sequence="10"/>
+  <menuitem id="menu_ncrs" name="Non-Conformance Reports" parent="menu_contractor_root" action="action_ncr" sequence="20"/>
+  <menuitem id="menu_eot_claims" name="EOT Claims" parent="menu_contractor_root" action="action_eot_claim" sequence="30"/>
+  <menuitem id="menu_contractor_programmes" name="Contractor Programmes" parent="menu_contractor_root" action="action_contractor_programme" sequence="40"/>
+</odoo>

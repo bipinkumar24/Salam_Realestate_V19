@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dev_contract_consultancy_form" model="ir.ui.view">
+        <field name="name">dev.contract.consultancy.form</field>
+        <field name="model">dev.contract.consultancy</field>
+        <field name="arch" type="xml">
+            <form string="Consultancy Agreement">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_under_review" string="Under Review" type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary"
+                            groups="salaam_dev_contracts.group_dev_contracts_manager"
+                           invisible="state != 'under_review'"/>
+                    <button name="action_sign" string="Mark Signed" type="object"
+                            invisible="state != 'approved'"/>
+                    <button name="action_activate" string="Activate" type="object"
+                            invisible="state != 'signed'"/>
+                    <button name="action_complete" string="Complete" type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ['completed','cancelled']"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,under_review,approved,signed,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_milestones" type="object"
+                                class="oe_stat_button" icon="fa-flag">
+                            <field name="milestone_count" widget="statinfo" string="Milestones"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3>Consultancy Agreement</h3>
+                    </div>
+                    <group>
+                        <group string="Parties">
+                            <field name="client_id"/>
+                            <field name="consultant_id"/>
+                            <field name="service_category"/>
+                            <field name="officer_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Dates &amp; Sharia">
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="sharia_required"/>
+                            <field name="sharia_certified" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Fee Structure">
+                            <group>
+                                <group>
+                                    <field name="currency_id"/>
+                                    <field name="fee_structure"/>
+                                    <field name="contract_value"/>
+                                    <field name="fee_amount" invisible="fee_structure != 'lump_sum'"/>
+                                    <field name="hourly_rate" invisible="fee_structure != 'time_materials'"/>
+                                    <field name="monthly_retainer" invisible="fee_structure != 'retainer'"/>
+                                </group>
+                                <group>
+                                    <field name="confidentiality_clause"/>
+                                    <field name="ip_ownership"/>
+                                    <field name="professional_indemnity_value"/>
+                                    <field name="termination_notice_days"/>
+                                    <field name="governing_law"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Scope &amp; Deliverables">
+                            <separator string="Scope of Services"/>
+                            <field name="service_scope"/>
+                            <separator string="Deliverables"/>
+                            <field name="deliverables"/>
+                        </page>
+                        <page string="Milestones">
+                            <field name="milestone_ids" context="{'default_res_model': 'dev.contract.consultancy', 'default_res_id': id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="planned_date"/>
+                                    <field name="payment_amount"/>
+                                    <field name="state"/>
+                                    <field name="res_model" invisible="1"/>
+                                    <field name="res_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Clauses">
+                            <field name="clause_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dev_contract_consultancy_tree" model="ir.ui.view">
+        <field name="name">dev.contract.consultancy.tree</field>
+        <field name="model">dev.contract.consultancy</field>
+        <field name="arch" type="xml">
+            <list string="Consultancy Agreements"
+                  decoration-success="state in ('signed','active','completed')"
+                  decoration-warning="state=='under_review'">
+                <field name="name"/>
+                <field name="consultant_id"/>
+                <field name="service_category"/>
+                <field name="fee_structure"/>
+                <field name="contract_value" sum="Total"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('signed','active','completed')"
+                       decoration-warning="state=='under_review'"
+                       decoration-danger="state=='cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dev_contract_consultancy" model="ir.actions.act_window">
+        <field name="name">Consultancy Agreements</field>
+        <field name="res_model">dev.contract.consultancy</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'default_contract_type': 'consultancy'}</field>
+    </record>
+
+</odoo>

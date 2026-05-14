@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_reservation_form">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <div style="border-bottom:2px solid #C9A84C;padding-bottom:10px;margin-bottom:16px;">
+              <h2 style="color:#1A1A2E;">RESERVATION AGREEMENT</h2>
+              <h3><t t-esc="o.name"/></h3>
+            </div>
+            <table class="table table-sm">
+              <tr><td><b>Unit</b></td><td><t t-esc="o.property_id.name"/></td><td><b>Development</b></td><td><t t-esc="o.project_id.name"/></td></tr>
+              <tr><td><b>Customer</b></td><td><t t-esc="o.partner_id.name"/></td><td><b>Agent</b></td><td><t t-esc="o.agent_id.name"/></td></tr>
+              <tr><td><b>Reservation Date</b></td><td><t t-esc="o.reservation_date"/></td><td><b>Unit Price</b></td><td><t t-esc="o.unit_price"/> <t t-esc="o.currency_id.symbol"/></td></tr>
+              <tr><td><b>Deposit Required</b></td><td><t t-esc="o.deposit_amount"/> <t t-esc="o.currency_id.symbol"/> (<t t-esc="o.deposit_pct"/>%)</td><td><b>Cooling-Off Ends</b></td><td><t t-esc="o.cooling_off_end"/></td></tr>
+              <tr><td><b>Conversion Deadline</b></td><td><t t-esc="o.conversion_deadline"/></td><td><b>Status</b></td><td><t t-esc="o.state"/></td></tr>
+            </table>
+            <t t-if="o.special_conditions"><h4>Special Conditions</h4><p><t t-esc="o.special_conditions"/></p></t>
+            <div style="margin-top:60px;display:flex;justify-content:space-between;">
+              <div>Developer Representative: _______________________<br/>Date: _______________</div>
+              <div>Customer Signature: _______________________<br/>Date: _______________</div>
+            </div>
+            <p style="margin-top:16px;font-size:9px;color:#999;">
+              This reservation agreement is subject to the full terms of the Sale and Purchase Agreement.
+              Salaam Investment Bank · IAFAO · <t t-esc="o.name"/>
+            </p>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_reservation_form" model="ir.actions.report">
+    <field name="name">Reservation Agreement Form</field>
+    <field name="model">salaam.reservation</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">salaam_reservation.report_reservation_form</field>
+    <field name="binding_model_id" ref="model_salaam_reservation"/>
+    <field name="binding_type">report</field>
+  </record>
+</odoo>

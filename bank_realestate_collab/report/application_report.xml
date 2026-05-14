@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Application PDF Report Action -->
+    <record id="action_report_application" model="ir.actions.report">
+        <field name="name">Customer Application Report</field>
+        <field name="model">bre.customer.application</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bank_realestate_collab.report_customer_application_template</field>
+        <field name="report_file">bank_realestate_collab.report_customer_application_template</field>
+        <field name="print_report_name">'Application_%s' % object.name</field>
+        <field name="binding_model_id" ref="bank_realestate_collab.model_bre_customer_application"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Financing Request Report Action -->
+    <record id="action_report_financing_request" model="ir.actions.report">
+        <field name="name">Financing Request Report</field>
+        <field name="model">bre.financing.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">bank_realestate_collab.report_financing_request_template</field>
+        <field name="report_file">bank_realestate_collab.report_financing_request_template</field>
+        <field name="print_report_name">'FinancingRequest_%s' % object.name</field>
+        <field name="binding_model_id" ref="bank_realestate_collab.model_bre_financing_request"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

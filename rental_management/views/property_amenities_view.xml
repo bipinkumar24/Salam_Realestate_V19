@@ -7,11 +7,11 @@
             <field name="arch" type="xml">
                 <form duplicate="false">
                     <sheet>
-                        <field name="image" widget="image" class="oe_avatar" />
+                        <field name="image" widget="image" class="oe_avatar"/>
                         <div class="oe_title">
-                            <label for="title" />
+                            <label for="title"/>
                             <h1>
-                                <field name="title" required="1" placeholder="Title" />
+                                <field name="title" required="1" placeholder="Title"/>
                             </h1>
                         </div>
                     </sheet>
@@ -24,7 +24,7 @@
             <field name="arch" type="xml">
                 <list duplicate="false">
                     <field name="sequence" widget="handle"/>
-                    <field name="title" />
+                    <field name="title"/>
                 </list>
             </field>
         </record>
@@ -33,32 +33,27 @@
             <field name="model">property.amenities</field>
             <field name="arch" type="xml">
                 <kanban>
-                    <field name="id" />
-                    <field name="title" />
-                    <field name="image" />
+                    <field name="id"/>
+                    <field name="title"/>
+                    <field name="image"/>
                     <templates>
                         <t t-name="card">
-                            <div
-                                class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
-                                <t t-if="record.image.raw_value">
-                                    <img alt="Avtar"
-                                        t-att-src="kanban_image('property.amenities', 'image', record.id.raw_value)"
-                                        style="width:100px;height:100px;object-fit: cover;" />
+                            <div class="oe_kanban_global_click d-flex flex-row"
+                                 style="gap:8px; align-items:flex-start;">
+                                <t t-if="record.image.value">
+                                    <img alt="Avatar"
+                                         t-attf-src="/web/image/property.amenities/{{ record.id.raw_value }}/image"
+                                         style="width:100px; height:100px; object-fit:cover; flex-shrink:0;"/>
                                 </t>
                                 <t t-else="">
-                                    <img
-                                        style="width:100px;height:100px;object-fit: cover;"
-                                        alt="Image"
-                                        src="rental_management/static/src/img/category-placeholder.png" />
+                                    <img alt="Image"
+                                         src="/rental_management/static/src/img/category-placeholder.png"
+                                         style="width:100px; height:100px; object-fit:cover; flex-shrink:0;"/>
                                 </t>
-                                <div class="oe_kanban_details d-flex flex-column ml-1">
-                                    <div class="oe_kanban_details">
-                                        <strong class="o_kanban_record_title oe_partner_heading">
-                                            <h3 style="color:#714B67;">
-                                                <field name="title" />
-                                            </h3>
-                                        </strong>
-                                    </div>
+                                <div class="d-flex flex-column w-100" style="align-items:flex-start;">
+                                    <strong style="color:#714B67; font-size:15px; text-align:right;">
+                                        <field name="title"/>
+                                    </strong>
                                 </div>
                             </div>
                         </t>

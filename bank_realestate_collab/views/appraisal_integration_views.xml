@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         1.  EXTEND bre.customer.application FORM
+             — add stat button + appraisal tab + score summary group
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="view_customer_application_form_appraisal" model="ir.ui.view">
+        <field name="name">bre.customer.application.form.appraisal</field>
+        <field name="model">bre.customer.application</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_customer_application_form"/>
+        <field name="arch" type="xml">
+
+            <!-- ① Smart button in the button box -->
+            <div name="button_box" position="inside">
+                <button name="action_open_appraisal" type="object"
+                        class="oe_stat_button" icon="fa-balance-scale"
+                        invisible = "not has_appraisal">
+                    <div class="o_field_widget o_stat_info">
+                        <span class="o_stat_value">
+                            <field name="appraisal_total_score" widget="percentage" digits="[3,1]"/>
+                        </span>
+                        <span class="o_stat_text">Five Cs Score</span>
+                    </div>
+                </button>
+            </div>
+
+            <!-- ② Create Appraisal / Sync buttons next to existing header buttons -->
+            <button name="action_submit_to_bank" position="before">
+                <button name="action_create_appraisal" string="Create Appraisal"
+                        type="object" icon="fa-plus-circle"
+                        invisible = "has_appraisal"
+                        groups="bank_realestate_collab.group_bre_bank_officer,bank_realestate_collab.group_bre_manager"/>
+                <button name="action_sync_from_appraisal" string="Sync from Appraisal"
+                        type="object" icon="fa-refresh"
+                        invisible = "not has_appraisal"
+                        groups="bank_realestate_collab.group_bre_bank_officer,bank_realestate_collab.group_bre_manager"/>
+            </button>
+
+            <!-- ③ Appraisal summary ribbon under the progress bar — only when linked -->
+            <field name="progress" position="after">
+                <div invisible = "not has_appraisal"
+                     class="alert alert-info mb-2 p-2" role="status"
+                     style="border-radius:6px;">
+                    <strong>
+                        <i class="fa fa-balance-scale mr-1"/>
+                        Investment Appraisal Linked:
+                    </strong>
+                    <field name="appraisal_id" readonly="1" nolabel="1"
+                           style="display:inline;"/>
+                    &amp;nbsp;|&amp;nbsp;
+                    Status: <field name="appraisal_state" widget="badge"
+                                   decoration-success="appraisal_state in ('approved','conditional')"
+                                   decoration-danger="appraisal_state == 'rejected'"
+                                   decoration-warning="appraisal_state in ('review','submitted')"
+                                   readonly="1" nolabel="1"
+                                   style="display:inline;"/>
+                    &amp;nbsp;|&amp;nbsp;
+                    Score: <field name="appraisal_total_score" widget="percentage"
+                                  readonly="1" nolabel="1"
+                                  decoration-success="appraisal_total_score &gt;= 0.80"
+                                  decoration-warning="appraisal_total_score &gt;= 0.70 and appraisal_total_score &lt; 0.80"
+                                  decoration-danger="appraisal_total_score &lt; 0.70"
+                                  style="display:inline;"/>
+                    &amp;nbsp;|&amp;nbsp;
+                    IIR: <field name="appraisal_iir" widget="percentage"
+                                readonly="1" nolabel="1"
+                                decoration-success="appraisal_iir_status == 'green'"
+                                decoration-warning="appraisal_iir_status == 'amber'"
+                                decoration-danger="appraisal_iir_status == 'red'"
+                                style="display:inline;"/>
+                    <field name="has_appraisal" invisible="1"/>
+                    <field name="appraisal_iir_status" invisible="1"/>
+                </div>
+            </field>
+
+            <!-- ④ New tab: Investment Appraisal (Five Cs) -->
+            <page name="bank_decision" position="after">
+                <page string="Investment Appraisal (Five Cs)" name="appraisal_tab">
+
+                    <!-- No appraisal yet -->
+                    <div invisible = "has_appraisal"
+                         class="text-center p-4">
+                        <p class="text-muted" style="font-size:15px;">
+                            <i class="fa fa-info-circle fa-2x d-block mb-2"/>
+                            No Investment Appraisal linked yet.<br/>
+                            Click <strong>Create Appraisal</strong> above to generate a
+                            Five Cs credit assessment for this application.
+                        </p>
+                        <button name="action_create_appraisal" string="Create Appraisal Now"
+                                type="object" class="btn-primary mt-2"
+                                icon="fa-plus"
+                                groups="bank_realestate_collab.group_bre_bank_officer,bank_realestate_collab.group_bre_manager"/>
+                    </div>
+
+                    <!-- Appraisal summary when linked -->
+                    <div invisible = "not has_appraisal">
+
+                        <group string="Appraisal Reference">
+                            <group>
+                                <field name="appraisal_id" readonly="1"/>
+                                <field name="appraisal_state" widget="badge"
+                                       decoration-success="appraisal_state in ('approved','conditional')"
+                                       decoration-danger="appraisal_state == 'rejected'"
+                                       decoration-warning="appraisal_state in ('review','submitted')"
+                                       readonly="1"/>
+                                <field name="appraisal_score_decision" readonly="1"/>
+                            </group>
+                            <group>
+                                <button name="action_open_appraisal" string="Open Full Appraisal →"
+                                        type="object" class="btn-primary"
+                                        icon="fa-external-link"/>
+                            </group>
+                        </group>
+
+                        <group string="Five Cs Weighted Score">
+                            <group>
+                                <field name="appraisal_total_score" widget="percentage"
+                                       readonly="1" string="Total Weighted Score"
+                                       decoration-success="appraisal_total_score &gt;= 0.80"
+                                       decoration-warning="appraisal_total_score &gt;= 0.70 and appraisal_total_score &lt; 0.80"
+                                       decoration-danger="appraisal_total_score &lt; 0.70"/>
+                            </group>
+                            <group>
+                                <field name="appraisal_iir" widget="percentage"
+                                       readonly="1" string="Installment-to-Income Ratio (IIR)"
+                                       decoration-success="appraisal_iir_status == 'green'"
+                                       decoration-warning="appraisal_iir_status == 'amber'"
+                                       decoration-danger="appraisal_iir_status == 'red'"/>
+                                <field name="appraisal_iir_status" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <group string="Capital &amp; Capacity Summary">
+                            <group>
+                                <field name="appraisal_net_worth" widget="monetary"
+                                       readonly="1" string="Net Worth (Assets − Liabilities)"
+                                       currency_field="currency_id"/>
+                                <field name="appraisal_net_disposable_income" widget="monetary"
+                                       readonly="1" string="Net Disposable Income (NDI)"
+                                       currency_field="currency_id"/>
+                            </group>
+                            <group>
+                                <field name="appraisal_monthly_installment" widget="monetary"
+                                       readonly="1" string="Calculated Monthly Installment"
+                                       currency_field="currency_id"/>
+                                <field name="appraisal_total_collateral" widget="monetary"
+                                       readonly="1" string="Adjusted Collateral Value"
+                                       currency_field="currency_id"/>
+                            </group>
+                        </group>
+
+                    </div>
+                </page>
+            </page>
+
+            <!-- ⑤ Hidden fields needed for attrs -->
+            <field name="priority" position="after">
+                <field name="has_appraisal" invisible="1"/>
+                <field name="appraisal_iir_status" invisible="1"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         2.  EXTEND bre.customer.application LIST VIEW
+             — add appraisal columns
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="view_customer_application_list_appraisal" model="ir.ui.view">
+        <field name="name">bre.customer.application.list.appraisal</field>
+        <field name="model">bre.customer.application</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_customer_application_list"/>
+        <field name="arch" type="xml">
+            <field name="document_count" position="before">
+                <field name="appraisal_total_score" widget="percentage" optional="show"
+                       string="Five Cs"
+                       decoration-success="appraisal_total_score &gt;= 0.80"
+                       decoration-warning="appraisal_total_score &gt;= 0.70 and appraisal_total_score &lt; 0.80"
+                       decoration-danger="appraisal_total_score &gt; 0 and appraisal_total_score &lt; 0.70"/>
+                <field name="appraisal_iir" widget="percentage" optional="show"
+                       string="IIR"
+                       decoration-success="appraisal_iir_status == 'green'"
+                       decoration-warning="appraisal_iir_status == 'amber'"
+                       decoration-danger="appraisal_iir_status == 'red'"/>
+                <field name="appraisal_iir_status" invisible="1"/>
+                <field name="appraisal_state" widget="badge" optional="show"
+                       string="Appraisal"
+                       decoration-success="appraisal_state in ('approved','conditional')"
+                       decoration-danger="appraisal_state == 'rejected'"
+                       decoration-warning="appraisal_state in ('review','submitted')"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         3.  EXTEND bre.financing.request LIST VIEW
+             — add appraisal columns for bank officers
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="view_financing_request_list_appraisal" model="ir.ui.view">
+        <field name="name">bre.financing.request.list.appraisal</field>
+        <field name="model">bre.financing.request</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_financing_request_list"/>
+        <field name="arch" type="xml">
+            <field name="debt_burden_ratio" position="after">
+                <field name="appraisal_score" widget="percentage" optional="show"
+                       string="Five Cs"
+                       decoration-success="appraisal_score &gt;= 0.80"
+                       decoration-warning="appraisal_score &gt;= 0.70 and appraisal_score &lt; 0.80"
+                       decoration-danger="appraisal_score &gt; 0 and appraisal_score &lt; 0.70"/>
+                <field name="appraisal_iir" widget="percentage" optional="show"
+                       string="IIR"
+                       decoration-success="appraisal_iir_status == 'green'"
+                       decoration-warning="appraisal_iir_status == 'amber'"
+                       decoration-danger="appraisal_iir_status == 'red'"/>
+                <field name="appraisal_iir_status" invisible="1"/>
+                <field name="appraisal_decision" widget="badge" optional="show"
+                       string="Recommendation"
+                       decoration-success="appraisal_decision == 'approved'"
+                       decoration-warning="appraisal_decision == 'conditional'"
+                       decoration-danger="appraisal_decision == 'rejected'"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         4.  EXTEND bre.financing.request FORM VIEW
+             — add Five Cs panel inside Bank Decision tab
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="view_financing_request_form_appraisal" model="ir.ui.view">
+        <field name="name">bre.financing.request.form.appraisal</field>
+        <field name="model">bre.financing.request</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_financing_request_form"/>
+        <field name="arch" type="xml">
+            <page name="bank_decision" position="after">
+                <page string="Five Cs Appraisal" name="appraisal_summary"
+                      groups="bank_realestate_collab.group_bre_bank_officer,bank_realestate_collab.group_bre_manager">
+                    <group string="Five Cs Credit Assessment">
+                        <group>
+                            <field name="appraisal_score" widget="percentage"
+                                   string="Weighted Score"
+                                   decoration-success="appraisal_score &gt;= 0.80"
+                                   decoration-warning="appraisal_score &gt;= 0.70 and appraisal_score &lt; 0.80"
+                                   decoration-danger="appraisal_score &gt; 0 and appraisal_score &lt; 0.70"
+                                   readonly="1"/>
+                            <field name="appraisal_decision" widget="badge"
+                                   readonly="1"
+                                   decoration-success="appraisal_decision == 'approved'"
+                                   decoration-warning="appraisal_decision == 'conditional'"
+                                   decoration-danger="appraisal_decision == 'rejected'"/>
+                        </group>
+                        <group>
+                            <field name="appraisal_iir" widget="percentage"
+                                   string="IIR"
+                                   decoration-success="appraisal_iir_status == 'green'"
+                                   decoration-warning="appraisal_iir_status == 'amber'"
+                                   decoration-danger="appraisal_iir_status == 'red'"
+                                   readonly="1"/>
+                            <field name="appraisal_iir_status" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Capital &amp; Collateral">
+                        <group>
+                            <field name="appraisal_net_worth" widget="monetary"
+                                   string="Net Worth" currency_field="currency_id" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="appraisal_collateral" widget="monetary"
+                                   string="Adjusted Collateral" currency_field="currency_id" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </page>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         5.  EXTEND property.investment.application FORM
+             — add BRE back-link button and property context
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="view_investment_application_form_bre_bridge" model="ir.ui.view">
+        <field name="name">property.investment.application.form.bre</field>
+        <field name="model">property.investment.application</field>
+        <field name="inherit_id" ref="property_investment_appraisal.view_investment_application_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Back button to BRE application in the header -->
+            <button name="action_submit" position="before">
+                <button name="action_open_bre_application" string="← BRE Application"
+                        type="object" icon="fa-arrow-left"
+                        invisible = "not bre_application_ref"/>
+            </button>
+
+            <!-- BRE context info banner below the title -->
+            <field name="partner_id" position="before">
+                <div invisible = "not bre_application_ref"
+                     class="alert alert-success mb-2 p-2" role="status"
+                     style="border-radius:6px;">
+                    <i class="fa fa-link mr-1"/>
+                    <strong>Linked from BRE Application:</strong>
+                    <field name="bre_application_ref" readonly="1" nolabel="1"
+                           style="display:inline; font-weight:600;"/>
+                    &amp;nbsp;|&amp;nbsp;
+                    <strong>Property:</strong>
+                    <field name="bre_property_name" readonly="1" nolabel="1"
+                           style="display:inline;"/>
+                    <field name="bre_application_ref" invisible="1"/>
+                </div>
+                <field name="bre_application_ref" invisible="1"/>
+                <field name="bre_property_name" invisible="1"/>
+            </field>
+
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         6.  SEARCH FILTER EXTENSIONS
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="view_customer_application_search_appraisal" model="ir.ui.view">
+        <field name="name">bre.customer.application.search.appraisal</field>
+        <field name="model">bre.customer.application</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_customer_application_search"/>
+        <field name="arch" type="xml">
+            <filter name="sharia" position="after">
+                <separator/>
+                <filter string="Has Appraisal" name="has_appraisal"
+                        domain="[('has_appraisal','=',True)]"/>
+                <filter string="No Appraisal Yet" name="no_appraisal"
+                        domain="[('has_appraisal','=',False)]"/>
+                <filter string="Appraisal Approved" name="appraisal_ok"
+                        domain="[('appraisal_state','in',['approved','conditional'])]"/>
+                <filter string="IIR Exceeded (&gt;40%)" name="iir_exceeded"
+                        domain="[('appraisal_iir','&gt;',0.40)]"/>
+                <filter string="High Score (≥80%)" name="high_score"
+                        domain="[('appraisal_total_score','&gt;=',0.80)]"/>
+            </filter>
+            <filter name="grp_agent" position="after">
+                <filter string="Appraisal Status" name="grp_appraisal_state"
+                        context="{'group_by': 'appraisal_state'}"/>
+                <filter string="Score Decision" name="grp_score_decision"
+                        context="{'group_by': 'appraisal_score_decision'}"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         7.  COMBINED ANALYTICS ACTION (BRE + Appraisal)
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="action_combined_appraisal_analytics" model="ir.actions.act_window">
+        <field name="name">Appraisal &amp; Credit Analytics</field>
+        <field name="res_model">property.investment.application</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No investment appraisals yet — create one from a BRE Application.
+            </p>
+        </field>
+    </record>
+
+</odoo>

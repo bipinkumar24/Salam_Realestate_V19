@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_varcause_list" model="ir.ui.view">
+        <field name="name">buruuj.variance.cause.list</field>
+        <field name="model">buruuj.variance.cause</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="is_recoverable"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_varcause" model="ir.actions.act_window">
+        <field name="name">Variance Causes</field>
+        <field name="res_model">buruuj.variance.cause</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

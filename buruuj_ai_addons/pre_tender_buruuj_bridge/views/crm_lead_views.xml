@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_crm_lead_form_bridge" model="ir.ui.view">
+        <field name="name">crm.lead.form.bridge</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="pre_tender_management.view_tender_opportunity_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <button name="action_create_buruuj_tender" type="object"
+                        string="Create Tender Estimate"
+                        class="oe_highlight"
+                        invisible="not is_tender or has_buruuj_tender or tender_state not in ('bid_decision','capture','kickoff')"/>
+            </xpath>
+
+            <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                <button class="oe_stat_button" name="action_open_buruuj_tender" type="object"
+                        icon="fa-calculator" invisible="not has_buruuj_tender">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Tender Estimate</span>
+                    </div>
+                </button>
+            </xpath>
+
+            <xpath expr="//page[@name='lead_source']" position="before">
+                <page string="Tender Estimate" name="buruuj_tender_link" invisible="not is_tender">
+                    <group>
+                        <field name="buruuj_tender_id" readonly="1"/>
+                        <field name="has_buruuj_tender" invisible="1"/>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

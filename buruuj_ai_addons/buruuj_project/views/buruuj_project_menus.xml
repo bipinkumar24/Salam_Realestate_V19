@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_buruuj_proj_list" name="All Projects"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_project" sequence="10"/>
+    <menuitem id="menu_buruuj_phases" name="Phases"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_phase" sequence="20"/>
+    <menuitem id="menu_buruuj_wbs" name="Work Breakdown"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_wbs" sequence="30"/>
+    <menuitem id="menu_buruuj_milestone" name="Milestones"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_milestone" sequence="40"/>
+    <menuitem id="menu_buruuj_variation" name="Variation Orders"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_variation" sequence="50"/>
+    <menuitem id="menu_buruuj_risk" name="Risk Register"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_risk" sequence="60"/>
+</odoo>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_risk_list" model="ir.ui.view">
+        <field name="name">tender.risk.list</field>
+        <field name="model">tender.risk</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="severity == 'critical'" decoration-warning="severity == 'high'" decoration-info="severity == 'medium'" decoration-muted="state in ('closed','accepted')">
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <field name="category"/>
+                <field name="probability"/>
+                <field name="impact"/>
+                <field name="score"/>
+                <field name="severity" widget="badge"/>
+                <field name="owner_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_risk_form" model="ir.ui.view">
+        <field name="name">tender.risk.form</field>
+        <field name="model">tender.risk</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="category"/>
+                            <field name="source"/>
+                            <field name="survey_line_id" invisible="source != 'survey'"/>
+                            <field name="owner_id"/>
+                            <field name="target_date"/>
+                        </group>
+                        <group>
+                            <field name="probability"/>
+                            <field name="impact"/>
+                            <field name="score" readonly="1"/>
+                            <field name="severity" widget="badge" readonly="1"/>
+                            <field name="reserve_amount"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description" nolabel="1" placeholder="Describe the risk…"/>
+                    </group>
+                    <group string="Mitigation">
+                        <field name="mitigation" nolabel="1" placeholder="Mitigation plan, owners, target dates…"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tender_risk_search" model="ir.ui.view">
+        <field name="name">tender.risk.search</field>
+        <field name="model">tender.risk</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <filter string="Critical" name="critical" domain="[('severity', '=', 'critical')]"/>
+                <filter string="High" name="high" domain="[('severity', '=', 'high')]"/>
+                <filter string="Open" name="open" domain="[('state', '=', 'open')]"/>
+                <group>
+                    <filter string="Category" name="group_cat" context="{'group_by': 'category'}"/>
+                    <filter string="Severity" name="group_sev" context="{'group_by': 'severity'}"/>
+                    <filter string="Owner" name="group_owner" context="{'group_by': 'owner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_tender_risk" model="ir.actions.act_window">
+        <field name="name">Risk Register</field>
+        <field name="res_model">tender.risk</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

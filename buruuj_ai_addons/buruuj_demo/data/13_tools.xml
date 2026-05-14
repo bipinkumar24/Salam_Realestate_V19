@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================================
+             EMPLOYEES — needed for tool issuance / transfer sign-off
+             ============================================================ -->
+        <record id="demo_emp_storekeeper_1" model="hr.employee">
+            <field name="name">Yusuf Mahmoud</field>
+            <field name="job_title">Main Store Keeper</field>
+            <field name="work_email">storekeeper.main@buruuj.example</field>
+            <field name="work_phone">+966-50-555-1100</field>
+        </record>
+
+        <record id="demo_emp_storekeeper_2" model="hr.employee">
+            <field name="name">Bilal Hassan</field>
+            <field name="job_title">Site Storekeeper - Marina</field>
+            <field name="work_email">storekeeper.marina@buruuj.example</field>
+            <field name="work_phone">+966-50-555-1101</field>
+        </record>
+
+        <record id="demo_emp_surveyor" model="hr.employee">
+            <field name="name">Khalid Rashid</field>
+            <field name="job_title">Senior Surveyor</field>
+            <field name="work_email">surveyor@buruuj.example</field>
+            <field name="work_phone">+966-50-555-1200</field>
+        </record>
+
+        <record id="demo_emp_foreman_1" model="hr.employee">
+            <field name="name">Ahmad Saeed</field>
+            <field name="job_title">Concrete Foreman</field>
+            <field name="work_email">foreman.concrete@buruuj.example</field>
+            <field name="work_phone">+966-50-555-1300</field>
+        </record>
+
+        <record id="demo_emp_foreman_2" model="hr.employee">
+            <field name="name">Omar Farooq</field>
+            <field name="job_title">MEP Foreman</field>
+            <field name="work_email">foreman.mep@buruuj.example</field>
+            <field name="work_phone">+966-50-555-1301</field>
+        </record>
+
+        <record id="demo_emp_electrician" model="hr.employee">
+            <field name="name">Mohammed Iqbal</field>
+            <field name="job_title">Senior Electrician</field>
+            <field name="work_email">electrician@buruuj.example</field>
+            <field name="work_phone">+966-50-555-1400</field>
+        </record>
+
+
+        <!-- ============================================================
+             TOOL CATEGORY (custom — beyond the 7 default ones)
+             ============================================================ -->
+        <record id="demo_tool_cat_lift" model="buruuj.tool.category">
+            <field name="code">LIFT</field>
+            <field name="name">Lifting &amp; Rigging</field>
+            <field name="sequence">35</field>
+        </record>
+
+
+        <!-- ============================================================
+             TOOLS — sample across categories
+             Naming: TL-AAAA-NN where AAAA is category code
+             ============================================================ -->
+
+        <!-- POWER TOOLS -->
+        <record id="demo_tool_drill_01" model="buruuj.tool">
+            <field name="name">Cordless Hammer Drill</field>
+            <field name="code">TL-POWER-001</field>
+            <field name="category_id" ref="buruuj_tools.cat_power_tool"/>
+            <field name="serial_no">DEW-HD18-2024-A1042</field>
+            <field name="barcode">TL00001</field>
+            <field name="make">DeWalt</field>
+            <field name="model">DCD996</field>
+            <field name="purchase_date" eval="(DateTime.today() - relativedelta(months=8)).strftime('%Y-%m-%d')"/>
+            <field name="purchase_value">580.00</field>
+            <field name="warranty_until" eval="(DateTime.today() + relativedelta(months=16)).strftime('%Y-%m-%d')"/>
+            <field name="current_location">issued</field>
+            <field name="current_project_id" ref="demo_project_marina"/>
+            <field name="current_holder_id" ref="demo_emp_foreman_1"/>
+            <field name="current_condition">good</field>
+        </record>
+
+        <record id="demo_tool_grinder_01" model="buruuj.tool">
+            <field name="name">Angle Grinder 5\"</field>
+            <field name="code">TL-POWER-002</field>
+            <field name="category_id" ref="buruuj_tools.cat_power_tool"/>
+            <field name="serial_no">BSH-AG125-2024-B22</field>
+            <field name="barcode">TL00002</field>
+            <field name="make">Bosch</field>
+            <field name="model">GWS 17-125 CIE</field>
+            <field name="purchase_date" eval="(DateTime.today() - relativedelta(months=14)).strftime('%Y-%m-%d')"/>
+            <field name="purchase_value">320.00</field>
+            <field name="current_location">site_store</field>
+            <field name="current_project_id" ref="demo_project_marina"/>
+            <field name="current_condition">good</field>
+        </record>
+
+        <record id="demo_tool_circsaw_01" model="buruuj.tool">
+            <field name="name">Circular Saw</field>
+            <field name="code">TL-POWER-003</field>
+            <field name="category_id" ref="buruuj_tools.cat_power_tool"/>
+            <field name="serial_no">MKT-CS-2023-99</field>
+            <field name="barcode">TL00003</field>
+            <field name="make">Makita</field>
+            <field name="model">5008MG</field>
+            <field name="purchase_value">450.00</field>
+            <field name="current_location">in_repair</field>
+            <field name="current_condition">poor</field>
+            <field name="notes">Sent to workshop — blade guard cracked.</field>
+        </record>
+
+        <!-- HAND TOOLS -->
+        <record id="demo_tool_torque_wrench" model="buruuj.tool">
+            <field name="name">Torque Wrench Set 1/2\"</field>
+            <field name="code">TL-HAND-001</field>
+            <field name="category_id" ref="buruuj_tools.cat_hand_tool"/>
+            <field name="barcode">TL00004</field>
+            <field name="make">Stanley</field>
+            <field name="purchase_value">280.00</field>
+            <field name="current_location">main_store</field>
+            <field name="current_condition">good</field>
+        </record>
+
+        <record id="demo_tool_ladder" model="buruuj.tool">
+            <field name="name">Aluminium A-Frame Ladder 2.4m</field>
+            <field name="code">TL-HAND-002</field>
+            <field name="category_id" ref="buruuj_tools.cat_hand_tool"/>
+            <field name="barcode">TL00005</field>
+            <field name="make">Werner</field>
+            <field name="purchase_value">180.00</field>
+            <field name="current_location">site_store</field>
+            <field name="current_project_id" ref="demo_project_plaza"/>
+            <field name="current_condition">good</field>
+        </record>
+
+        <!-- INSTRUMENTS — require calibration -->
+        <record id="demo_tool_total_station" model="buruuj.tool">
+            <field name="name">Total Station</field>
+            <field name="code">TL-INST-001</field>
+            <field name="category_id" ref="buruuj_tools.cat_instrument"/>
+            <field name="serial_no">LCA-TS16-A4521</field>
+            <field name="barcode">TL00010</field>
+            <field name="make">Leica</field>
+            <field name="model">TS16 R500</field>
+            <field name="purchase_date" eval="(DateTime.today() - relativedelta(months=24)).strftime('%Y-%m-%d')"/>
+            <field name="purchase_value">18500.00</field>
+            <field name="current_location">issued</field>
+            <field name="current_project_id" ref="demo_project_marina"/>
+            <field name="current_holder_id" ref="demo_emp_surveyor"/>
+            <field name="current_condition">good</field>
+            <field name="calibration_interval_months">12</field>
+            <field name="last_calibration_date" eval="(DateTime.today() - relativedelta(months=10)).strftime('%Y-%m-%d')"/>
+            <field name="next_calibration_due" eval="(DateTime.today() + relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="calibration_certificate_no">CAL-2025-1042</field>
+        </record>
+
+        <record id="demo_tool_theodolite" model="buruuj.tool">
+            <field name="name">Digital Theodolite</field>
+            <field name="code">TL-INST-002</field>
+            <field name="category_id" ref="buruuj_tools.cat_instrument"/>
+            <field name="serial_no">SOK-DT5A-7891</field>
+            <field name="barcode">TL00011</field>
+            <field name="make">Sokkia</field>
+            <field name="model">DT5A</field>
+            <field name="purchase_value">4200.00</field>
+            <field name="current_location">main_store</field>
+            <field name="current_condition">good</field>
+            <field name="calibration_interval_months">12</field>
+            <field name="last_calibration_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="next_calibration_due" eval="(DateTime.today() + relativedelta(months=8)).strftime('%Y-%m-%d')"/>
+            <field name="calibration_certificate_no">CAL-2026-0207</field>
+        </record>
+
+        <record id="demo_tool_multimeter" model="buruuj.tool">
+            <field name="name">Digital Multimeter (Cat IV)</field>
+            <field name="code">TL-INST-003</field>
+            <field name="category_id" ref="buruuj_tools.cat_instrument"/>
+            <field name="barcode">TL00012</field>
+            <field name="make">Fluke</field>
+            <field name="model">87V</field>
+            <field name="purchase_value">680.00</field>
+            <field name="current_location">issued</field>
+            <field name="current_project_id" ref="demo_project_plaza"/>
+            <field name="current_holder_id" ref="demo_emp_electrician"/>
+            <field name="current_condition">good</field>
+            <field name="calibration_interval_months">12</field>
+            <field name="last_calibration_date" eval="(DateTime.today() - relativedelta(months=14)).strftime('%Y-%m-%d')"/>
+            <field name="next_calibration_due" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="calibration_certificate_no">CAL-2024-0991</field>
+            <field name="notes">CALIBRATION OVERDUE — recall to main store.</field>
+        </record>
+
+        <!-- SCAFFOLDING -->
+        <record id="demo_tool_scaffold_set" model="buruuj.tool">
+            <field name="name">Scaffold Tower Set 6m</field>
+            <field name="code">TL-SCAF-001</field>
+            <field name="category_id" ref="buruuj_tools.cat_scaffold"/>
+            <field name="barcode">TL00020</field>
+            <field name="make">Layher</field>
+            <field name="purchase_value">3200.00</field>
+            <field name="current_location">site_store</field>
+            <field name="current_project_id" ref="demo_project_marina"/>
+            <field name="current_condition">good</field>
+        </record>
+
+        <!-- SAFETY EQUIPMENT -->
+        <record id="demo_tool_harness_01" model="buruuj.tool">
+            <field name="name">Full Body Safety Harness</field>
+            <field name="code">TL-SAFE-001</field>
+            <field name="category_id" ref="buruuj_tools.cat_safety"/>
+            <field name="barcode">TL00030</field>
+            <field name="make">3M Protecta</field>
+            <field name="purchase_value">240.00</field>
+            <field name="current_location">site_store</field>
+            <field name="current_project_id" ref="demo_project_marina"/>
+            <field name="current_condition">good</field>
+        </record>
+
+        <!-- LIFTING (custom category) -->
+        <record id="demo_tool_chain_block" model="buruuj.tool">
+            <field name="name">Chain Block 2-ton</field>
+            <field name="code">TL-LIFT-001</field>
+            <field name="category_id" ref="demo_tool_cat_lift"/>
+            <field name="barcode">TL00040</field>
+            <field name="make">Yale</field>
+            <field name="purchase_value">450.00</field>
+            <field name="current_location">main_store</field>
+            <field name="current_condition">good</field>
+        </record>
+
+        <!-- A WRITTEN-OFF TOOL — for the loss demo -->
+        <record id="demo_tool_lost_drill" model="buruuj.tool">
+            <field name="name">Cordless Drill (Lost)</field>
+            <field name="code">TL-POWER-099</field>
+            <field name="category_id" ref="buruuj_tools.cat_power_tool"/>
+            <field name="barcode">TL00099</field>
+            <field name="make">Bosch</field>
+            <field name="model">GSB 18V-21</field>
+            <field name="purchase_value">340.00</field>
+            <field name="current_location">lost</field>
+            <field name="current_condition">poor</field>
+            <field name="active" eval="False"/>
+        </record>
+
+
+        <!-- ============================================================
+             ISSUANCES — current and historical
+             ============================================================ -->
+
+        <!-- Current open issuance: drill to concrete foreman -->
+        <record id="demo_iss_drill_open" model="buruuj.tool.issuance">
+            <field name="tool_id" ref="demo_tool_drill_01"/>
+            <field name="employee_id" ref="demo_emp_foreman_1"/>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="expected_return" eval="(DateTime.today() + relativedelta(days=11)).strftime('%Y-%m-%d')"/>
+            <field name="condition_out">good</field>
+            <field name="state">issued</field>
+            <field name="notes">Hammer drill issued for L7 column rebar fixing.</field>
+        </record>
+
+        <!-- Current open issuance: total station to surveyor -->
+        <record id="demo_iss_ts_open" model="buruuj.tool.issuance">
+            <field name="tool_id" ref="demo_tool_total_station"/>
+            <field name="employee_id" ref="demo_emp_surveyor"/>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(days=12)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="expected_return" eval="(DateTime.today() + relativedelta(days=18)).strftime('%Y-%m-%d')"/>
+            <field name="condition_out">good</field>
+            <field name="state">issued</field>
+            <field name="notes">Setting out columns L7-L9.</field>
+        </record>
+
+        <!-- Current open issuance: multimeter to electrician -->
+        <record id="demo_iss_mm_open" model="buruuj.tool.issuance">
+            <field name="tool_id" ref="demo_tool_multimeter"/>
+            <field name="employee_id" ref="demo_emp_electrician"/>
+            <field name="project_id" ref="demo_project_plaza"/>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(days=20)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="expected_return" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="condition_out">good</field>
+            <field name="state">issued</field>
+            <field name="notes">Issued for fitout final testing — return overdue.</field>
+        </record>
+
+        <!-- Historical: returned in good condition -->
+        <record id="demo_iss_grinder_returned" model="buruuj.tool.issuance">
+            <field name="tool_id" ref="demo_tool_grinder_01"/>
+            <field name="employee_id" ref="demo_emp_foreman_1"/>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(days=45)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="expected_return" eval="(DateTime.today() - relativedelta(days=30)).strftime('%Y-%m-%d')"/>
+            <field name="actual_return" eval="(DateTime.today() - relativedelta(days=29)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="condition_out">good</field>
+            <field name="condition_in">good</field>
+            <field name="state">returned</field>
+        </record>
+
+        <!-- Historical: returned with damage -->
+        <record id="demo_iss_circsaw_damaged" model="buruuj.tool.issuance">
+            <field name="tool_id" ref="demo_tool_circsaw_01"/>
+            <field name="employee_id" ref="demo_emp_foreman_2"/>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(days=22)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="expected_return" eval="(DateTime.today() - relativedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="actual_return" eval="(DateTime.today() - relativedelta(days=14)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="condition_out">good</field>
+            <field name="condition_in">damaged</field>
+            <field name="state">returned</field>
+            <field name="notes">Blade guard fell off during cut. Sent to repair.</field>
+        </record>
+
+
+        <!-- ============================================================
+             TRANSFERS BETWEEN SITES
+             ============================================================ -->
+
+        <!-- Completed transfer: ladder moved from Marina to Gov Plaza -->
+        <record id="demo_xfer_ladder_done" model="buruuj.tool.transfer">
+            <field name="tool_id" ref="demo_tool_ladder"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=15)).strftime('%Y-%m-%d')"/>
+            <field name="from_project_id" ref="demo_project_marina"/>
+            <field name="to_project_id" ref="demo_project_plaza"/>
+            <field name="from_storekeeper_id" ref="demo_emp_storekeeper_2"/>
+            <field name="to_storekeeper_id" ref="demo_emp_storekeeper_1"/>
+            <field name="transport_method">vehicle</field>
+            <field name="condition_at_dispatch">good</field>
+            <field name="condition_at_receipt">good</field>
+            <field name="state">received</field>
+        </record>
+
+        <!-- In-progress: scaffold tower being moved -->
+        <record id="demo_xfer_scaffold_dispatched" model="buruuj.tool.transfer">
+            <field name="tool_id" ref="demo_tool_scaffold_set"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="from_project_id" ref="demo_project_marina"/>
+            <field name="to_project_id" ref="demo_project_hc7"/>
+            <field name="from_storekeeper_id" ref="demo_emp_storekeeper_2"/>
+            <field name="transport_method">vehicle</field>
+            <field name="condition_at_dispatch">good</field>
+            <field name="state">dispatched</field>
+            <field name="notes">In transit — expected receipt tomorrow.</field>
+        </record>
+
+
+        <!-- ============================================================
+             CALIBRATIONS
+             ============================================================ -->
+
+        <!-- Last completed calibration on the total station -->
+        <record id="demo_cal_ts_done" model="buruuj.tool.calibration">
+            <field name="tool_id" ref="demo_tool_total_station"/>
+            <field name="calibration_date" eval="(DateTime.today() - relativedelta(months=10)).strftime('%Y-%m-%d')"/>
+            <field name="certificate_no">CAL-2025-1042</field>
+            <field name="calibration_lab">National Metrology Institute</field>
+            <field name="cost">450.00</field>
+            <field name="result">pass</field>
+            <field name="state">done</field>
+        </record>
+
+        <!-- Theodolite calibration done -->
+        <record id="demo_cal_th_done" model="buruuj.tool.calibration">
+            <field name="tool_id" ref="demo_tool_theodolite"/>
+            <field name="calibration_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="certificate_no">CAL-2026-0207</field>
+            <field name="calibration_lab">Precision Calibration Services</field>
+            <field name="cost">320.00</field>
+            <field name="result">pass_adjustment</field>
+            <field name="state">done</field>
+            <field name="notes">Minor adjustment to vertical axis. Within tolerance after.</field>
+        </record>
+
+        <!-- A scheduled (not yet started) calibration for the multimeter -->
+        <record id="demo_cal_mm_scheduled" model="buruuj.tool.calibration">
+            <field name="tool_id" ref="demo_tool_multimeter"/>
+            <field name="calibration_date" eval="(DateTime.today() + relativedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="calibration_lab">National Metrology Institute</field>
+            <field name="cost">180.00</field>
+            <field name="state">scheduled</field>
+            <field name="notes">Scheduled following overdue alert. Tool to be recalled this week.</field>
+        </record>
+
+
+        <!-- ============================================================
+             LOSS / DAMAGE RECORDS
+             ============================================================ -->
+
+        <!-- Lost drill — under investigation -->
+        <record id="demo_loss_drill" model="buruuj.tool.loss">
+            <field name="tool_id" ref="demo_tool_lost_drill"/>
+            <field name="incident_type">lost</field>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=18)).strftime('%Y-%m-%d')"/>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="location">Level 5 East — last seen at concrete pour</field>
+            <field name="responsible_subcontractor_id" ref="demo_sub_concretemaster"/>
+            <field name="description">Drill issued to concrete subcontractor for column rebar work. Not returned at end of shift. Subcontractor's foreman cannot account for it.</field>
+            <field name="estimated_value">340.00</field>
+            <field name="recovery_amount">340.00</field>
+            <field name="recovery_method">backcharge</field>
+            <field name="state">investigating</field>
+        </record>
+
+        <!-- Damaged circular saw — repairable, written off as it cost more to fix -->
+        <record id="demo_loss_circsaw" model="buruuj.tool.loss">
+            <field name="tool_id" ref="demo_tool_circsaw_01"/>
+            <field name="incident_type">damaged_repairable</field>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=14)).strftime('%Y-%m-%d')"/>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="location">Site workshop area</field>
+            <field name="responsible_employee_id" ref="demo_emp_foreman_2"/>
+            <field name="description">Blade guard failure during use. Saw dropped, casing cracked. Repair quote received.</field>
+            <field name="estimated_value">180.00</field>
+            <field name="recovery_method">none</field>
+            <field name="state">reported</field>
+        </record>
+
+    </data>
+</odoo>

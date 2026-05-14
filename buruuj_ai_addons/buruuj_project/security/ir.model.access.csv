@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_buruuj_phase_se,buruuj.phase.se,model_buruuj_phase,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_buruuj_phase_pm,buruuj.phase.pm,model_buruuj_phase,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_wbs_se,buruuj.wbs.se,model_buruuj_wbs,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_buruuj_wbs_pm,buruuj.wbs.pm,model_buruuj_wbs,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_variation_qs,buruuj.variation.qs,model_buruuj_variation,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_variation_pm,buruuj.variation.pm,model_buruuj_variation,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_milestone_qs,buruuj.milestone.qs,model_buruuj_milestone,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_milestone_pm,buruuj.milestone.pm,model_buruuj_milestone,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_risk_pm,buruuj.risk.pm,model_buruuj_risk,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_risk_dir,buruuj.risk.dir,model_buruuj_risk,buruuj_base.group_buruuj_director,1,1,0,0

@@ -268,6 +268,26 @@
                 action="property_exposure_action"
                 groups="rental_management.property_rental_manager,rental_management.property_rental_officer" />
         </menuitem>
+        <menuitem name="Blocks"
+                id="menu_property_block"
+                sequence="10"
+                action="property_block_action"
+                groups="rental_management.property_rental_manager,rental_management.property_rental_officer" />
+        <menuitem name="Zones"
+                id="menu_property_zone"
+                sequence="8"
+                action="property_zone_action"
+                groups="rental_management.property_rental_manager,rental_management.property_rental_officer" />
+        <menuitem name="Lots"
+                id="menu_property_lot"
+                sequence="9"
+                action="property_lot_action"
+                groups="rental_management.property_rental_manager,rental_management.property_rental_officer" />
+        <menuitem name="Typologies"
+                id="menu_property_typology"
+                sequence="7"
+                action="property_typology_action"
+                groups="rental_management.property_rental_manager,rental_management.property_rental_officer" />
     </menuitem>
 
 

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ── DOC TYPE CONFIG ── -->
+    <record id="view_governance_doc_type_list" model="ir.ui.view">
+        <field name="name">salaam.governance.doc.type.list</field>
+        <field name="model">salaam.governance.doc.type</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_governance_doc_type" model="ir.actions.act_window">
+        <field name="name">Document Types</field>
+        <field name="res_model">salaam.governance.doc.type</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ── GOVERNANCE DOCUMENT ── -->
+    <record id="view_governance_document_form" model="ir.ui.view">
+        <field name="name">salaam.governance.document.form</field>
+        <field name="model">salaam.governance.document</field>
+        <field name="arch" type="xml">
+            <form string="Governance Document">
+                <header>
+                    <button name="action_submit_review" string="Submit for Review"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve / Execute"
+                            type="object" class="btn-primary"
+                            groups="salaam_construction_mgmt.group_construction_manager"
+                            invisible = "state != 'in_review'"/>
+                    <button name="action_supersede" string="Supersede"
+                            type="object"
+                            invisible = "state != 'approved'"/>
+                    <button name="action_archive_doc" string="Archive"
+                            type="object"
+                            invisible="state in ['archived']"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,in_review,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-paperclip"
+                                type="object" name="action_get_attachment_view">
+                            <field name="file_count" widget="statinfo" string="Files"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                        <h3><field name="name"/></h3>
+                    </div>
+                    <group>
+                        <group string="Classification">
+                            <field name="doc_type"/>
+                            <field name="doc_category"/>
+                            <field name="confidentiality_level"/>
+                            <field name="version"/>
+                            <field name="supersedes_id"/>
+                        </group>
+                        <group string="Links">
+                            <field name="project_id"/>
+                            <field name="musharaka_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Parties">
+                            <field name="issuing_authority"/>
+                            <field name="party_ids" widget="many2many_tags"/>
+                            <field name="signed_by_bank"/>
+                            <field name="bank_signatory_id"
+                                   invisible = "not signed_by_bank"/>
+                        </group>
+                        <group string="Dates &amp; Validity">
+                            <field name="execution_date"/>
+                            <field name="effective_date"/>
+                            <field name="expiry_date"/>
+                            <field name="days_to_expiry" readonly="1"
+                                   decoration-danger="days_to_expiry &lt; 30 and days_to_expiry &gt; 0"
+                                   decoration-warning="days_to_expiry &lt; 90 and days_to_expiry &gt; 0"/>
+                            <field name="renewal_required"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Summary &amp; Provisions">
+                            <separator string="Executive Summary"/>
+                            <field name="summary"/>
+                            <separator string="Key Provisions"/>
+                            <field name="key_provisions"/>
+                        </page>
+                        <page string="Documents">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_governance_document_list" model="ir.ui.view">
+        <field name="name">salaam.governance.document.list</field>
+        <field name="model">salaam.governance.document</field>
+        <field name="arch" type="xml">
+            <list string="Governance Documents"
+                  decoration-success="state=='approved'"
+                  decoration-warning="state=='in_review'"
+                  decoration-muted="state in ('superseded','archived')"
+                  decoration-danger="state=='expired'">
+                <field name="reference"/>
+                <field name="name"/>
+                <field name="doc_type"/>
+                <field name="doc_category"/>
+                <field name="project_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="execution_date"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"
+                       decoration-danger="days_to_expiry &lt; 30 and days_to_expiry &gt; 0"
+                       decoration-warning="days_to_expiry &lt; 90 and days_to_expiry &gt; 0"/>
+                <field name="renewal_required" widget="boolean_toggle"/>
+                <field name="version"/>
+                <field name="file_count"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='approved'"
+                       decoration-warning="state=='in_review'"
+                       decoration-danger="state=='expired'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_governance_document_search" model="ir.ui.view">
+        <field name="name">salaam.governance.document.search</field>
+        <field name="model">salaam.governance.document</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="reference"/>
+                <field name="project_id"/>
+                <field name="doc_type"/>
+                <filter string="Approved" name="approved"
+                        domain="[('state','=','approved')]"/>
+                <filter string="Under Review" name="in_review"
+                        domain="[('state','=','in_review')]"/>
+                <filter string="Expiring Soon (90 days)" name="expiring"
+                        domain="[('days_to_expiry','&lt;=',90),('days_to_expiry','&gt;',0)]"/>
+                <filter string="Sharia Documents" name="sharia"
+                        domain="[('doc_category','=','sharia')]"/>
+                <filter string="Constitutional" name="constitutional"
+                        domain="[('doc_category','=','constitutional')]"/>
+                <separator/>
+                <group>
+                    <filter string="Category" name="group_category"
+                            context="{'group_by':'doc_category'}"/>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by':'doc_type'}"/>
+                    <filter string="Project" name="group_project"
+                            context="{'group_by':'project_id'}"/>
+                    <filter string="Status" name="group_state"
+                            context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_governance_document" model="ir.actions.act_window">
+        <field name="name">Governance Documents</field>
+        <field name="res_model">salaam.governance.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_governance_document_search"/>
+    </record>
+
+</odoo>

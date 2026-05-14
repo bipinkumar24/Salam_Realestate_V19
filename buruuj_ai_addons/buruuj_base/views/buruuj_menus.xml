@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root menu for the Buruuj suite -->
+    <menuitem id="menu_buruuj_root"
+              name="Construction"
+              web_icon="buruuj_base,static/description/icon.png"
+              sequence="50"
+              groups="buruuj_base.group_buruuj_site_user"/>
+
+    <!-- Main sections (other modules will add their items here) -->
+    <menuitem id="menu_buruuj_dashboard" name="Dashboard"
+              parent="menu_buruuj_root" sequence="5"/>
+
+    <menuitem id="menu_buruuj_tendering" name="Tendering"
+              parent="menu_buruuj_root" sequence="10"/>
+
+    <menuitem id="menu_buruuj_projects" name="Projects"
+              parent="menu_buruuj_root" sequence="20"/>
+
+    <menuitem id="menu_buruuj_subcontractors" name="Subcontractors"
+              parent="menu_buruuj_root" sequence="30"/>
+
+    <menuitem id="menu_buruuj_billing" name="Billing &amp; IPC"
+              parent="menu_buruuj_root" sequence="40"/>
+
+    <menuitem id="menu_buruuj_site" name="Site Operations"
+              parent="menu_buruuj_root" sequence="50"/>
+
+    <menuitem id="menu_buruuj_plant_root" name="Plant &amp; Equipment"
+              parent="menu_buruuj_root" sequence="60"/>
+
+    <menuitem id="menu_buruuj_hse_root" name="HSE"
+              parent="menu_buruuj_root" sequence="70"/>
+
+    <menuitem id="menu_buruuj_quality_root" name="Quality &amp; Documents"
+              parent="menu_buruuj_root" sequence="80"/>
+
+    <menuitem id="menu_buruuj_contracts_root" name="Contracts"
+              parent="menu_buruuj_root" sequence="90"/>
+
+    <menuitem id="menu_buruuj_config" name="Configuration"
+              parent="menu_buruuj_root" sequence="100"
+              groups="buruuj_base.group_buruuj_manager"/>
+
+    <!-- Configuration sub-menus -->
+    <menuitem id="menu_buruuj_trade" name="Trades"
+              parent="menu_buruuj_config"
+              action="action_buruuj_trade" sequence="10"/>
+
+    <menuitem id="menu_buruuj_settings" name="Settings"
+              parent="menu_buruuj_config"
+              action="action_buruuj_config_settings" sequence="100"/>
+
+</odoo>

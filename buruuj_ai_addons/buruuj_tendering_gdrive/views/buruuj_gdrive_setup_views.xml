@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_gdrive_setup_form" model="ir.ui.view">
+        <field name="name">buruuj.gdrive.setup.form</field>
+        <field name="model">buruuj.gdrive.setup</field>
+        <field name="arch" type="xml">
+            <form string="Google Drive Sync — Setup">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Google Drive Sync</h1>
+                        <p class="text-muted">
+                            Configure the shared Drive folder and the service account used
+                            to push and pull the Master Rates spreadsheet.
+                        </p>
+                    </div>
+                    <group string="Google Drive">
+                        <field name="folder_id" placeholder="e.g. 1AbCdEfGhIjKlMnOpQrStUvWxYz"/>
+                        <field name="filename"/>
+                        <field name="has_existing_credentials" invisible="1"/>
+                        <field name="service_account" filename="service_account_filename"
+                               required="not has_existing_credentials"/>
+                        <field name="service_account_filename" invisible="1"/>
+                    </group>
+                    <group string="Claude (Anthropic)">
+                        <field name="anthropic_api_key" password="True"
+                               placeholder="sk-ant-..."/>
+                    </group>
+                    <div class="alert alert-info" role="alert">
+                        <strong>Setup steps:</strong>
+                        <ol class="mb-0">
+                            <li>Create a service account in Google Cloud Console.</li>
+                            <li>Generate and download a JSON key.</li>
+                            <li>Share the target Drive folder with the service account email
+                                (Editor permission).</li>
+                            <li>Paste the folder ID (from its URL) above and upload the JSON.</li>
+                        </ol>
+                    </div>
+                </sheet>
+                <footer>
+                    <button name="action_save" string="Save" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_buruuj_gdrive_setup" model="ir.actions.act_window">
+        <field name="name">Drive Setup</field>
+        <field name="res_model">buruuj.gdrive.setup</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

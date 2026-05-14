@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_equipment_list" model="ir.ui.view">
+        <field name="name">buruuj.equipment.list</field>
+        <field name="model">buruuj.equipment</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category"/>
+                <field name="ownership"/>
+                <field name="current_project_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_equipment_form" model="ir.ui.view">
+        <field name="name">buruuj.equipment.form</field>
+        <field name="model">buruuj.equipment</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                        <h3><field name="code"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category"/>
+                            <field name="serial_no"/>
+                            <field name="plate_no"/>
+                            <field name="make"/>
+                            <field name="model"/>
+                            <field name="year"/>
+                        </group>
+                        <group>
+                            <field name="ownership"/>
+                            <field name="rental_partner_id" invisible="ownership == 'owned'"/>
+                            <field name="rental_rate_daily" invisible="ownership == 'owned'"/>
+                            <field name="rental_off_hire_date" invisible="ownership == 'owned'"/>
+                            <field name="internal_hire_rate_daily"/>
+                            <field name="purchase_date" invisible="ownership != 'owned'"/>
+                            <field name="purchase_value" invisible="ownership != 'owned'"/>
+                            <field name="state"/>
+                            <field name="current_project_id"/>
+                            <field name="operator_id"/>
+                            <field name="operator_name"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Allocations">
+                            <field name="allocation_ids">
+                                <list editable="bottom">
+                                    <field name="project_id"/>
+                                    <field name="date_from"/>
+                                    <field name="date_to"/>
+                                    <field name="daily_rate"/>
+                                    <field name="days"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="operator_id"/>
+                                    <field name="state"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Fuel Logs">
+                            <field name="fuel_log_ids">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="project_id"/>
+                                    <field name="quantity_liters" sum="L"/>
+                                    <field name="unit_price"/>
+                                    <field name="total_cost" sum="Total"/>
+                                    <field name="odometer"/>
+                                    <field name="operator"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Maintenance">
+                            <field name="maintenance_ids">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="type"/>
+                                    <field name="description"/>
+                                    <field name="next_due_date"/>
+                                    <field name="cost"/>
+                                    <field name="state"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes"><field name="notes"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_equipment" model="ir.actions.act_window">
+        <field name="name">Equipment</field>
+        <field name="res_model">buruuj.equipment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_buruuj_allocation" model="ir.actions.act_window">
+        <field name="name">Allocations</field>
+        <field name="res_model">buruuj.allocation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_buruuj_fuel_log" model="ir.actions.act_window">
+        <field name="name">Fuel Logs</field>
+        <field name="res_model">buruuj.fuel.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_buruuj_maintenance" model="ir.actions.act_window">
+        <field name="name">Maintenance</field>
+        <field name="res_model">buruuj.maintenance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

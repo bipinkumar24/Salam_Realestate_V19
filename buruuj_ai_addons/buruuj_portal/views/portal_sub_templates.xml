@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ===== SUBCONTRACTS ===== -->
+  <template id="portal_my_subs" name="My Subcontracts">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">My Subcontracts</h2>
+        <div t-if="not subs" class="alert alert-info">No subcontracts.</div>
+        <table class="table" t-if="subs">
+          <thead>
+            <tr><th>Ref</th><th>Project</th><th>Title</th><th>Value</th>
+              <th>Trade</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="subs" t-as="s">
+              <td><a t-attf-href="/my/subcontracts/#{s.id}" t-esc="s.name"/></td>
+              <td><span t-esc="s.project_id.name"/></td>
+              <td><span t-esc="s.title"/></td>
+              <td><span t-field="s.contract_value"/></td>
+              <td><span t-esc="s.trade_id.name"/></td>
+              <td>
+                <span class="buruuj-status-badge"
+                      t-attf-class="buruuj-status-#{'active' if s.state in ('signed','in_progress') else 'pending'}">
+                  <t t-esc="s.state"/>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_sub_detail" name="Subcontract Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/subcontracts" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title" t-esc="sub.title"/>
+        <div class="buruuj-portal-summary">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Project:</span>
+                <span t-esc="sub.project_id.name"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Trade:</span>
+                <span t-esc="sub.trade_id.name"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Contract Value:</span>
+                <span t-field="sub.contract_value"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Advance:</span>
+                <span t-field="sub.advance_amount"/>
+                (<t t-esc="sub.advance_percent"/>%)
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Retention:</span>
+                <span t-esc="sub.retention_percent"/>%
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Start:</span>
+                <span t-field="sub.start_date"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Completion:</span>
+                <span t-field="sub.completion_date"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">DLP (months):</span>
+                <span t-esc="sub.dlp_months"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Status:</span>
+                <span t-esc="sub.state"/>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h4>Scope of Work</h4>
+        <div t-field="sub.scope_of_work"/>
+      </div>
+    </t>
+  </template>
+
+  <!-- ===== WORK ORDERS ===== -->
+  <template id="portal_my_wos" name="Work Orders">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">Work Orders</h2>
+        <div t-if="not wos" class="alert alert-info">No work orders.</div>
+        <table class="table" t-if="wos">
+          <thead>
+            <tr><th>Ref</th><th>Title</th><th>Subcontract</th><th>Amount</th>
+              <th>State</th><th>Acknowledged</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="wos" t-as="w">
+              <td><a t-attf-href="/my/workorders/#{w.id}" t-esc="w.name"/></td>
+              <td><span t-esc="w.title"/></td>
+              <td><span t-esc="w.subcontract_id.name"/></td>
+              <td><span t-field="w.amount"/></td>
+              <td><span t-esc="w.state"/></td>
+              <td>
+                <span t-if="w.portal_acknowledged" class="text-success">✓</span>
+                <span t-else="" class="text-muted">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_wo_detail" name="Work Order Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/workorders" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title" t-esc="wo.title"/>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Subcontract:</span>
+          <span t-esc="wo.subcontract_id.name"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Project:</span>
+          <span t-esc="wo.project_id.name"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Amount:</span>
+          <span t-field="wo.amount"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Start / End:</span>
+          <span t-field="wo.start_date"/> / <span t-field="wo.end_date"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Status:</span>
+          <span t-esc="wo.state"/>
+        </div>
+        <h4 class="mt-3">Description</h4>
+        <div t-field="wo.description"/>
+
+        <div t-if="not wo.portal_acknowledged and wo.state in ('issued', 'in_progress')"
+             class="buruuj-action-bar mt-4">
+          <h4>Acknowledge Work Order</h4>
+          <p>By acknowledging, you confirm receipt and understanding of this Work Order.</p>
+          <form t-attf-action="/my/workorders/#{wo.id}/acknowledge" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <button type="submit" class="btn btn-primary">Acknowledge</button>
+          </form>
+        </div>
+        <div t-if="wo.portal_acknowledged" class="alert alert-success mt-3">
+          ✓ Acknowledged on <t t-field="wo.portal_acknowledged_at"/>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <!-- ===== SUB IPCs ===== -->
+  <template id="portal_my_sub_ipcs" name="My IPCs">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 class="buruuj-section-title">My IPCs</h2>
+          <a href="/my/sub-ipcs/new" class="btn btn-primary">Submit New IPC</a>
+        </div>
+        <div t-if="not ipcs" class="alert alert-info">No IPCs submitted yet.</div>
+        <table class="table" t-if="ipcs">
+          <thead>
+            <tr><th>Ref</th><th>#</th><th>Subcontract</th><th>Period</th>
+              <th>Net</th><th>State</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="ipcs" t-as="i">
+              <td><a t-attf-href="/my/sub-ipcs/#{i.id}" t-esc="i.name"/></td>
+              <td><span t-esc="i.sequence_no"/></td>
+              <td><span t-esc="i.subcontract_id.name"/></td>
+              <td><t t-field="i.period_from"/> – <t t-field="i.period_to"/></td>
+              <td><span t-field="i.net_amount"/></td>
+              <td>
+                <span class="buruuj-status-badge"
+                      t-attf-class="buruuj-status-#{'approved' if i.state in ('finance_approved','paid') else 'pending'}">
+                  <t t-esc="i.state"/>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_sub_ipc_detail" name="Sub IPC Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/sub-ipcs" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title">
+          IPC <t t-esc="ipc.name"/> — #<t t-esc="ipc.sequence_no"/>
+        </h2>
+        <div class="buruuj-portal-summary">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Subcontract:</span>
+                <span t-esc="ipc.subcontract_id.name"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Period:</span>
+                <span t-field="ipc.period_from"/> – <span t-field="ipc.period_to"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Status:</span>
+                <span t-esc="ipc.state"/>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Cumulative:</span>
+                <span t-field="ipc.cumulative_amount"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Net:</span>
+                <strong t-field="ipc.net_amount"/>
+              </div>
+              <div class="buruuj-readonly-row">
+                <span class="buruuj-readonly-label">Total Payable:</span>
+                <strong t-field="ipc.total_payable"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_sub_ipc_new" name="Submit New IPC">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/sub-ipcs" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title">Submit New IPC</h2>
+        <p>This will create a draft IPC for QS review. Buruuj's QS will validate
+          the figures against site records before approving.</p>
+        <form action="/my/sub-ipcs/submit" method="post" class="buruuj-portal-card">
+          <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+          <div class="form-group">
+            <label>Subcontract</label>
+            <select name="sub_id" class="form-control" required="required">
+              <option value="">— select —</option>
+              <t t-foreach="subs" t-as="s">
+                <option t-att-value="s.id"
+                        t-att-selected="selected_sub_id and s.id == selected_sub_id">
+                  <t t-esc="s.name"/> — <t t-esc="s.title"/>
+                </option>
+              </t>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Period From</label>
+              <input type="date" name="period_from" class="form-control"
+                     required="required"/>
+            </div>
+            <div class="form-group col-md-6">
+              <label>Period To</label>
+              <input type="date" name="period_to" class="form-control"
+                     required="required"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Claimed Amount (this period)</label>
+              <input type="number" step="0.01" name="claimed_amount"
+                     class="form-control" required="required"/>
+            </div>
+            <div class="form-group col-md-6">
+              <label>Materials on Site</label>
+              <input type="number" step="0.01" name="materials_on_site"
+                     class="form-control" value="0"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Notes</label>
+            <textarea name="notes" class="form-control" rows="3"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Submit IPC</button>
+        </form>
+      </div>
+    </t>
+  </template>
+
+  <!-- ===== BACKCHARGES ===== -->
+  <template id="portal_my_backcharges" name="My Back-charges">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <h2 class="buruuj-section-title">Back-charges Raised Against Us</h2>
+        <div t-if="not backcharges" class="alert alert-info">None.</div>
+        <table class="table" t-if="backcharges">
+          <thead>
+            <tr><th>Date</th><th>Title</th><th>Subcontract</th><th>Category</th>
+              <th>Amount</th><th>State</th><th>Disputed</th></tr>
+          </thead>
+          <tbody>
+            <tr t-foreach="backcharges" t-as="b">
+              <td><span t-field="b.date"/></td>
+              <td><a t-attf-href="/my/backcharges/#{b.id}" t-esc="b.name"/></td>
+              <td><span t-esc="b.subcontract_id.name"/></td>
+              <td><span t-esc="b.category"/></td>
+              <td><span t-field="b.amount"/></td>
+              <td><span t-esc="b.state"/></td>
+              <td>
+                <span t-if="b.portal_disputed" class="text-danger">⚠ Disputed</span>
+                <span t-else="" class="text-muted">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </t>
+  </template>
+
+  <template id="portal_backcharge_detail" name="Back-charge Detail">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <a href="/my/backcharges" class="btn btn-sm btn-link">← Back</a>
+        <h2 class="buruuj-section-title" t-esc="bc.name"/>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Subcontract:</span>
+          <span t-esc="bc.subcontract_id.name"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Date:</span>
+          <span t-field="bc.date"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Category:</span>
+          <span t-esc="bc.category"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Amount:</span>
+          <span t-field="bc.amount"/>
+        </div>
+        <div class="buruuj-readonly-row">
+          <span class="buruuj-readonly-label">Status:</span>
+          <span t-esc="bc.state"/>
+        </div>
+        <h4 class="mt-3">Description</h4>
+        <div t-field="bc.description"/>
+
+        <div t-if="not bc.portal_disputed and bc.state in ('confirmed','applied')"
+             class="buruuj-action-bar mt-4">
+          <h4>Dispute this Back-charge</h4>
+          <p>If you believe this back-charge is unjustified, raise a dispute below.
+            Buruuj's PM will review and respond.</p>
+          <form t-attf-action="/my/backcharges/#{bc.id}/dispute" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <textarea name="reason" class="form-control" rows="4"
+                        placeholder="Reason for dispute..." required="required"></textarea>
+            <button type="submit" class="btn btn-warning mt-3">Submit Dispute</button>
+          </form>
+        </div>
+        <div t-if="bc.portal_disputed" class="alert alert-warning mt-3">
+          ⚠ Disputed on <t t-field="bc.portal_dispute_at"/>.
+          Reason: <t t-esc="bc.portal_dispute_reason"/>
+        </div>
+      </div>
+    </t>
+  </template>
+
+</odoo>

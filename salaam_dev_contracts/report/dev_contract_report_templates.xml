@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!-- ══════════════════════════════════════════════════════════════════════
+     BASE LAYOUT — shared by all contract types via t-call
+     ══════════════════════════════════════════════════════════════════════ -->
+<template id="report_dev_contract_base_layout">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+
+                    <!-- HEADER BAND -->
+                    <div style="background:#1A1A2E; color:#ffffff; padding:16px 20px; margin-bottom:20px; border-bottom:4px solid #C9A84C;">
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    <h2 style="margin:0; color:#C9A84C; font-size:18px;">SALAAM INVESTMENT BANK</h2>
+                                    <div style="font-size:11px; color:#aaaaaa; margin-top:4px;">
+                                        Investment Appraisal and Final Approval Office (IAFAO)
+                                    </div>
+                                    <div style="font-size:10px; color:#888888;">
+                                        Djibouti · Nairobi · Mogadishu · Kinshasa
+                                    </div>
+                                </td>
+                                <td style="text-align:right; vertical-align:top;">
+                                    <div style="font-size:14px; font-weight:bold; color:#C9A84C;">
+                                        <t t-esc="doc.name"/>
+                                    </div>
+                                    <div style="font-size:11px; color:#cccccc; margin-top:4px;">
+                                        <t t-esc="doc.contract_type and dict(doc._fields['contract_type'].selection).get(doc.contract_type, '')"/>
+                                    </div>
+                                    <div style="font-size:10px; color:#aaaaaa;">
+                                        Date: <t t-esc="doc.date_start"/> to <t t-esc="doc.date_end"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- SHARIA BADGE -->
+                    <t t-if="doc.sharia_required">
+                        <div style="background:#064E3B; color:#10B981; padding:6px 12px; border-radius:4px; font-size:11px; margin-bottom:16px; display:inline-block;">
+                            ☽ SHARIA-COMPLIANT CONTRACT
+                            <t t-if="doc.sharia_ref"> · Ref: <t t-esc="doc.sharia_ref"/></t>
+                            <t t-if="doc.sharia_certified"> · CERTIFIED</t>
+                        </div>
+                    </t>
+
+                    <!-- PARTIES TABLE -->
+                    <h3 style="color:#1A1A2E; border-bottom:2px solid #C9A84C; padding-bottom:4px;">Parties</h3>
+                    <t t-block="parties_block">
+                        <!-- overridden per contract type -->
+                    </t>
+
+                    <!-- PROPERTY DETAILS -->
+                    <t t-if="doc.property_id">
+                        <h3 style="color:#1A1A2E; border-bottom:2px solid #C9A84C; padding-bottom:4px; margin-top:20px;">Property Details</h3>
+                        <table class="table table-sm" width="100%">
+                            <tr>
+                                <td width="30%"><strong>Property Name</strong></td>
+                                <td><t t-esc="doc.property_id.name"/></td>
+                                <td width="30%"><strong>Property ID</strong></td>
+                                <td><t t-esc="doc.property_id.property_id or ''"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Zone / Lot / Block</strong></td>
+                                <td>
+                                    <t t-esc="doc.property_id.zone_id.name if doc.property_id.zone_id else ''"/>
+                                    / <t t-esc="doc.property_id.lot_id.name if doc.property_id.lot_id else ''"/>
+                                    / <t t-esc="doc.property_id.block_id.name if doc.property_id.block_id else ''"/>
+                                </td>
+                                <td><strong>TF Number</strong></td>
+                                <td><t t-esc="doc.property_id.tf_no or ''"/></td>
+                            </tr>
+                        </table>
+                    </t>
+
+                    <!-- CONTRACT FINANCIALS -->
+                    <h3 style="color:#1A1A2E; border-bottom:2px solid #C9A84C; padding-bottom:4px; margin-top:20px;">Financial Terms</h3>
+                    <t t-block="financials_block"/>
+
+                    <!-- PAYMENT SCHEDULE -->
+                    <t t-if="doc.milestone_ids">
+                        <h3 style="color:#1A1A2E; border-bottom:2px solid #C9A84C; padding-bottom:4px; margin-top:20px;">Payment Schedule</h3>
+                        <table class="table table-sm table-striped" width="100%">
+                            <thead style="background:#1A1A2E; color:#ffffff;">
+                                <tr>
+                                    <th>Milestone</th>
+                                    <th>Planned Date</th>
+                                    <th class="text-right">Amount</th>
+                                    <th class="text-right">%</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.milestone_ids" t-as="m">
+                                    <tr>
+                                        <td><t t-esc="m.name"/></td>
+                                        <td><t t-esc="m.planned_date"/></td>
+                                        <td class="text-right">
+                                            <t t-esc="m.payment_amount" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                        </td>
+                                        <td class="text-right"><t t-esc="'%.1f%%' % m.payment_pct"/></td>
+                                        <td><t t-esc="m.state.title()"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </t>
+
+                    <!-- CONTRACT CLAUSES -->
+                    <t t-if="doc.clause_ids">
+                        <h3 style="color:#1A1A2E; border-bottom:2px solid #C9A84C; padding-bottom:4px; margin-top:20px;">Terms and Conditions</h3>
+                        <t t-foreach="doc.clause_ids" t-as="cl">
+                            <div style="margin-bottom:12px;">
+                                <strong style="color:#1A1A2E;">§<t t-esc="cl_index + 1"/> — <t t-esc="cl.name"/>
+                                    <t t-if="cl.sharia_applicable"> ☽</t>
+                                </strong>
+                                <div style="margin-top:4px; font-size:11px;">
+                                    <t t-raw="cl.content"/>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+
+                    <!-- SIGNATURE BLOCK -->
+                    <h3 style="color:#1A1A2E; border-bottom:2px solid #C9A84C; padding-bottom:4px; margin-top:32px;">Signatures</h3>
+                    <table width="100%" style="margin-top:20px;">
+                        <tr>
+                            <td width="45%" style="border-top:1px solid #333; padding-top:8px; vertical-align:top;">
+                                <strong>Party A — Salaam Investment Bank</strong><br/>
+                                <div style="margin-top:40px;">Name: ______________________________</div>
+                                <div style="margin-top:8px;">Position: ___________________________</div>
+                                <div style="margin-top:8px;">Date: _______________________________</div>
+                                <div style="margin-top:8px;">Stamp: _____________________________</div>
+                            </td>
+                            <td width="10%"/>
+                            <td width="45%" style="border-top:1px solid #333; padding-top:8px; vertical-align:top;">
+                                <strong>Party B — Counterparty</strong><br/>
+                                <div style="margin-top:40px;">Name: ______________________________</div>
+                                <div style="margin-top:8px;">Position: ___________________________</div>
+                                <div style="margin-top:8px;">Date: _______________________________</div>
+                                <div style="margin-top:8px;">Stamp: _____________________________</div>
+                            </td>
+                        </tr>
+                        <t t-if="doc.sharia_required">
+                            <tr style="margin-top:30px;">
+                                <td colspan="3" style="padding-top:30px; border-top:1px solid #C9A84C;">
+                                    <strong style="color:#064E3B;">☽ Sharia Supervisory Board Certification</strong><br/>
+                                    <div style="margin-top:30px;">SSB Officer Name: _______________________________</div>
+                                    <div style="margin-top:8px;">SSB Reference: <t t-esc="doc.sharia_ref or '_______________'"/></div>
+                                    <div style="margin-top:8px;">Date Certified: <t t-esc="doc.sharia_certified_date or '_______________'"/></div>
+                                    <div style="margin-top:8px;">Signature / Stamp: ______________________________</div>
+                                </td>
+                            </tr>
+                        </t>
+                    </table>
+
+                    <!-- FOOTER -->
+                    <div style="margin-top:40px; padding-top:10px; border-top:1px solid #cccccc; font-size:9px; color:#888888;">
+                        CONFIDENTIAL — This document is the property of Salaam Investment Bank.
+                        Ref: <t t-esc="doc.name"/> ·
+                        Branch: <t t-esc="doc.company_id.name"/> ·
+                        Officer: <t t-esc="doc.officer_id.name"/> ·
+                        Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/>
+                        <t t-if="doc.sharia_required">
+                            · <t t-esc="getattr(doc, 'aaoifi_standard_ref', '')"/>
+                        </t>
+                    </div>
+
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<!-- ── SALE CONTRACT ── -->
+<template id="report_dev_contract_sale">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div style="background:#1A1A2E; color:#ffffff; padding:16px 20px; margin-bottom:20px; border-bottom:4px solid #C9A84C;">
+                        <table width="100%"><tr>
+                            <td><h2 style="margin:0;color:#C9A84C;font-size:18px;">SALAAM INVESTMENT BANK</h2>
+                                <div style="font-size:11px;color:#aaa;">IAFAO — Investment Appraisal and Final Approval Office</div></td>
+                            <td style="text-align:right;vertical-align:top;">
+                                <div style="font-size:14px;font-weight:bold;color:#C9A84C;"><t t-esc="doc.name"/></div>
+                                <div style="font-size:11px;color:#ccc;">Sale Contract — عقد البيع</div>
+                                <div style="font-size:10px;color:#aaa;"><t t-esc="doc.date_start"/> to <t t-esc="doc.date_end"/></div>
+                            </td>
+                        </tr></table>
+                    </div>
+                    <t t-if="doc.sharia_required"><div style="background:#064E3B;color:#10B981;padding:6px 12px;border-radius:4px;font-size:11px;margin-bottom:16px;display:inline-block;">☽ SHARIA-COMPLIANT<t t-if="doc.sharia_ref"> · <t t-esc="doc.sharia_ref"/></t></div></t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;">Parties</h3>
+                    <table class="table table-sm" width="100%">
+                        <tr><td width="25%"><strong>Seller</strong></td><td><t t-esc="doc.seller_id.name"/></td><td width="25%"><strong>Buyer</strong></td><td><t t-esc="doc.buyer_id.name"/></td></tr>
+                        <tr><td><strong>Contract Officer</strong></td><td><t t-esc="doc.officer_id.name"/></td><td><strong>Branch</strong></td><td><t t-esc="doc.company_id.name"/></td></tr>
+                    </table>
+                    <t t-if="doc.property_id">
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Property</h3>
+                        <table class="table table-sm" width="100%">
+                            <tr><td width="25%"><strong>Name</strong></td><td><t t-esc="doc.property_id.name"/></td><td width="25%"><strong>TF Number</strong></td><td><t t-esc="doc.property_id.tf_no or ''"/></td></tr>
+                            <tr><td><strong>Title File No.</strong></td><td><t t-esc="doc.title_file_no"/></td><td><strong>Transfer Date</strong></td><td><t t-esc="doc.transfer_date"/></td></tr>
+                        </table>
+                    </t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Financial Terms</h3>
+                    <table class="table table-sm" width="100%">
+                        <tr><td width="30%"><strong>Purchase Price</strong></td><td><t t-esc="doc.purchase_price" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td width="30%"><strong>Down Payment</strong></td><td><t t-esc="doc.down_payment" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td></tr>
+                        <tr><td><strong>Balance Due</strong></td><td><t t-esc="doc.balance_due" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td><strong>Warranty Period</strong></td><td><t t-esc="doc.warranty_period"/> months</td></tr>
+                        <tr><td><strong>Governing Law</strong></td><td colspan="3"><t t-esc="doc.governing_law"/></td></tr>
+                    </table>
+                    <t t-if="doc.milestone_ids">
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Payment Schedule</h3>
+                        <table class="table table-sm table-striped" width="100%">
+                            <thead style="background:#1A1A2E;color:#fff;"><tr><th>Milestone</th><th>Due Date</th><th class="text-right">Amount</th><th>Status</th></tr></thead>
+                            <tbody><t t-foreach="doc.milestone_ids" t-as="m"><tr><td><t t-esc="m.name"/></td><td><t t-esc="m.planned_date"/></td><td class="text-right"><t t-esc="m.payment_amount" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td><t t-esc="m.state.title()"/></td></tr></t></tbody>
+                        </table>
+                    </t>
+                    <t t-if="doc.clause_ids">
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Terms and Conditions</h3>
+                        <t t-foreach="doc.clause_ids" t-as="cl"><div style="margin-bottom:10px;"><strong>§<t t-esc="cl_index+1"/> — <t t-esc="cl.name"/></strong><div style="font-size:11px;margin-top:3px;"><t t-raw="cl.content"/></div></div></t>
+                    </t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:28px;">Signatures</h3>
+                    <table width="100%" style="margin-top:16px;"><tr>
+                        <td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong>Salaam Investment Bank</strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div><div style="margin-top:6px;">Stamp: _____________________</div></td>
+                        <td width="10%"/>
+                        <td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong>Buyer — <t t-esc="doc.buyer_id.name"/></strong><br/><div style="margin-top:36px;">Signature: ______________________________</div><div style="margin-top:6px;">Date: ______________________</div><div style="margin-top:6px;">ID / CR Number: _________________</div></td>
+                    </tr></table>
+                    <t t-if="doc.sharia_required"><div style="margin-top:24px;padding-top:10px;border-top:1px solid #C9A84C;"><strong style="color:#064E3B;">☽ Sharia Supervisory Board</strong><br/>SSB Ref: <t t-esc="doc.sharia_ref or '_______________'"/> · Date: <t t-esc="doc.sharia_certified_date or '_______________'"/> · Signature / Stamp: _______________________</div></t>
+                    <div style="margin-top:32px;padding-top:8px;border-top:1px solid #ccc;font-size:9px;color:#888;">CONFIDENTIAL · <t t-esc="doc.name"/> · <t t-esc="doc.company_id.name"/> · Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/></div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<!-- ── ISTISNA (reuses sale pattern with construction-specific fields) ── -->
+<template id="report_dev_contract_istisna">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div style="background:#1A1A2E;color:#fff;padding:16px 20px;margin-bottom:20px;border-bottom:4px solid #C9A84C;">
+                        <table width="100%"><tr><td><h2 style="margin:0;color:#C9A84C;font-size:18px;">SALAAM INVESTMENT BANK</h2><div style="font-size:11px;color:#aaa;">IAFAO</div></td><td style="text-align:right;vertical-align:top;"><div style="font-size:14px;font-weight:bold;color:#C9A84C;"><t t-esc="doc.name"/></div><div style="font-size:11px;color:#ccc;">Istisna — عقد الاستصناع</div></td></tr></table>
+                    </div>
+                    <div style="background:#064E3B;color:#10B981;padding:6px 12px;border-radius:4px;font-size:11px;margin-bottom:16px;display:inline-block;">☽ SHARIA-COMPLIANT · <t t-esc="doc.aaoifi_standard_ref"/></div>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;">Parties</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="25%"><strong>Bank</strong></td><td><t t-esc="doc.company_id.name"/></td><td width="25%"><strong>Main Contractor</strong></td><td><t t-esc="doc.contractor_id.name"/></td></tr><tr><td><strong>Officer</strong></td><td><t t-esc="doc.officer_id.name"/></td><td><strong>Works Category</strong></td><td><t t-esc="doc.works_category"/></td></tr></table>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Construction Terms</h3>
+                    <table class="table table-sm" width="100%">
+                        <tr><td width="30%"><strong>Contract Value</strong></td><td><t t-esc="doc.contract_value" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td width="30%"><strong>Payment Basis</strong></td><td><t t-esc="doc.payment_basis"/></td></tr>
+                        <tr><td><strong>Construction Start</strong></td><td><t t-esc="doc.construction_start"/></td><td><strong>Expected Completion</strong></td><td><t t-esc="doc.expected_completion"/></td></tr>
+                        <tr><td><strong>Retention Rate</strong></td><td><t t-esc="doc.retention_rate"/>%</td><td><strong>Defect Liability</strong></td><td><t t-esc="doc.defect_liability_months"/> months</td></tr>
+                        <tr><td><strong>Built Area</strong></td><td><t t-esc="doc.total_built_area"/> m²</td><td><strong>AAOIFI Ref</strong></td><td><t t-esc="doc.aaoifi_standard_ref"/></td></tr>
+                    </table>
+                    <t t-if="doc.milestone_ids">
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Milestone Payment Schedule</h3>
+                        <table class="table table-sm table-striped" width="100%">
+                            <thead style="background:#1A1A2E;color:#fff;"><tr><th>Milestone</th><th>Planned Date</th><th class="text-right">Amount</th><th class="text-right">Retention</th><th class="text-right">Net Payable</th><th>Status</th></tr></thead>
+                            <tbody><t t-foreach="doc.milestone_ids" t-as="m"><tr><td><t t-esc="m.name"/></td><td><t t-esc="m.planned_date"/></td><td class="text-right"><t t-esc="m.payment_amount" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td class="text-right"><t t-esc="m.retention_held" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td class="text-right"><t t-esc="m.net_payable" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td><t t-esc="m.state.title()"/></td></tr></t></tbody>
+                        </table>
+                    </t>
+                    <t t-if="doc.clause_ids"><h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Terms and Conditions</h3><t t-foreach="doc.clause_ids" t-as="cl"><div style="margin-bottom:10px;"><strong>§<t t-esc="cl_index+1"/> — <t t-esc="cl.name"/></strong><div style="font-size:11px;margin-top:3px;"><t t-raw="cl.content"/></div></div></t></t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:28px;">Signatures</h3>
+                    <table width="100%" style="margin-top:16px;"><tr><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong>Salaam Investment Bank</strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td><td width="10%"/><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong><t t-esc="doc.contractor_id.name"/></strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td></tr></table>
+                    <div style="margin-top:24px;padding-top:8px;border-top:1px solid #C9A84C;"><strong style="color:#064E3B;">☽ SSB Certification</strong> · Ref: <t t-esc="doc.sharia_ref or '_______________'"/> · Date: <t t-esc="doc.sharia_certified_date or '_______________'"/> · Signature: _______________________</div>
+                    <div style="margin-top:16px;padding-top:8px;border-top:1px solid #ccc;font-size:9px;color:#888;">CONFIDENTIAL · <t t-esc="doc.name"/> · <t t-esc="doc.company_id.name"/> · Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/></div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<!-- ── IJARA, MUSHARAKA, SUBCONTRACTOR, CONSULTANCY — compact templates ── -->
+<template id="report_dev_contract_ijara">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div style="background:#1A1A2E;color:#fff;padding:16px 20px;margin-bottom:20px;border-bottom:4px solid #C9A84C;"><table width="100%"><tr><td><h2 style="margin:0;color:#C9A84C;font-size:18px;">SALAAM INVESTMENT BANK</h2><div style="font-size:11px;color:#aaa;">IAFAO</div></td><td style="text-align:right;vertical-align:top;"><div style="font-size:14px;font-weight:bold;color:#C9A84C;"><t t-esc="doc.name"/></div><div style="font-size:11px;color:#ccc;">Ijara — عقد الإجارة</div><div style="font-size:10px;color:#aaa;"><t t-esc="doc.date_start"/> → <t t-esc="doc.date_end"/></div></td></tr></table></div>
+                    <div style="background:#064E3B;color:#10B981;padding:6px 12px;border-radius:4px;font-size:11px;margin-bottom:16px;display:inline-block;">☽ SHARIA-COMPLIANT · <t t-esc="doc.aaoifi_standard_ref"/></div>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;">Parties</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="25%"><strong>Lessor</strong></td><td><t t-esc="doc.lessor_id.name"/></td><td width="25%"><strong>Lessee</strong></td><td><t t-esc="doc.lessee_id.name"/></td></tr><tr><td><strong>Ijara Type</strong></td><td><t t-esc="dict(doc._fields['ijara_type'].selection).get(doc.ijara_type,'')"/></td><td><strong>Officer</strong></td><td><t t-esc="doc.officer_id.name"/></td></tr></table>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Lease Terms</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="30%"><strong>Monthly Rental</strong></td><td><t t-esc="doc.monthly_rental" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td width="30%"><strong>Annual Rental</strong></td><td><t t-esc="doc.annual_rental" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td></tr><tr><td><strong>Security Deposit</strong></td><td><t t-esc="doc.security_deposit" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td><strong>Escalation Rate</strong></td><td><t t-esc="doc.rental_escalation_rate"/>% (<t t-esc="doc.rental_escalation_basis"/>)</td></tr><tr><td><strong>Maintenance</strong></td><td><t t-esc="doc.maintenance_obligation"/></td><td><strong>Subletting</strong></td><td><t t-if="doc.subletting_permitted">Permitted</t><t t-else="">Not Permitted</t></td></tr><t t-if="doc.ijara_type == 'muntahia'"><tr><td><strong>Purchase Option Price</strong></td><td><t t-esc="doc.purchase_option_price" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td><strong>Earliest Option Date</strong></td><td><t t-esc="doc.purchase_option_date"/></td></tr></t></table>
+                    <t t-if="doc.clause_ids"><h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Terms and Conditions</h3><t t-foreach="doc.clause_ids" t-as="cl"><div style="margin-bottom:10px;"><strong>§<t t-esc="cl_index+1"/> — <t t-esc="cl.name"/></strong><div style="font-size:11px;margin-top:3px;"><t t-raw="cl.content"/></div></div></t></t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:28px;">Signatures</h3>
+                    <table width="100%" style="margin-top:16px;"><tr><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong>Lessor — Salaam Investment Bank</strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td><td width="10%"/><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong>Lessee — <t t-esc="doc.lessee_id.name"/></strong><br/><div style="margin-top:36px;">Signature: ______________________________</div><div style="margin-top:6px;">Date: ______________________</div></td></tr></table>
+                    <div style="margin-top:24px;padding-top:8px;border-top:1px solid #C9A84C;"><strong style="color:#064E3B;">☽ SSB Certification</strong> · Ref: <t t-esc="doc.sharia_ref or '_______________'"/> · <t t-esc="doc.aaoifi_standard_ref"/> · Date: <t t-esc="doc.sharia_certified_date or '_______________'"/></div>
+                    <div style="margin-top:12px;padding-top:8px;border-top:1px solid #ccc;font-size:9px;color:#888;">CONFIDENTIAL · <t t-esc="doc.name"/> · <t t-esc="doc.company_id.name"/> · Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/></div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<template id="report_dev_contract_musharaka">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div style="background:#1A1A2E;color:#fff;padding:16px 20px;margin-bottom:20px;border-bottom:4px solid #C9A84C;"><table width="100%"><tr><td><h2 style="margin:0;color:#C9A84C;font-size:18px;">SALAAM INVESTMENT BANK</h2><div style="font-size:11px;color:#aaa;">IAFAO — Board Approved</div></td><td style="text-align:right;vertical-align:top;"><div style="font-size:14px;font-weight:bold;color:#C9A84C;"><t t-esc="doc.name"/></div><div style="font-size:11px;color:#ccc;">Diminishing Musharaka — عقد المشاركة المتناقصة</div></td></tr></table></div>
+                    <div style="background:#064E3B;color:#10B981;padding:6px 12px;border-radius:4px;font-size:11px;margin-bottom:16px;display:inline-block;">☽ SHARIA-COMPLIANT · <t t-esc="doc.aaoifi_standard_ref"/> · Annual Audit Required</div>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;">Parties</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="25%"><strong>Bank</strong></td><td><t t-esc="doc.company_id.name"/></td><td width="25%"><strong>JV Partner</strong></td><td><t t-esc="doc.partner_id.name"/></td></tr><tr><td><strong>Management</strong></td><td><t t-esc="doc.management_party"/></td><td><strong>Officer</strong></td><td><t t-esc="doc.officer_id.name"/></td></tr></table>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Partnership Structure</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="30%"><strong>Total Project Value</strong></td><td><t t-esc="doc.total_project_value" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td width="30%"><strong>Bank Initial Share</strong></td><td><t t-esc="doc.bank_share_pct"/>%</td></tr><tr><td><strong>Bank Contribution</strong></td><td><t t-esc="doc.bank_contribution" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td><strong>Partner Contribution</strong></td><td><t t-esc="doc.partner_contribution" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td></tr><tr><td><strong>Profit Distribution</strong></td><td colspan="3"><t t-esc="doc.profit_distribution_basis"/></td></tr></table>
+                    <t t-if="doc.redemption_ids"><h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Redemption Schedule</h3><table class="table table-sm table-striped" width="100%"><thead style="background:#1A1A2E;color:#fff;"><tr><th>Tranche</th><th>Planned Date</th><th class="text-right">%</th><th class="text-right">Amount</th><th>Status</th></tr></thead><tbody><t t-foreach="doc.redemption_ids" t-as="r"><tr><td><t t-esc="r.name"/></td><td><t t-esc="r.planned_date"/></td><td class="text-right"><t t-esc="r.tranche_pct"/>%</td><td class="text-right"><t t-esc="r.tranche_amount" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td><t t-esc="r.state.title()"/></td></tr></t></tbody></table></t>
+                    <t t-if="doc.clause_ids"><h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Terms and Conditions</h3><t t-foreach="doc.clause_ids" t-as="cl"><div style="margin-bottom:10px;"><strong>§<t t-esc="cl_index+1"/> — <t t-esc="cl.name"/></strong><div style="font-size:11px;margin-top:3px;"><t t-raw="cl.content"/></div></div></t></t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:28px;">Signatures</h3>
+                    <table width="100%" style="margin-top:16px;"><tr><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong>Salaam Investment Bank (Board Signatory)</strong><br/><div style="margin-top:36px;">Name: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td><td width="10%"/><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong><t t-esc="doc.partner_id.name"/></strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td></tr></table>
+                    <div style="margin-top:24px;padding-top:8px;border-top:1px solid #C9A84C;"><strong style="color:#064E3B;">☽ SSB Certification</strong> · Ref: <t t-esc="doc.sharia_ref or '_______________'"/> · Annual Audit: Required · Date: <t t-esc="doc.sharia_certified_date or '_______________'"/></div>
+                    <div style="margin-top:12px;padding-top:8px;border-top:1px solid #ccc;font-size:9px;color:#888;">CONFIDENTIAL · <t t-esc="doc.name"/> · <t t-esc="doc.company_id.name"/> · Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/></div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<template id="report_dev_contract_subcontractor">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div style="background:#1A1A2E;color:#fff;padding:16px 20px;margin-bottom:20px;border-bottom:4px solid #C9A84C;"><table width="100%"><tr><td><h2 style="margin:0;color:#C9A84C;font-size:18px;">SALAAM INVESTMENT BANK</h2><div style="font-size:11px;color:#aaa;">IAFAO</div></td><td style="text-align:right;vertical-align:top;"><div style="font-size:14px;font-weight:bold;color:#C9A84C;"><t t-esc="doc.name"/></div><div style="font-size:11px;color:#ccc;">Subcontractor Agreement</div></td></tr></table></div>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;">Parties</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="25%"><strong>Main Contractor</strong></td><td><t t-esc="doc.main_contractor_id.name"/></td><td width="25%"><strong>Subcontractor</strong></td><td><t t-esc="doc.subcontractor_id.name"/></td></tr><tr><td><strong>Parent Contract</strong></td><td><t t-esc="doc.parent_istisna_id.name if doc.parent_istisna_id else 'N/A'"/></td><td><strong>Works Category</strong></td><td><t t-esc="doc.works_category"/></td></tr></table>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Financial Terms</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="30%"><strong>Sub-Contract Value</strong></td><td><t t-esc="doc.subcontract_value" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td><td width="30%"><strong>Retention Rate</strong></td><td><t t-esc="doc.retention_rate"/>%</td></tr><tr><td><strong>Payment Terms</strong></td><td><t t-esc="doc.payment_terms_days"/> days</td><td><strong>Insurance Required</strong></td><td><t t-if="doc.insurance_required">Yes — <t t-esc="doc.insurance_value" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></t><t t-else="">No</t></td></tr></table>
+                    <t t-if="doc.clause_ids"><h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Terms and Conditions</h3><t t-foreach="doc.clause_ids" t-as="cl"><div style="margin-bottom:10px;"><strong>§<t t-esc="cl_index+1"/> — <t t-esc="cl.name"/></strong><div style="font-size:11px;margin-top:3px;"><t t-raw="cl.content"/></div></div></t></t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:28px;">Signatures</h3>
+                    <table width="100%" style="margin-top:16px;"><tr><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong><t t-esc="doc.main_contractor_id.name"/></strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td><td width="10%"/><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong><t t-esc="doc.subcontractor_id.name"/></strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td></tr></table>
+                    <div style="margin-top:12px;padding-top:8px;border-top:1px solid #ccc;font-size:9px;color:#888;">CONFIDENTIAL · <t t-esc="doc.name"/> · <t t-esc="doc.company_id.name"/> · Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/></div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+<template id="report_dev_contract_consultancy">
+    <t t-call="web.html_container">
+        <t t-foreach="docs" t-as="doc">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div style="background:#1A1A2E;color:#fff;padding:16px 20px;margin-bottom:20px;border-bottom:4px solid #C9A84C;"><table width="100%"><tr><td><h2 style="margin:0;color:#C9A84C;font-size:18px;">SALAAM INVESTMENT BANK</h2><div style="font-size:11px;color:#aaa;">IAFAO</div></td><td style="text-align:right;vertical-align:top;"><div style="font-size:14px;font-weight:bold;color:#C9A84C;"><t t-esc="doc.name"/></div><div style="font-size:11px;color:#ccc;">Consultancy Agreement</div></td></tr></table></div>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;">Parties</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="25%"><strong>Client</strong></td><td><t t-esc="doc.client_id.name"/></td><td width="25%"><strong>Consultant</strong></td><td><t t-esc="doc.consultant_id.name"/></td></tr><tr><td><strong>Service Category</strong></td><td><t t-esc="doc.service_category"/></td><td><strong>Officer</strong></td><td><t t-esc="doc.officer_id.name"/></td></tr></table>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Fee Structure</h3>
+                    <table class="table table-sm" width="100%"><tr><td width="30%"><strong>Fee Structure</strong></td><td><t t-esc="doc.fee_structure"/></td><td width="30%"><strong>Contract Value</strong></td><td><t t-esc="doc.contract_value" t-options='{"widget":"monetary","display_currency":doc.currency_id}'/></td></tr><tr><td><strong>IP Ownership</strong></td><td><t t-esc="doc.ip_ownership"/></td><td><strong>Termination Notice</strong></td><td><t t-esc="doc.termination_notice_days"/> days</td></tr><tr><td><strong>Governing Law</strong></td><td colspan="3"><t t-esc="doc.governing_law"/></td></tr></table>
+                    <t t-if="doc.clause_ids"><h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Terms and Conditions</h3><t t-foreach="doc.clause_ids" t-as="cl"><div style="margin-bottom:10px;"><strong>§<t t-esc="cl_index+1"/> — <t t-esc="cl.name"/></strong><div style="font-size:11px;margin-top:3px;"><t t-raw="cl.content"/></div></div></t></t>
+                    <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:28px;">Signatures</h3>
+                    <table width="100%" style="margin-top:16px;"><tr><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong><t t-esc="doc.client_id.name"/></strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td><td width="10%"/><td width="45%" style="border-top:1px solid #333;padding-top:8px;"><strong><t t-esc="doc.consultant_id.name"/></strong><br/><div style="margin-top:36px;">Authorised Signatory: ____________________</div><div style="margin-top:6px;">Date: ______________________</div></td></tr></table>
+                    <div style="margin-top:12px;padding-top:8px;border-top:1px solid #ccc;font-size:9px;color:#888;">CONFIDENTIAL · <t t-esc="doc.name"/> · <t t-esc="doc.company_id.name"/> · Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y')"/></div>
+                </div>
+            </t>
+        </t>
+    </t>
+</template>
+
+</odoo>

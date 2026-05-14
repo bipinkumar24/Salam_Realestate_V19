@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dev_contract_ijara_form" model="ir.ui.view">
+        <field name="name">dev.contract.ijara.form</field>
+        <field name="model">dev.contract.ijara</field>
+        <field name="arch" type="xml">
+            <form string="Ijara Lease Contract">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_under_review" string="Under Review" type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary"
+                            groups="salaam_dev_contracts.group_dev_contracts_manager"
+                            invisible="state != 'under_review'"/>
+                    <button name="action_sign" string="Mark Signed" type="object"
+                            invisible="state != 'approved'"/>
+                    <button name="action_activate" string="Activate" type="object"
+                            invisible="state != 'signed'"/>
+                    <button name="action_exercise_purchase_option" string="Exercise Purchase Option" type="object"
+                            invisible="ijara_type != 'muntahia' or state != 'active'"/>
+                    <button name="action_complete" string="Complete" type="object" invisible ="state != 'active'"/>
+                    <button name="action_certify_sharia" string="☽ Certify Sharia" type="object"
+                            groups="salaam_dev_contracts.group_dev_contracts_sharia"
+                            invisible="sharia_certified"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ['completed','cancelled']"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,under_review,approved,signed,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_milestones" type="object"
+                                class="oe_stat_button" icon="fa-calendar">
+                            <field name="milestone_count" widget="statinfo" string="Rental Schedule"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3><field name="ijara_type"/></h3>
+                    </div>
+                    <group>
+                        <group string="Parties">
+                            <field name="lessee_id"/>
+                            <field name="lessor_id"/>
+                            <field name="officer_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Sharia">
+                            <field name="sharia_required" readonly="1"/>
+                            <field name="sharia_certified" readonly="1"/>
+                            <field name="sharia_ref"/>
+                            <field name="aaoifi_standard_ref"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lease Terms">
+                            <group>
+                                <group string="Property &amp; Dates">
+                                    <field name="property_id"/>
+                                    <field name="bre_application_id"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                </group>
+                                <group string="Rental Amounts">
+                                    <field name="currency_id"/>
+                                    <field name="monthly_rental"/>
+                                    <field name="annual_rental" readonly="1"/>
+                                    <field name="contract_value"/>
+                                    <field name="security_deposit"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Escalation">
+                                    <field name="rental_escalation_rate"/>
+                                    <field name="rental_escalation_basis"/>
+                                </group>
+                                <group string="Obligations">
+                                    <field name="maintenance_obligation"/>
+                                    <field name="subletting_permitted"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Purchase Option" invisible="ijara_type != 'muntahia'">
+                            <group>
+                                <field name="purchase_option_price"/>
+                                <field name="purchase_option_date"/>
+                                <field name="purchase_option_exercised" readonly="1"/>
+                                <field name="linked_rent_contract_id" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="Clauses">
+                            <field name="clause_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dev_contract_ijara_tree" model="ir.ui.view">
+        <field name="name">dev.contract.ijara.list</field>
+        <field name="model">dev.contract.ijara</field>
+        <field name="arch" type="xml">
+            <list string="Ijara Contracts"
+                  decoration-success="state in ('signed','active','completed')"
+                  decoration-warning="state=='under_review'"
+                  decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="lessee_id"/>
+                <field name="ijara_type"/>
+                <field name="property_id"/>
+                <field name="monthly_rental"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="sharia_certified" widget="boolean_toggle"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('signed','active','completed')"
+                       decoration-warning="state=='under_review'"
+                       decoration-danger="state=='cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dev_contract_ijara" model="ir.actions.act_window">
+        <field name="name">Ijara Contracts</field>
+        <field name="res_model">dev.contract.ijara</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'default_contract_type': 'ijara'}</field>
+    </record>
+
+</odoo>

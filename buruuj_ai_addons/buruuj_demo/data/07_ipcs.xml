@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Client IPC for Al Marina Tower -->
+        <record id="demo_ipc_client_marina_5" model="buruuj.ipc">
+            <field name="type">client</field>
+            <field name="sequence_no">5</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="partner_id" ref="demo_client_marina"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(weeks=2)).strftime('%Y-%m-%d')"/>
+            <field name="period_from" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="period_to" eval="(DateTime.today() - relativedelta(weeks=2)).strftime('%Y-%m-%d')"/>
+            <field name="previous_certified">5800000.00</field>
+            <field name="materials_on_site">450000.00</field>
+            <field name="retention_percent">10</field>
+            <field name="advance_recovery_percent">20</field>
+            <field name="vat_amount">95000.00</field>
+            <field name="state">finance_approved</field>
+        </record>
+
+        <record id="demo_ipc_client_marina_5_l1" model="buruuj.ipc.line">
+            <field name="ipc_id" ref="demo_ipc_client_marina_5"/>
+            <field name="item_no">2.1</field>
+            <field name="description">Concrete works — Substructure</field>
+            <field name="uom_id" ref="uom.product_uom_cubic_meter"/>
+            <field name="contract_qty">2400</field>
+            <field name="unit_rate">650.00</field>
+            <field name="previous_qty">2200</field>
+            <field name="cumulative_qty">2400</field>
+        </record>
+        <record id="demo_ipc_client_marina_5_l2" model="buruuj.ipc.line">
+            <field name="ipc_id" ref="demo_ipc_client_marina_5"/>
+            <field name="item_no">2.2</field>
+            <field name="description">Concrete works — Superstructure (L1-L4)</field>
+            <field name="uom_id" ref="uom.product_uom_cubic_meter"/>
+            <field name="contract_qty">3800</field>
+            <field name="unit_rate">680.00</field>
+            <field name="previous_qty">1100</field>
+            <field name="cumulative_qty">1850</field>
+        </record>
+        <record id="demo_ipc_client_marina_5_l3" model="buruuj.ipc.line">
+            <field name="ipc_id" ref="demo_ipc_client_marina_5"/>
+            <field name="item_no">3.1</field>
+            <field name="description">Reinforcement steel — supply &amp; fix</field>
+            <field name="uom_id" ref="uom.product_uom_ton"/>
+            <field name="contract_qty">820</field>
+            <field name="unit_rate">920.00</field>
+            <field name="previous_qty">240</field>
+            <field name="cumulative_qty">385</field>
+        </record>
+
+        <!-- Subcontractor IPC -->
+        <record id="demo_ipc_sub_concrete_3" model="buruuj.ipc">
+            <field name="type">subcontractor</field>
+            <field name="sequence_no">3</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="partner_id" ref="demo_sub_concretemaster"/>
+            <field name="subcontract_id" ref="demo_sc_marina_concrete"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(weeks=3)).strftime('%Y-%m-%d')"/>
+            <field name="period_from" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="period_to" eval="(DateTime.today() - relativedelta(weeks=3)).strftime('%Y-%m-%d')"/>
+            <field name="previous_certified">1450000.00</field>
+            <field name="retention_percent">10</field>
+            <field name="advance_recovery_percent">20</field>
+            <field name="backcharge_amount">12500.00</field>
+            <field name="state">pm_approved</field>
+        </record>
+
+        <record id="demo_ipc_sub_concrete_3_l1" model="buruuj.ipc.line">
+            <field name="ipc_id" ref="demo_ipc_sub_concrete_3"/>
+            <field name="item_no">SC-1</field>
+            <field name="description">Concrete pour — substructure to L4</field>
+            <field name="uom_id" ref="uom.product_uom_cubic_meter"/>
+            <field name="contract_qty">6200</field>
+            <field name="unit_rate">485.00</field>
+            <field name="previous_qty">2700</field>
+            <field name="cumulative_qty">3500</field>
+        </record>
+        <record id="demo_ipc_sub_concrete_3_l2" model="buruuj.ipc.line">
+            <field name="ipc_id" ref="demo_ipc_sub_concrete_3"/>
+            <field name="item_no">SC-2</field>
+            <field name="description">Reinforcement fixing</field>
+            <field name="uom_id" ref="uom.product_uom_ton"/>
+            <field name="contract_qty">820</field>
+            <field name="unit_rate">320.00</field>
+            <field name="previous_qty">240</field>
+            <field name="cumulative_qty">385</field>
+        </record>
+
+    </data>
+</odoo>

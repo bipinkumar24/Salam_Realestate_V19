@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_si_form" model="ir.ui.view">
+    <field name="name">salaam.site.instruction.form</field>
+    <field name="model">salaam.site.instruction</field>
+    <field name="arch" type="xml">
+      <form string="Site Instruction">
+        <header>
+          <button name="action_issue" string="Issue to Contractor" type="object" class="btn-primary" invisible="state != 'draft'"/>
+          <button name="action_acknowledge" string="Mark Acknowledged" type="object" invisible="state != 'issued'"/>
+          <button name="action_complete" string="Mark Completed" type="object" class="btn-primary" invisible="state != 'acknowledged'"/>
+          <button name="action_dispute" string="Dispute" type="object" invisible="state not in ['issued', 'acknowledged']"/>
+          <button name="action_reset_draft" string="Reset" type="object" invisible="state not in ['disputed']"/>
+          <field name="state" widget="statusbar" statusbar_visible="draft,issued,acknowledged,completed"/>
+        </header>
+        <div class="alert alert-warning" role="alert" invisible="priority != 'immediate'">
+          [!!] IMMEDIATE instruction — contractor must comply now.
+        </div>
+        <sheet>
+          <div class="oe_title"><label for="name"/><h1><field name="name"/></h1><h2><field name="title"/></h2></div>
+          <group>
+            <group string="Instruction Details">
+              <field name="project_id"/><field name="phase_id"/>
+              <field name="instruction_type"/><field name="priority"/>
+              <field name="issued_by"/><field name="issue_date"/>
+              <field name="compliance_deadline"/>
+            </group>
+            <group string="Issued To">
+              <field name="contractor_party_id"/><field name="contractor_id" readonly="1"/>
+              <field name="drawing_ref"/><field name="rfi_ref"/>
+              <field name="ncr_id" invisible="instruction_type != 'quality_remedy'"/>
+            </group>
+          </group>
+          <group string="Instruction Content">
+            <field name="description" widget="html" nolabel="1"/>
+            <field name="scope_of_works" widget="text"/>
+          </group>
+          <notebook>
+            <page string="Cost Impact">
+              <group>
+                <field name="has_cost_impact"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="estimated_cost" invisible="not has_cost_impact"/>
+                <field name="agreed_cost" invisible="not has_cost_impact"/>
+                <field name="cost_basis" invisible="not has_cost_impact"/>
+                <field name="ipc_id" invisible="not has_cost_impact"/>
+              </group>
+            </page>
+            <page string="Time Impact">
+              <group>
+                <field name="has_time_impact"/>
+                <field name="estimated_delay_days" invisible="not has_time_impact"/>
+                <field name="eot_claim_id" invisible="not has_time_impact"/>
+              </group>
+            </page>
+            <page string="Contractor Response">
+              <field name="contractor_response" widget="text"/>
+              <field name="dispute_reason" widget="text" invisible="state != 'disputed'"/>
+            </page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+  <record id="view_si_list" model="ir.ui.view">
+    <field name="name">salaam.site.instruction.list</field>
+    <field name="model">salaam.site.instruction</field>
+    <field name="arch" type="xml">
+      <list string="Site Instructions" decoration-danger="priority == 'immediate'" decoration-warning="priority == 'urgent'" decoration-success="state == 'completed'" decoration-muted="state == 'disputed'">
+        <field name="name"/><field name="title"/><field name="project_id"/>
+        <field name="instruction_type"/><field name="contractor_id"/>
+        <field name="priority"/>
+        <field name="issue_date"/><field name="compliance_deadline"/>
+        <field name="has_cost_impact"/><field name="has_time_impact"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+  <record id="action_site_instruction" model="ir.actions.act_window">
+    <field name="name">Site Instructions</field><field name="res_model">salaam.site.instruction</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

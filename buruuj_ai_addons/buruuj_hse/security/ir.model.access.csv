@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tb_se,tb.se,model_buruuj_toolbox_talk,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_tb_hse,tb.hse,model_buruuj_toolbox_talk,buruuj_base.group_buruuj_hse,1,1,1,1
+access_tb_pm,tb.pm,model_buruuj_toolbox_talk,buruuj_base.group_buruuj_pm,1,1,1,1
+access_ptw_se,ptw.se,model_buruuj_ptw,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_ptw_hse,ptw.hse,model_buruuj_ptw,buruuj_base.group_buruuj_hse,1,1,1,1
+access_ptw_pm,ptw.pm,model_buruuj_ptw,buruuj_base.group_buruuj_pm,1,1,1,1
+access_inc_se,inc.se,model_buruuj_hse_incident,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_inc_hse,inc.hse,model_buruuj_hse_incident,buruuj_base.group_buruuj_hse,1,1,1,1
+access_inc_dir,inc.dir,model_buruuj_hse_incident,buruuj_base.group_buruuj_director,1,1,0,0
+access_ppe_se,ppe.se,model_buruuj_ppe_issuance,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_ppe_hse,ppe.hse,model_buruuj_ppe_issuance,buruuj_base.group_buruuj_hse,1,1,1,1
+access_ppe_store,ppe.store,model_buruuj_ppe_issuance,buruuj_base.group_buruuj_storekeeper,1,1,1,0

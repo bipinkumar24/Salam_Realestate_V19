@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_programme_form" model="ir.ui.view">
+        <field name="name">salaam.contractor.programme.form</field>
+        <field name="model">salaam.contractor.programme</field>
+        <field name="arch" type="xml">
+            <form string="Contractor Programme">
+                <header>
+                    <button name="action_submit" string="Submit for Approval" type="object" class="btn-primary" invisible="state != 'draft'" />
+                    <button name="action_review" string="Start Review" type="object" invisible="state != 'submitted'" />
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" invisible="state != 'under_review'" />
+                    <button name="action_reject" string="Reject" type="object" invisible="state != 'under_review'" />
+                    <button name="action_reset_draft" string="Reset to Draft" type="object" invisible="state != 'rejected'" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,under_review,approved" />
+                </header>
+                <div class="alert alert-danger" role="alert" invisible="not is_in_delay">
+                    [!] Programme is in DELAY:
+                    <field name="delay_to_completion" /> days behind revised contract completion.
+                </div>
+                <div class="alert alert-success" role="alert" invisible="not is_baseline or state != 'approved'">
+                    [OK] This is the approved CONTRACT BASELINE PROGRAMME.
+                </div>
+                <sheet>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <h3>Rev
+                            <field name="revision" /> —
+                            <field name="programme_type" />
+                        </h3>
+                    </div>
+                    <group>
+                        <group string="Programme Details">
+                            <field name="project_id" />
+                            <field name="contractor_party_id" />
+                            <field name="programme_type" />
+                            <field name="revision" />
+                            <field name="is_baseline" readonly="1" />
+                            <field name="reviewer_id" />
+                            <field name="approved_by" readonly="1" />
+                        </group>
+                        <group string="Key Dates">
+                            <field name="submission_date" />
+                            <field name="review_deadline" />
+                            <field name="programme_start" />
+                            <field name="programme_completion" />
+                            <field name="contract_completion_date" />
+                            <field name="programme_duration_days" readonly="1" />
+                            <field name="approval_date" readonly="1" />
+                        </group>
+                    </group>
+                    <group string="EOT and Delay">
+                        <group>
+                            <field name="eot_total_granted" />
+                            <field name="revised_contract_completion" readonly="1" />
+                        </group>
+                        <group>
+                            <field name="delay_to_completion" readonly="1" />
+                            <field name="is_in_delay" readonly="1" />
+                            <field name="total_float_days" />
+                            <field name="critical_path_flagged" />
+                            <field name="float_ownership" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Phase Mapping">
+                            <field name="phase_mapping_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="phase_id" />
+                                    <field name="programme_activity_name" />
+                                    <field name="planned_start" />
+                                    <field name="planned_finish" />
+                                    <field name="actual_start" />
+                                    <field name="actual_finish" />
+                                    <field name="float_days" />
+                                    <field name="on_critical_path" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Narrative">
+                            <field name="programme_narrative" widget="text" />
+                            <field name="review_comments" widget="text" />
+                            <field name="rejection_reason" widget="text" invisible="state != 'rejected'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+    <record id="view_programme_list" model="ir.ui.view">
+        <field name="name">salaam.contractor.programme.list</field>
+        <field name="model">salaam.contractor.programme</field>
+        <field name="arch" type="xml">
+            <list string="Contractor Programmes" decoration-danger="is_in_delay == True" decoration-success="state == 'approved' and not is_in_delay" decoration-muted="state == 'superseded'">
+                <field name="name" />
+                <field name="revision" />
+                <field name="project_id" />
+                <field name="contractor_id" />
+                <field name="programme_type" />
+                <field name="is_baseline" />
+                <field name="programme_start" />
+                <field name="programme_completion" />
+                <field name="eot_total_granted" />
+                <field name="revised_contract_completion" />
+                <field name="delay_to_completion" />
+                <field name="is_in_delay" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <record id="action_contractor_programme" model="ir.actions.act_window">
+        <field name="name">Contractor Programmes</field>
+        <field name="res_model">salaam.contractor.programme</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

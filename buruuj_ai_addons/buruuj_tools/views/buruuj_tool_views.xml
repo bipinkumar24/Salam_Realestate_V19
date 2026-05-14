@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tool_list" model="ir.ui.view">
+        <field name="name">buruuj.tool.list</field>
+        <field name="model">buruuj.tool</field>
+        <field name="arch" type="xml">
+            <list decoration-success="current_location == 'main_store' or current_location == 'site_store'"
+                  decoration-info="current_location == 'issued'"
+                  decoration-warning="current_location in ('in_repair', 'in_calibration')"
+                  decoration-danger="current_location in ('lost', 'written_off')">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="make"/>
+                <field name="current_project_id"/>
+                <field name="current_holder_id"/>
+                <field name="current_condition" widget="badge"/>
+                <field name="current_location" widget="badge"/>
+                <field name="next_calibration_due" optional="show"
+                       invisible="not requires_calibration"/>
+                <field name="requires_calibration" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tool_kanban" model="ir.ui.view">
+        <field name="name">buruuj.tool.kanban</field>
+        <field name="model">buruuj.tool</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="current_location" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="category_id"/>
+                <field name="current_holder_id"/>
+                <field name="current_project_id"/>
+                <field name="current_condition"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-2">
+                            <strong><field name="code"/></strong>
+                            <div><field name="name"/></div>
+                            <div class="text-muted"><field name="category_id"/></div>
+                            <div t-if="record.current_holder_id.raw_value" class="mt-1">
+                                Held by: <field name="current_holder_id"/>
+                            </div>
+                            <div t-if="record.current_project_id.raw_value" class="text-muted">
+                                <field name="current_project_id"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_tool_form" model="ir.ui.view">
+        <field name="name">buruuj.tool.form</field>
+        <field name="model">buruuj.tool</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_issuances" type="object"
+                                class="oe_stat_button" icon="fa-share">
+                            <field name="issuance_count" widget="statinfo"
+                                   string="Issuances"/>
+                        </button>
+                        <button name="action_view_calibrations" type="object"
+                                class="oe_stat_button" icon="fa-wrench"
+                                invisible="not requires_calibration">
+                            <field name="calibration_count" widget="statinfo"
+                                   string="Calibrations"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Tool name..."/></h1>
+                        <h3><field name="code" placeholder="Tool code..."/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="serial_no"/>
+                            <field name="barcode"/>
+                            <field name="make"/>
+                            <field name="model"/>
+                            <field name="purchase_date"/>
+                            <field name="purchase_value"/>
+                            <field name="warranty_until"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="current_location" widget="badge"/>
+                            <field name="current_project_id"/>
+                            <field name="current_holder_id"/>
+                            <field name="current_condition"/>
+                            <field name="active"/>
+                            <field name="is_consumable" invisible="1"/>
+                            <field name="requires_calibration" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Calibration" invisible="not requires_calibration">
+                        <group>
+                            <field name="calibration_interval_months"/>
+                            <field name="last_calibration_date"/>
+                        </group>
+                        <group>
+                            <field name="next_calibration_due"/>
+                            <field name="calibration_certificate_no"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Issuances">
+                            <field name="issuance_ids" readonly="1"/>
+                        </page>
+                        <page string="Transfers">
+                            <field name="transfer_ids" readonly="1"/>
+                        </page>
+                        <page string="Calibrations" invisible="not requires_calibration">
+                            <field name="calibration_ids" readonly="1"/>
+                        </page>
+                        <page string="Loss / Damage">
+                            <field name="loss_ids" readonly="1"/>
+                        </page>
+                        <page string="Notes"><field name="notes"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tool_search" model="ir.ui.view">
+        <field name="name">buruuj.tool.search</field>
+        <field name="model">buruuj.tool</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="barcode"/>
+                <field name="category_id"/>
+                <field name="current_holder_id"/>
+                <field name="current_project_id"/>
+                <filter string="In Store" name="store"
+                        domain="[('current_location','in',('main_store','site_store'))]"/>
+                <filter string="Issued" name="issued"
+                        domain="[('current_location','=','issued')]"/>
+                <filter string="In Repair" name="repair"
+                        domain="[('current_location','=','in_repair')]"/>
+                <filter string="Calibration Due Soon" name="cal_due"
+                        domain="[('next_calibration_due','&lt;=', (context_today() + relativedelta(days=30)).strftime('%Y-%m-%d')),
+                                 ('requires_calibration','=',True)]"/>
+                <filter string="Lost / Written Off" name="lost"
+                        domain="[('current_location','in',('lost','written_off'))]"/>
+                <group>
+                    <filter string="Category" name="g_cat" context="{'group_by': 'category_id'}"/>
+                    <filter string="Location" name="g_loc" context="{'group_by': 'current_location'}"/>
+                    <filter string="Project" name="g_proj" context="{'group_by': 'current_project_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_tool" model="ir.actions.act_window">
+        <field name="name">Tool Register</field>
+        <field name="res_model">buruuj.tool</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+</odoo>

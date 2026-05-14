@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_create_bre_application_wizard" model="ir.ui.view">
+        <field name="name">salaam.create.bre.application.wizard.form</field>
+        <field name="model">salaam.create.bre.application.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create BRE Application">
+                <sheet>
+                    <div class="oe_title">
+                        <h2>Create BRE Customer Application</h2>
+                        <p class="text-muted">
+                            Please complete the required fields below before creating the application.
+                            Fields pre-filled from the customer record — please verify and correct if needed.
+                        </p>
+                    </div>
+                    <!-- Read-only reservation context -->
+                    <group string="Reservation">
+                        <field name="reservation_id" readonly="1" />
+                        <field name="partner_id" readonly="1" />
+                        <field name="property_id" readonly="1" />
+                        <field name="currency_id" invisible="1" />
+                        <field name="unit_price" readonly="1" />
+                    </group>
+                    <group>
+                        <!-- LEFT: Personal Details -->
+                        <group string="Personal Details">
+                            <field name="date_of_birth" required="1" />
+                            <field name="gender" required="1" />
+                            <field name="nationality_id" required="1" />
+                        </group>
+                        <!-- RIGHT: Contact -->
+                        <group string="Contact">
+                            <field name="email" required="1" />
+                            <field name="mobile" required="1" />
+                        </group>
+                    </group>
+                    <group>
+                        <!-- LEFT: Identification -->
+                        <group string="Identification">
+                            <field name="id_type" required="1" />
+                            <field name="id_number" required="1" />
+                        </group>
+                        <!-- RIGHT: Employment -->
+                        <group string="Employment &amp; Income">
+                            <field name="employment_status" required="1" />
+                            <field name="employer_name" invisible="employment_status in ('retired','unemployed')" />
+                            <field name="monthly_income" required="1" />
+                        </group>
+                    </group>
+                    <group string="Financing">
+                        <group>
+                            <field name="financing_type" required="1" />
+                            <field name="tenure_months" invisible="financing_type == 'cash'" />
+                        </group>
+                        <group>
+                            <field name="down_payment" />
+                            <field name="financing_amount" invisible="financing_type == 'cash'" />
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_create" string="Create Application" type="object" class="btn-primary" />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_create_bre_application_wizard" model="ir.actions.act_window">
+        <field name="name">Create BRE Application</field>
+        <field name="res_model">salaam.create.bre.application.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

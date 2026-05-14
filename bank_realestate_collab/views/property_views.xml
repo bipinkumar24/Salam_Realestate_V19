@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         NOTE: We do NOT inherit the rental_management form view here
+         because the XML ID varies between versions/installations.
+         Instead the BRE Sharia fields are surfaced via the
+         customer application's Property & Financing tab (read-only
+         mirror fields) and the standalone BRE form below.
+
+         TO ADD THE SHARIA TAB TO THE RENTAL MANAGEMENT PROPERTY FORM:
+         Find the XML ID of your form view by running this SQL:
+           SELECT id, name FROM ir_ui_view
+           WHERE model = 'property.details' AND type = 'form'
+           ORDER BY priority ASC LIMIT 5;
+         Then set inherit_id ref to that XML ID.
+    ══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ACTION — open property.details from BRE Properties menu
+    ══════════════════════════════════════════════════════════════════ -->
+    <record id="action_property_listing" model="ir.actions.act_window">
+        <field name="name">Properties</field>
+        <field name="res_model">property.details</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No properties found. Add properties in the Rental Management module.
+            </p>
+        </field>
+    </record>
+
+</odoo>

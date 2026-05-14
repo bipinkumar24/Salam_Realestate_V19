@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data noupdate="1">
+    <!-- salaam_offplan_link does not require sequences (no auto-named records) -->
+  </data>
+</odoo>

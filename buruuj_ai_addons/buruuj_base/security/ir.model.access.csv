@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_buruuj_trade_user,buruuj.trade.user,model_buruuj_trade,buruuj_base.group_buruuj_site_user,1,0,0,0
+access_buruuj_trade_qs,buruuj.trade.qs,model_buruuj_trade,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_trade_manager,buruuj.trade.manager,model_buruuj_trade,buruuj_base.group_buruuj_manager,1,1,1,1

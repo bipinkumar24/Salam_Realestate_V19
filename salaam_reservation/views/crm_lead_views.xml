@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ═══ CRM LEAD FORM INHERIT — Salaam Reservation Fields ═══
+       Inherits our own fallback view at load time.
+       post_init_hook re-points this to the real CRM form view after install.
+  ═══ -->
+  <record id="view_crm_lead_salaam_inherit" model="ir.ui.view">
+    <field name="name">crm.lead.salaam.reservation.inherit</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="salaam_reservation.view_crm_lead_base_fallback"/>
+    <field name="priority">21</field>
+    <field name="arch" type="xml">
+
+      <!-- Inject action buttons into header -->
+      <xpath expr="//header" position="inside">
+        <button name="action_generate_and_reserve"
+                string="Generate Numbers &amp; Reserve"
+                type="object"
+                class="btn-primary"
+                invisible="priority_number != ''"/>
+        <button name="action_create_reservation_manual"
+                string="Create Reservation"
+                type="object"
+                invisible="reservation_id or priority_number == ''"/>
+      </xpath>
+
+      <!-- Inject Salaam fields after header -->
+      <xpath expr="//header" position="after">
+        <group string="Salaam City — Reference &amp; Reservation">
+          <group>
+            <field name="priority_number" readonly="1" invisible="priority_number == ''"/>
+            <field name="file_number" readonly="1" invisible="file_number == ''"/>
+            <field name="property_id"/>
+          </group>
+          <group>
+            <field name="reservation_id" readonly="1" invisible="not reservation_id"/>
+            <field name="reservation_state" readonly="1" invisible="not reservation_id"/>
+          </group>
+        </group>
+      </xpath>
+
+    </field>
+  </record>
+
+  <!-- ═══ CRM OPPORTUNITY LIST VIEW — add priority/file columns ═══ -->
+  <record id="view_crm_lead_salaam_tree_inherit" model="ir.ui.view">
+    <field name="name">crm.lead.salaam.tree.inherit</field>
+    <field name="model">crm.lead</field>
+    <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='name']" position="after">
+        <field name="priority_number" optional="show"/>
+        <field name="file_number" optional="show"/>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

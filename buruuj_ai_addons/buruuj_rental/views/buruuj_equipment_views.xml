@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_equipment_form_rental" model="ir.ui.view">
+        <field name="name">buruuj.equipment.form.rental</field>
+        <field name="model">buruuj.equipment</field>
+        <field name="inherit_id" ref="buruuj_plant.view_buruuj_equipment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Rental History">
+                    <field name="active_rental_contract_id" readonly="1"/>
+                    <field name="rental_contract_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="direction"/>
+                            <field name="vendor_id"/>
+                            <field name="project_id"/>
+                            <field name="actual_start_date"/>
+                            <field name="actual_end_date"/>
+                            <field name="total_committed_cost"/>
+                            <field name="state" widget="badge"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

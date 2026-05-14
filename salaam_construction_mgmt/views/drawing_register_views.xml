@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_drawing_register_form" model="ir.ui.view">
+        <field name="name">salaam.drawing.register.form</field>
+        <field name="model">salaam.drawing.register</field>
+        <field name="arch" type="xml">
+            <form string="Drawing / Document">
+                <header>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="issued_for_review,issued_for_approval,approved,as_built"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" icon="fa-paperclip"
+                                type="object" name="action_get_attachment_view">
+                            <field name="file_count" widget="statinfo" string="Files"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="drawing_number"/>
+                        </h1>
+                        <h3><field name="name"/></h3>
+                    </div>
+                    <group>
+                        <group string="Document Details">
+                            <field name="project_id"/>
+                            <field name="project_id" invisible="1"/>
+                            <field name="phase_id"
+                                   domain="[('project_id','=',project_id)]"/>
+                            <field name="document_type"/>
+                            <field name="discipline"/>
+                            <field name="revision"/>
+                        </group>
+                        <group string="Dates">
+                            <field name="issued_by"/>
+                            <field name="issued_date"/>
+                            <field name="received_date"/>
+                            <field name="response_required_by"/>
+                            <field name="responded_date"/>
+                        </group>
+                    </group>
+
+                    <!-- RFI-specific fields -->
+                    <group string="RFI Details"
+                           invisible = "document_type != 'rfi'">
+                        <field name="rfi_response" invisible="document_type != 'rfi'"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="rfi_impact_cost" invisible="document_type != 'rfi'"/>
+                        <field name="rfi_impact_time" invisible="document_type != 'rfi'"/>
+                    </group>
+
+                    <group string="Distribution">
+                        <field name="distributed_to" widget="many2many_tags"/>
+                    </group>
+                    <field name="description" placeholder="Description / comments..."/>
+
+                    <separator string="Attached Files"/>
+                    <field name="attachment_ids" widget="many2many_binary"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_drawing_register_list" model="ir.ui.view">
+        <field name="name">salaam.drawing.register.list</field>
+        <field name="model">salaam.drawing.register</field>
+        <field name="arch" type="xml">
+            <list string="Drawing Register"
+                  decoration-success="status=='approved'"
+                  decoration-warning="status in ('issued_for_review','issued_for_approval')"
+                  decoration-muted="status in ('superseded','as_built')">
+                <field name="drawing_number"/>
+                <field name="name"/>
+                <field name="document_type"/>
+                <field name="discipline"/>
+                <field name="phase_id"/>
+                <field name="revision"/>
+                <field name="issued_by"/>
+                <field name="issued_date"/>
+                <field name="response_required_by"
+                       decoration-danger="response_required_by &lt; current_date and status not in ('approved','rejected','as_built')"/>
+                <field name="status" widget="badge"
+                       decoration-success="status=='approved'"
+                       decoration-warning="status in ('issued_for_review','issued_for_approval')"
+                       decoration-danger="status=='rejected'"/>
+                <field name="file_count"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_drawing_register_search" model="ir.ui.view">
+        <field name="name">salaam.drawing.register.search</field>
+        <field name="model">salaam.drawing.register</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="drawing_number"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <filter string="Awaiting Response" name="awaiting"
+                        domain="[('status','in',['issued_for_review','issued_for_approval'])]"/>
+                <filter string="Approved" name="approved"
+                        domain="[('status','=','approved')]"/>
+                <filter string="RFIs" name="rfis"
+                        domain="[('document_type','=','rfi')]"/>
+                <filter string="As-Built" name="as_built"
+                        domain="[('status','=','as_built')]"/>
+                <group>
+                    <filter string="Type" name="group_type"
+                            context="{'group_by':'document_type'}"/>
+                    <filter string="Discipline" name="group_discipline"
+                            context="{'group_by':'discipline'}"/>
+                    <filter string="Phase" name="group_phase"
+                            context="{'group_by':'phase_id'}"/>
+                    <filter string="Status" name="group_status"
+                            context="{'group_by':'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_drawing_register" model="ir.actions.act_window">
+        <field name="name">Drawing Register</field>
+        <field name="res_model">salaam.drawing.register</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_drawing_register_search"/>
+    </record>
+
+</odoo>

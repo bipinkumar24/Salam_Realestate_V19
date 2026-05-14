@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ═══ ACTION ═══ -->
+  <record id="action_predevelopment" model="ir.actions.act_window">
+    <field name="name">Pre-Development Applications</field>
+    <field name="res_model">salaam.predevelopment</field>
+    <field name="view_mode">list,form,kanban</field>
+  </record>
+
+  <!-- ═══ KANBAN VIEW ═══ -->
+  <record id="view_predevelopment_kanban" model="ir.ui.view">
+    <field name="name">salaam.predevelopment.kanban</field>
+    <field name="model">salaam.predevelopment</field>
+    <field name="arch" type="xml">
+      <kanban default_group_by="stage" class="o_kanban_small_column">
+        <field name="stage"/>
+        <field name="title"/>
+        <field name="project_id"/>
+        <field name="total_units"/>
+        <field name="viability_status"/>
+        <field name="project_manager_id"/>
+        <templates>
+          <t t-name="card">
+            <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+              <div class="o_kanban_record_body">
+                <strong><field name="name"/></strong>
+                <br/>
+                <field name="title"/>
+                <div class="o_kanban_tags_section mt4">
+                  <span class="badge badge-pill badge-secondary">
+                    <field name="total_units"/> units
+                  </span>
+                </div>
+              </div>
+              <div class="o_kanban_record_bottom">
+                <div class="oe_kanban_bottom_left">
+                  <field name="project_id"/>
+                </div>
+                <div class="oe_kanban_bottom_right">
+                  <field name="project_manager_id" widget="many2one_avatar_user"/>
+                </div>
+              </div>
+            </div>
+          </t>
+        </templates>
+      </kanban>
+    </field>
+  </record>
+
+  <!-- ═══ LIST VIEW ═══ -->
+  <record id="view_predevelopment_tree" model="ir.ui.view">
+    <field name="name">salaam.predevelopment.tree</field>
+    <field name="model">salaam.predevelopment</field>
+    <field name="arch" type="xml">
+      <list string="Pre-Development Applications"
+            decoration-success="stage == 'approved'"
+            decoration-warning="stage in ('concept','unit_mix','design')"
+            decoration-muted="stage == 'cancelled'">
+        <field name="name"/>
+        <field name="title"/>
+        <field name="stage"/>
+        <field name="project_id"/>
+        <field name="location"/>
+        <field name="total_units"/>
+        <field name="estimated_gdc"/>
+        <field name="viability_status"/>
+        <field name="project_manager_id" widget="many2one_avatar_user"/>
+        <field name="target_launch_date"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- ═══ FORM VIEW ═══ -->
+  <record id="view_predevelopment_form" model="ir.ui.view">
+    <field name="name">salaam.predevelopment.form</field>
+    <field name="model">salaam.predevelopment</field>
+    <field name="arch" type="xml">
+      <form string="Pre-Development Application">
+        <header>
+          <button name="action_next_stage"
+                  string="Advance to Next Stage"
+                  type="object"
+                  class="btn-primary" invisible="stage in  ['approved', 'cancelled']"/>
+          <button name="action_create_units"
+                  string="Create Property Units"
+                  type="object"
+                  class="btn-secondary"
+                  invisible="units_created or stage not in ['unit_mix', 'design', 'approved']"/>
+          <button name="action_cancel"
+                  string="Cancel"
+                  type="object"
+                  invisible="stage in ['approved', 'cancelled']"/>
+          <button name="action_reset_draft"
+                  string="Reset to Draft"
+                  type="object"
+                  invisible="stage != 'cancelled'"/>
+          <field name="stage" widget="statusbar"
+                 statusbar_visible="market_research,land,feasibility,concept,unit_mix,design,approved"/>
+        </header>
+
+        <sheet>
+          <!-- STAT BUTTONS -->
+          <div class="oe_button_box" name="button_box">
+            <button name="action_open_tenders" type="object"
+                    class="oe_stat_button" icon="fa-gavel"
+                    invisible="tender_count == 0">
+              <div class="o_stat_info">
+                <field name="tender_count" class="o_stat_value"/>
+                <span class="o_stat_text">Tenders</span>
+              </div>
+            </button>
+            <button name="action_open_units" type="object"
+                    class="oe_stat_button" icon="fa-building"
+                    invisible="property_count == 0">
+              <div class="o_stat_info">
+                <field name="property_count" class="o_stat_value"/>
+                <span class="o_stat_text">Units</span>
+              </div>
+            </button>
+            <button name="action_open_attachments" type="object"
+                    class="oe_stat_button" icon="fa-paperclip">
+              <div class="o_stat_info">
+                <field name="attachment_count" class="o_stat_value"/>
+                <span class="o_stat_text">Documents</span>
+              </div>
+            </button>
+            <button name="action_create_tender" type="object"
+                    class="oe_stat_button" icon="fa-plus"
+                    invisible="stage not in ['concept','unit_mix','design','approved']">
+              <span class="o_stat_text">New Tender</span>
+            </button>
+          </div>
+
+          <div class="oe_title">
+            <label for="name"/>
+            <h1><field name="name" readonly="1"/></h1>
+            <h2><field name="title" placeholder="Development Title..."/></h2>
+          </div>
+
+          <!-- MAIN FIELDS -->
+          <group>
+            <group string="Development">
+              <field name="project_id"/>
+              <field name="sub_project_id" invisible="not project_id"/>
+              <field name="developer_id"/>
+              <field name="project_manager_id"/>
+              <field name="architect_id"/>
+            </group>
+            <group string="Location">
+              <field name="location"/>
+              <field name="city"/>
+              <field name="country_id"/>
+              <field name="land_area"/>
+              <field name="gfa"/>
+              <field name="plot_ratio"/>
+            </group>
+          </group>
+
+          <group>
+            <group string="Timeline">
+              <field name="start_date"/>
+              <field name="target_launch_date"/>
+              <field name="target_completion_date"/>
+            </group>
+            <group string="Financials">
+              <field name="currency_id" invisible="1"/>
+              <field name="land_cost"/>
+              <field name="estimated_build_cost"/>
+              <field name="estimated_gdc" readonly="1"/>
+              <field name="estimated_gdv"/>
+              <field name="estimated_margin" readonly="1" widget="percentage"/>
+              <field name="viability_status"/>
+            </group>
+          </group>
+
+          <!-- DOWNSTREAM LINKS -->
+          <group string="Downstream Links" invisible="stage not in ['design','approved']">
+            <field name="construction_project_id"/>
+            <field name="units_created" readonly="1"/>
+          </group>
+
+          <!-- NOTEBOOK: STAGE DETAILS + UNIT MIX -->
+          <notebook>
+
+            <page string="Market Research"
+                  invisible="stage not in ['market_research','land','feasibility','concept','unit_mix','design','approved']">
+              <field name="market_research_notes"
+                     placeholder="Summarise market research findings, demand analysis, comparable projects, target demographic..."/>
+            </page>
+
+            <page string="Land Acquisition"
+                  invisible="stage not in ['land','feasibility','concept','unit_mix','design','approved']">
+              <field name="land_notes"
+                     placeholder="Land title status, acquisition timeline, due diligence findings, encumbrances..."/>
+            </page>
+
+            <page string="Feasibility Study"
+                  invisible="stage not in ['feasibility','concept','unit_mix','design','approved']">
+              <field name="feasibility_notes"
+                     placeholder="Feasibility conclusions, planning constraints, infrastructure requirements, environmental considerations..."/>
+            </page>
+
+            <page string="Concept &amp; Design"
+                  invisible="stage not in ['concept','unit_mix','design','approved']">
+              <field name="concept_notes"
+                     placeholder="Concept design brief, architectural intent, key design features..."/>
+              <separator string="Design Notes"/>
+              <field name="design_notes"
+                     placeholder="Detailed design notes, consultant appointments, design approvals..."/>
+            </page>
+
+            <page string="Unit Mix">
+              <group>
+                <group>
+                  <field name="total_units" readonly="1"/>
+                  <field name="total_sellable_area" readonly="1"/>
+                </group>
+              </group>
+              <field name="unit_mix_ids">
+                <list editable="bottom" string="Unit Mix">
+                  <field name="sequence" widget="handle"/>
+                  <field name="unit_type"/>
+                  <field name="unit_type_code"/>
+                  <field name="quantity"/>
+                  <field name="unit_area"/>
+                  <field name="sale_price"/>
+                  <field name="total_area" readonly="1"/>
+                  <field name="total_revenue" readonly="1"/>
+                  <field name="notes"/>
+                </list>
+              </field>
+            </page>
+            <page string="Internal Notes">
+              <field name="internal_notes" placeholder="Internal notes..."/>
+            </page>
+          </notebook>
+        </sheet>  
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <!-- ═══ SEARCH VIEW ═══ -->
+  <record id="view_predevelopment_search" model="ir.ui.view">
+    <field name="name">salaam.predevelopment.search</field>
+    <field name="model">salaam.predevelopment</field>
+    <field name="arch" type="xml">
+      <search string="Pre-Development">
+        <field name="title"/>
+        <field name="name"/>
+        <field name="project_id"/>
+        <field name="project_manager_id"/>
+        <separator/>
+        <filter name="market_research" string="Market Research"
+                domain="[('stage','=','market_research')]"/>
+        <filter name="land" string="Land" domain="[('stage','=','land')]"/>
+        <filter name="feasibility" string="Feasibility"
+                domain="[('stage','=','feasibility')]"/>
+        <filter name="concept" string="Concept"
+                domain="[('stage','=','concept')]"/>
+        <filter name="unit_mix" string="Unit Mix"
+                domain="[('stage','=','unit_mix')]"/>
+        <filter name="design" string="Design"
+                domain="[('stage','=','design')]"/>
+        <filter name="approved" string="Approved"
+                domain="[('stage','=','approved')]"/>
+        <filter name="active" string="Active (not cancelled)"
+                domain="[('stage','!=','cancelled')]"/>
+        <separator/>
+        <filter name="viable" string="Viable"
+                domain="[('viability_status','=','viable')]"/>
+        <group>
+          <filter name="by_stage" string="Stage" context="{'group_by': 'stage'}"/>
+          <filter name="by_project" string="Project" context="{'group_by': 'project_id'}"/>
+          <filter name="by_pm" string="Project Manager" context="{'group_by': 'project_manager_id'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
+
+  <!-- ═══ MENUS ═══ -->
+  <menuitem id="menu_predevelopment_root"
+            name="Pre-Development"
+            sequence="5"
+            web_icon="salaam_predevelopment,static/description/icon.png"/>
+
+  <menuitem id="menu_predevelopment_apps"
+            name="Applications"
+            parent="menu_predevelopment_root"
+            action="action_predevelopment"
+            sequence="10"/>
+
+  <!-- Config sub-menu -->
+  <menuitem id="menu_predevelopment_config"
+            name="Configuration"
+            parent="menu_predevelopment_root"
+            sequence="90"/>
+
+</odoo>

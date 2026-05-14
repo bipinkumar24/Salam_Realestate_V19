@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_construction_project_form" model="ir.ui.view">
+        <field name="name">salaam.construction.project.form</field>
+        <field name="model">salaam.construction.project</field>
+        <field name="arch" type="xml">
+            <form string="Construction Project">
+                <header>
+                    <button name="action_start_planning" string="Start Planning"
+                            type="object" class="btn-secondary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_activate" string="Activate Project"
+                            type="object" class="btn-primary"
+                            invisible="state not in ['draft', 'planning']"/>
+                    <button name="action_put_on_hold" string="Put On Hold"
+                            type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_handover" string="Handover"
+                            type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_complete" string="Complete"
+                            type="object" class="btn-primary"
+                            groups="salaam_construction_mgmt.group_construction_manager"
+                            invisible="state not in ['handover', 'active']"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ['completed', 'cancelled']"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,planning,active,handover,completed"/>
+                </header>
+                <sheet>
+                    <!-- SMART BUTTONS -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_phases" type="object"
+                                class="oe_stat_button" icon="fa-tasks">
+                            <field name="phase_count" widget="statinfo" string="Phases"/>
+                        </button>
+                        <button name="action_open_budget" type="object"
+                                class="oe_stat_button" icon="fa-usd">
+                            <field name="budget_line_count" widget="statinfo" string="Budget Lines"/>
+                        </button>
+                        <button name="action_open_site_reports" type="object"
+                                class="oe_stat_button" icon="fa-clipboard">
+                            <field name="site_report_count" widget="statinfo" string="Site Reports"/>
+                        </button>
+                        <button name="action_open_drawings" type="object"
+                                class="oe_stat_button" icon="fa-file-image-o">
+                            <field name="drawing_count" widget="statinfo" string="Drawings"/>
+                        </button>
+                        <button name="action_open_governance_docs" type="object"
+                                class="oe_stat_button" icon="fa-gavel">
+                            <field name="governance_doc_count" widget="statinfo" string="Gov. Docs"/>
+                        </button>
+                        <button name="action_open_odoo_project" type="object"
+                                class="oe_stat_button" icon="fa-rocket"
+                                invisible="not odoo_project_id">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Odoo Project</span>
+                            </div>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" readonly="1" class="o_field_char"/>
+                            — <field name="name"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Project Details">
+                            <field name="project_type"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="project_manager_id"/>
+                            <field name="site_engineer_id"/>
+                            <field name="location"/>
+                            <field name="total_built_area"/>
+                            <field name="num_units"/>
+                        </group>
+                        <group string="Contract Links">
+                            <field name="istisna_contract_id"/>
+                            <field name="contractor_id" readonly="1"/>
+                            <field name="property_id" readonly="1"/>
+                            <field name="odoo_project_id" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Timeline">
+                            <field name="date_start_planned" readonly="1"/>
+                            <field name="date_end_planned" readonly="1"/>
+                            <field name="date_start_actual"/>
+                            <field name="date_end_actual"/>
+                        </group>
+                        <group string="Overall Progress">
+                            <field name="overall_progress" widget="progressbar"/>
+                            <field name="last_report_date" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <!-- BUDGET SUMMARY TAB -->
+                        <page string="Budget Overview">
+                            <group>
+                                <group>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="contract_value" readonly="1"/>
+                                    <field name="approved_budget"/>
+                                </group>
+                                <group>
+                                    <field name="total_committed" readonly="1"/>
+                                    <field name="total_spent" readonly="1"/>
+                                    <field name="budget_variance" readonly="1"/>
+                                    <field name="budget_pct_spent" widget="progressbar" readonly="1"/>
+                                </group>
+                            </group>
+                            <field name="budget_line_ids">
+                                <list editable="bottom"
+                                      decoration-danger="pct_spent &gt; 100"
+                                      decoration-warning="pct_spent &gt; 80">
+                                    <field name="category"/>
+                                    <field name="name"/>
+                                    <field name="project_id" invisible="1"/>
+                                    <field name="phase_id"/>
+                                    <field name="subcontract_id"/>
+                                    <field name="budgeted_amount" sum="Budget"/>
+                                    <field name="committed_amount" sum="Committed" readonly="1"/>
+                                    <field name="invoiced_amount" sum="Invoiced" readonly="1"/>
+                                    <field name="spent_amount" sum="Spent"/>
+                                    <field name="variance" sum="Variance" readonly="1"/>
+                                    <field name="pct_spent" readonly="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- PHASES TAB -->
+                        <page string="Phases">
+                            <field name="phase_ids">
+                                <list decoration-success="state=='completed'"
+                                      decoration-warning="state=='on_hold'"
+                                      decoration-muted="state=='pending'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="phase_type"/>
+                                    <field name="date_start_planned"/>
+                                    <field name="date_end_planned"/>
+                                    <field name="weight"/>
+                                    <field name="progress" widget="progressbar"/>
+                                    <field name="delay_days"
+                                           decoration-danger="delay_days &gt; 0"
+                                           decoration-muted="delay_days == 0"/>
+                                    <field name="budget_allocated" sum="Budget"/>
+                                    <field name="budget_spent" sum="Spent" readonly="1"/>
+                                    <field name="task_count"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state=='completed'"
+                                           decoration-warning="state=='on_hold'"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- GOVERNANCE DOCS TAB -->
+                        <page string="Governance Documents">
+                            <field name="governance_doc_ids">
+                                <list decoration-warning="state=='in_review'"
+                                      decoration-muted="state in ('superseded','archived')">
+                                    <field name="reference"/>
+                                    <field name="name"/>
+                                    <field name="doc_type"/>
+                                    <field name="doc_category"/>
+                                    <field name="execution_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="days_to_expiry"
+                                           decoration-danger="days_to_expiry &lt; 30 and days_to_expiry &gt; 0"
+                                           decoration-warning="days_to_expiry &lt; 90 and days_to_expiry &gt; 0"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state=='approved'"
+                                           decoration-warning="state=='in_review'"
+                                           decoration-danger="state=='expired'"/>
+                                    <field name="file_count"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- SUB-CONTRACTS TAB -->
+                        <page string="Sub-Contracts">
+                            <field name="subcontract_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="subcontractor_id"/>
+                                    <field name="works_category"/>
+                                    <field name="subcontract_value" sum="Total"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                    <field name="state" widget="badge"
+                                           decoration-success="state in ('signed','active','completed')"
+                                           decoration-warning="state=='under_review'"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_construction_project_list" model="ir.ui.view">
+        <field name="name">salaam.construction.project.list</field>
+        <field name="model">salaam.construction.project</field>
+        <field name="arch" type="xml">
+            <list string="Construction Projects"
+                  decoration-success="state=='completed'"
+                  decoration-warning="state in ('on_hold','handover')"
+                  decoration-muted="state=='cancelled'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="project_type"/>
+                <field name="contractor_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="date_start_planned"/>
+                <field name="date_end_planned"/>
+                <field name="approved_budget" sum="Total Budget"/>
+                <field name="total_spent" sum="Total Spent"/>
+                <field name="overall_progress" widget="progressbar"/>
+                <field name="last_report_date"/>
+                <field name="project_manager_id"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='completed'"
+                       decoration-warning="state in ('on_hold','handover')"
+                       decoration-danger="state=='cancelled'"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_construction_project_kanban" model="ir.ui.view">
+        <field name="name">salaam.construction.project.kanban</field>
+        <field name="model">salaam.construction.project</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/><field name="code"/><field name="overall_progress"/>
+                <field name="state"/><field name="project_manager_id"/>
+                <field name="approved_budget"/><field name="currency_id"/>
+                <templates>
+                        <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div class="o_kanban_record_top">
+                                    <strong><field name="code"/> — <field name="name"/></strong>
+                                </div>
+                                <div><field name="project_manager_id"/></div>
+                                <div>Budget: <field name="approved_budget"/>
+                                    <field name="currency_id"/>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <field name="overall_progress" widget="progressbar"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_construction_project_search" model="ir.ui.view">
+        <field name="name">salaam.construction.project.search</field>
+        <field name="model">salaam.construction.project</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/><field name="code"/>
+                <field name="contractor_id"/><field name="project_manager_id"/>
+                <filter string="Active" name="active" domain="[('state','=','active')]"/>
+                <filter string="My Projects" name="my_projects" domain="[('project_manager_id','=',uid)]"/>
+                <filter string="On Hold" name="on_hold" domain="[('state','=','on_hold')]"/>
+                <filter string="Completed" name="completed" domain="[('state','=','completed')]"/>
+                <separator/>
+                <group>
+                    <filter string="Status" name="group_state" context="{'group_by':'state'}"/>
+                    <filter string="Branch" name="group_company" context="{'group_by':'company_id'}"/>
+                    <filter string="Project Type" name="group_type" context="{'group_by':'project_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_construction_project" model="ir.actions.act_window">
+        <field name="name">Construction Projects</field>
+        <field name="res_model">salaam.construction.project</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_construction_project_search"/>
+    </record>
+
+</odoo>

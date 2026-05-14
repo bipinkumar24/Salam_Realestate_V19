@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Root Menu -->
+    <menuitem id="menu_property_investment_root"
+              name="Investment Appraisal"
+              sequence="90"
+              groups="property_investment_appraisal.group_credit_officer"
+              web_icon="property_investment_appraisal,static/description/icon.png"/>
+
+    <!-- Applications -->
+    <menuitem id="menu_investment_applications"
+              name="Applications"
+              parent="menu_property_investment_root"
+              sequence="10"/>
+
+    <menuitem id="menu_investment_application_list"
+              name="All Applications"
+              parent="menu_investment_applications"
+              action="action_investment_application"
+              sequence="10"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_investment_config"
+              name="Configuration"
+              parent="menu_property_investment_root"
+              sequence="90"
+              groups="property_investment_appraisal.group_credit_manager"/>
+
+    <menuitem id="menu_investment_sectors"
+              name="Business Sectors"
+              parent="menu_investment_config"
+              action="action_property_sector"
+              sequence="10"/>
+
+</odoo>

@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dpr_se,buruuj.dpr.se,model_buruuj_dpr,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_dpr_pm,buruuj.dpr.pm,model_buruuj_dpr,buruuj_base.group_buruuj_pm,1,1,1,1
+access_dpr_mp_se,buruuj.dpr.mp.se,model_buruuj_dpr_manpower,buruuj_base.group_buruuj_site_engineer,1,1,1,1
+access_dpr_eq_se,buruuj.dpr.eq.se,model_buruuj_dpr_equipment,buruuj_base.group_buruuj_site_engineer,1,1,1,1
+access_rfi_se,buruuj.rfi.se,model_buruuj_rfi,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_rfi_pm,buruuj.rfi.pm,model_buruuj_rfi,buruuj_base.group_buruuj_pm,1,1,1,1
+access_ncr_se,buruuj.ncr.se,model_buruuj_ncr,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_ncr_pm,buruuj.ncr.pm,model_buruuj_ncr,buruuj_base.group_buruuj_pm,1,1,1,1
+access_snag_se,buruuj.snag.se,model_buruuj_snag,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_snag_pm,buruuj.snag.pm,model_buruuj_snag,buruuj_base.group_buruuj_pm,1,1,1,1
+access_itp_se,buruuj.itp.se,model_buruuj_itp,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_itp_pm,buruuj.itp.pm,model_buruuj_itp,buruuj_base.group_buruuj_pm,1,1,1,1
+access_itp_line_se,buruuj.itp.line.se,model_buruuj_itp_line,buruuj_base.group_buruuj_site_engineer,1,1,1,1

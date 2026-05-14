@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tp_list" model="ir.ui.view">
+        <field name="name">buruuj.time.phasing.list</field>
+        <field name="model">buruuj.time.phasing</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="project_id"/>
+                <field name="cbs_id"/>
+                <field name="date"/>
+                <field name="period_label"/>
+                <field name="planned_amount" sum="Planned"/>
+                <field name="cumulative_planned"/>
+                <field name="cumulative_actual"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tp_search" model="ir.ui.view">
+        <field name="name">buruuj.time.phasing.search</field>
+        <field name="model">buruuj.time.phasing</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="cbs_id"/>
+                <field name="date"/>
+                <group>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Period" name="g_date"
+                            context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_tp" model="ir.actions.act_window">
+        <field name="name">Time-Phased Budget (S-Curve)</field>
+        <field name="res_model">buruuj.time.phasing</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_g_proj': 1}</field>
+    </record>
+</odoo>

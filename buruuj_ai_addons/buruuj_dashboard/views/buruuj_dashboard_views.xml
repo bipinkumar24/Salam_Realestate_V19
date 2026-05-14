@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_dashboard_form" model="ir.ui.view">
+        <field name="name">buruuj.dashboard.form</field>
+        <field name="model">buruuj.dashboard</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+
+                    <group string="Project Portfolio">
+                        <group>
+                            <field name="active_projects"/>
+                            <field name="projects_green"/>
+                            <field name="projects_amber"/>
+                            <field name="projects_red"/>
+                        </group>
+                        <group>
+                            <field name="total_contract_value"/>
+                            <field name="total_baseline_budget"/>
+                            <field name="total_revised_budget"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Tender Pipeline">
+                        <group>
+                            <field name="open_tenders"/>
+                            <field name="pipeline_value"/>
+                        </group>
+                        <group>
+                            <field name="won_ytd"/>
+                            <field name="lost_ytd"/>
+                            <field name="win_rate"/>
+                        </group>
+                    </group>
+
+                    <group string="Subcontractor Exposure">
+                        <group>
+                            <field name="active_subcontracts"/>
+                            <field name="subcontract_exposure"/>
+                        </group>
+                    </group>
+
+                    <group string="Billing &amp; Cash">
+                        <group>
+                            <field name="pending_client_ipcs"/>
+                            <field name="pending_sub_ipcs"/>
+                        </group>
+                        <group>
+                            <field name="receivable_from_clients"/>
+                            <field name="payable_to_subs"/>
+                        </group>
+                    </group>
+
+                    <group string="Risk">
+                        <group>
+                            <field name="high_risk_count"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_buruuj_dashboard" model="ir.actions.act_window">
+        <field name="name">Executive Dashboard</field>
+        <field name="res_model">buruuj.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <menuitem id="menu_buruuj_dashboard_main" name="Executive Dashboard"
+              parent="buruuj_base.menu_buruuj_dashboard"
+              action="action_buruuj_dashboard" sequence="10"/>
+</odoo>

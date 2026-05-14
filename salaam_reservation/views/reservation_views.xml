@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══ RESERVATION FORM ═══ -->
+    <record id="action_reservation_payment" model="ir.actions.act_window">
+        <field name="name">Deposit Payments</field>
+        <field name="res_model">salaam.reservation.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_reservation_form" model="ir.ui.view">
+        <field name="name">salaam.reservation.form</field>
+        <field name="model">salaam.reservation</field>
+        <field name="arch" type="xml">
+            <form string="Reservation Agreement">
+                <header>
+                    <button name="action_activate" string="Activate Reservation" type="object" class="btn-primary" invisible="state != 'draft'" />
+                    <button name="action_confirm" string="Confirm (Deposit Received)" type="object" class="btn-primary" invisible="state != 'active'" />
+                    <button name="action_create_application" string="Create BRE Application" type="object" class="btn-primary" invisible="state != 'active'" />
+                    <button name="action_create_application" string="Open BRE Application" type="object" class="btn-secondary" invisible="state != 'new_application'" />
+                    <button name="action_convert" string="Convert to Contract" type="object" class="btn-primary" invisible="state not in ('active','confirmed')" />
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state in ('converted','cancelled','expired')" />
+                    <button name="action_mark_expired" string="Mark Expired" type="object" invisible="state not in ('active','confirmed')" />
+                    <button name="action_register_payment" string="Register Payment" type="object" class="btn-secondary" invisible="state not in ('active','confirmed')" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,new_application,confirmed,converted" />
+                </header>
+                <!-- Deadline alert -->
+                <div class="alert alert-danger" role="alert" invisible="deadline_status not in ('red','expired')">
+                    [!] Conversion deadline critical:
+                    <field name="days_to_deadline" /> days remaining.
+                    Deadline:
+                    <field name="conversion_deadline" />
+                </div>
+                <div class="alert alert-warning" role="alert" invisible="deadline_status != 'amber'">
+                    Conversion deadline approaching:
+                    <field name="days_to_deadline" /> days remaining.
+                </div>
+                <field name="in_cooling_off" invisible="1" />
+                <div class="alert alert-info" role="alert" invisible="not in_cooling_off">
+                    Customer is within cooling-off period until
+                    <field name="cooling_off_end" />.
+                    Full deposit refund applies if cancelled now.
+                </div>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_payments" type="object" class="oe_stat_button" icon="fa-money">
+                            <div class="o_stat_info">
+                                <field name="payment_count" class="o_stat_value" />
+                                <span class="o_stat_text">Payments</span>
+                            </div>
+                        </button>
+                        <button name="action_open_bre_application" type="object" class="oe_stat_button" icon="fa-file-text" invisible="not bre_application_id">
+                            <div class="o_stat_info">
+                                <field name="bre_application_id" class="o_stat_value" />
+                                <span class="o_stat_text">BRE App</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Unit">
+                            <field name="property_id" />
+                            <field name="unit_price" readonly="1" />
+                            <field name="project_id" />
+                        </group>
+                        <group string="Customer">
+                            <field name="partner_id" />
+                            <field name="nationality" />
+                            <field name="id_type" />
+                            <field name="id_number" />
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Reservation Terms">
+                            <field name="reservation_date" />
+                            <field name="agent_id" />
+                            <field name="team_id" />
+                            <field name="crm_lead_id" />
+                            <field name="bre_application_id" readonly="1" string="BRE Application ID" invisible="not bre_application_id" />
+                            <field name="cooling_off_days" />
+                            <field name="cooling_off_end" readonly="1" />
+                            <field name="conversion_days" />
+                            <field name="conversion_deadline" readonly="1" />
+                            <field name="days_to_deadline" readonly="1" />
+                            <field name="deadline_status" readonly="1" />
+                        </group>
+                        <group string="Deposit">
+                            <field name="currency_id" invisible="1" />
+                            <field name="deposit_pct" />
+                            <field name="deposit_amount" readonly="1" />
+                            <field name="deposit_received" readonly="1" />
+                            <field name="deposit_outstanding" readonly="1" />
+                            <field name="deposit_fully_paid" readonly="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Deposit Payments">
+                            <field name="payment_ids" readonly="1">
+                                <list decoration-success="state == 'posted'" decoration-warning="state == 'draft'" decoration-muted="state == 'cancel'">
+                                    <field name="name" />
+                                    <field name="date" />
+                                    <field name="amount" />
+                                    <field name="journal_id" />
+                                    <field name="memo" />
+                                    <field name="state" />
+                                </list>
+                            </field>
+                            <separator string="Legacy Records" invisible="not legacy_payment_ids" />
+                            <field name="legacy_payment_ids" ainvisible="not legacy_payment_ids">
+                                <list>
+                                    <field name="name" />
+                                    <field name="payment_date" />
+                                    <field name="amount" />
+                                    <field name="payment_method" />
+                                    <field name="receipt_reference" />
+                                    <field name="state" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Cancellation" invisible="state not in ('cancelled','expired')">
+                            <group>
+                                <field name="cancellation_reason" />
+                                <field name="refund_policy" />
+                                <field name="expiry_date" readonly="1" />
+                            </group>
+                        </page>
+                        <page string="Converted To" invisible="state != 'converted'">
+                            <group>
+                                <field name="bre_application_id" readonly="1" />
+                                <field name="sale_contract_id" readonly="1" />
+                                <field name="converted_date" readonly="1" />
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="special_conditions" widget="text" />
+                            <field name="internal_notes" widget="text" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <!-- ═══ RESERVATION LIST ═══ -->
+    <record id="view_reservation_list" model="ir.ui.view">
+        <field name="name">salaam.reservation.list</field>
+        <field name="model">salaam.reservation</field>
+        <field name="arch" type="xml">
+            <list string="Reservations" decoration-success="state == 'converted'" decoration-danger="deadline_status in ['red','expired']" decoration-warning="deadline_status == 'amber'" decoration-muted="state in ['cancelled','expired']">
+                <field name="name" />
+                <field name="property_id" />
+                <field name="partner_id" />
+                <field name="reservation_date" />
+                <field name="conversion_deadline" />
+                <field name="days_to_deadline" />
+                <field name="deposit_amount" />
+                <field name="deposit_received" />
+                <field name="deposit_fully_paid" />
+                <field name="deadline_status" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <!-- ═══ KANBAN ═══ -->
+    <record id="view_reservation_kanban" model="ir.ui.view">
+        <field name="name">salaam.reservation.kanban</field>
+        <field name="model">salaam.reservation</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name" />
+                <field name="partner_id" />
+                <field name="property_id" />
+                <field name="days_to_deadline" />
+                <field name="deadline_status" />
+                <field name="deposit_fully_paid" />
+                <field name="state" />
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong>
+                                    <field name="name" /></strong>
+                                <div>
+                                    <field name="partner_id" />
+                                </div>
+                                <div class="text-muted">
+                                    <field name="property_id" />
+                                </div>
+                                <div class="mt4">
+                                    <span t-if="record.days_to_deadline.value &lt; 14" class="badge badge-danger">
+                                        <field name="days_to_deadline" /> days left
+                                    </span>
+                                    <span t-if="record.deposit_fully_paid.value" class="badge badge-success ms-1">Deposit [OK]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="action_reservation" model="ir.actions.act_window">
+        <field name="name">Reservations</field>
+        <field name="res_model">salaam.reservation</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+    <!-- ═══ PROPERTY INHERIT — Reservation smart button + construction ═══ -->
+    <!-- <record id="view_property_reservation_inherit" model="ir.ui.view">
+        <field name="name">property.details.reservation.inherit</field>
+        <field name="model">property.details</field>
+        <field name="inherit_id" ref="salaam_reservation.view_property_details_base_fallback" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_open_reservations" type="object" class="oe_stat_button" icon="fa-bookmark">
+                    <div class="o_stat_info">
+                        <field name="reservation_count" class="o_stat_value" />
+                        <span class="o_stat_text">Reservations</span>
+                    </div>
+                </button>
+                <button name="action_create_reservation" type="object" class="oe_stat_button" icon="fa-plus" invisible="stage not in ('available','draft')">
+                    <span class="o_stat_text">Reserve Unit</span>
+                </button>
+            </div>-->
+            <!-- Add active reservation panel after main group -->
+            <!-- <field name="price" position="after">
+                <field name="active_reservation_id" invisible="1" />
+                <field name="stage" invisible="1" />-->
+                <!-- Active Reservation Banner -->
+               <!--  <div class="alert alert-primary" role="alert" invisible="not active_reservation_id">
+                    <strong>Active Reservation:</strong>
+                    <field name="active_reservation_name" readonly="1" />
+                    —
+                    <field name="active_reservation_partner" readonly="1" />
+                    — Deadline:
+                    <field name="active_reservation_deadline" readonly="1" />
+                    <field name="active_reservation_deadline_status" readonly="1" />
+                </div>
+            </field>
+        </field>
+    </record> -->
+    <!-- ═══ MENUS ═══ -->
+    <menuitem id="menu_reservation_root" name="Reservations" sequence="90" />
+    <menuitem id="menu_reservations_list" name="All Reservations" parent="menu_reservation_root" action="action_reservation" sequence="10" />
+    <menuitem id="menu_reservation_payments" name="Deposit Payments" parent="menu_reservation_root" action="action_reservation_payment" sequence="20" />
+</odoo>

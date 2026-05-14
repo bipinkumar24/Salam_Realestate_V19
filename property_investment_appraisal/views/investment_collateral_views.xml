@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_investment_collateral_list" model="ir.ui.view">
+        <field name="name">property.investment.collateral.list</field>
+        <field name="model">property.investment.collateral</field>
+        <field name="arch" type="xml">
+            <list string="Collateral Properties">
+                <field name="application_id"/>
+                <field name="location"/>
+                <field name="title_number"/>
+                <field name="area_sqm"/>
+                <field name="market_value_per_sqm"/>
+                <field name="haircut_rate" widget="percentage"/>
+                <field name="total_market_value"/>
+                <field name="adjusted_value"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_investment_collateral_form" model="ir.ui.view">
+        <field name="name">property.investment.collateral.form</field>
+        <field name="model">property.investment.collateral</field>
+        <field name="arch" type="xml">
+            <form string="Collateral Property">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="application_id"/>
+                            <field name="location"/>
+                            <field name="title_number"/>
+                        </group>
+                        <group>
+                            <field name="area_sqm"/>
+                            <field name="market_value_per_sqm"/>
+                            <field name="haircut_rate" widget="percentage"/>
+                        </group>
+                    </group>
+                    <group string="Computed Valuation">
+                        <field name="total_market_value" readonly="1"/>
+                        <field name="adjusted_value" readonly="1"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

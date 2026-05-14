@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="view_tender_form" model="ir.ui.view">
+    <field name="name">salaam.tender.form</field>
+    <field name="model">salaam.tender</field>
+    <field name="arch" type="xml">
+      <form string="Tender">
+        <header>
+          <button name="action_publish" string="Publish" type="object" class="btn-primary" invisible="state != 'draft'"/>
+          <button name="action_close_submissions" string="Close Submissions" type="object" invisible="state != 'published'"/>
+          <button name="action_start_evaluation" string="Start Evaluation" type="object" invisible="state != 'closed'"/>
+          <button name="action_award" string="Award Tender" type="object" class="btn-primary" invisible="state != 'evaluation'"/>
+          <button name="action_cancel" string="Cancel" type="object" invisible="state in ['awarded','cancelled']"/>
+          <field name="state" widget="statusbar" statusbar_visible="draft,published,closed,evaluation,awarded"/>
+        </header>
+        <sheet>
+          <div class="oe_title"><label for="name"/><h1><field name="name"/></h1><h2><field name="title"/></h2></div>
+          <group>
+            <group string="Tender Details">
+              <field name="project_id"/><field name="phase_id"/>
+              <field name="tender_type"/><field name="package_type"/>
+              <field name="delivery_method_code"/><field name="currency_id" invisible="1"/>
+              <field name="estimated_value"/><field name="sharia_compliance_required"/>
+            </group>
+            <group string="Key Dates">
+              <field name="issue_date"/><field name="site_visit_date"/>
+              <field name="clarification_deadline"/>
+              <field name="submission_deadline"/>
+              <field name="evaluation_start" invisible="state not in ['evaluation','awarded']"/>
+              <field name="award_date" invisible="state != 'awarded'"/>
+            </group>
+          </group>
+          <group string="Bond and Retention">
+            <group><field name="bid_bond_required"/><field name="bid_bond_pct" invisible="not bid_bond_required"/></group>
+            <group><field name="performance_bond_pct"/><field name="retention_pct"/><field name="dlp_months"/></group>
+          </group>
+          <group string="Evaluation Weights (must total 100%)">
+            <group>
+              <field name="weight_technical"/><field name="weight_commercial"/>
+              <field name="weight_sharia"/>
+            </group>
+            <group>
+              <field name="weight_hse"/><field name="weight_local"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Tenderers and Bids">
+              <group string="Award">
+                <field name="submitted_count" readonly="1"/>
+                <field name="awarded_invitee_id" invisible="state != 'awarded'"/>
+                <field name="awarded_amount" invisible="state != 'awarded'"/>
+                <field name="awarded_contract_ref" invisible="state != 'awarded'"/>
+              </group>
+              <field name="invitee_ids">
+                <list editable="bottom" decoration-success="recommendation == 'recommend'" decoration-danger="recommendation == 'not_recommend'">
+                  <field name="partner_id"/><field name="qualified"/>
+                  <field name="bid_submitted"/><field name="bid_amount"/>
+                  <field name="score_technical"/><field name="score_commercial"/>
+                  <field name="score_sharia"/><field name="score_hse"/>
+                  <field name="weighted_score" readonly="1"/>
+                  <field name="evaluation_rank" readonly="1"/>
+                  <field name="recommendation" readonly="1"/>
+                </list>
+              </field>
+            </page>
+            <page string="Scope"><field name="scope_description" widget="html"/></page>
+            <page string="Notes"><field name="notes" widget="text"/></page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_tender_list" model="ir.ui.view">
+    <field name="name">salaam.tender.list</field>
+    <field name="model">salaam.tender</field>
+    <field name="arch" type="xml">
+      <list string="Tenders" decoration-success="state == 'awarded'" decoration-muted="state == 'cancelled'">
+        <field name="name"/><field name="title"/><field name="project_id"/>
+        <field name="tender_type"/><field name="package_type"/>
+        <field name="estimated_value"/><field name="submission_deadline"/>
+        <field name="invitee_count"/><field name="submitted_count"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="action_tender" model="ir.actions.act_window">
+    <field name="name">Tenders</field><field name="res_model">salaam.tender</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <record id="view_ipc_form" model="ir.ui.view">
+    <field name="name">salaam.payment.certificate.form</field>
+    <field name="model">salaam.payment.certificate</field>
+    <field name="arch" type="xml">
+      <form string="Interim Payment Certificate">
+        <header>
+          <button name="action_submit" string="Submit" type="object" class="btn-primary" invisible="state != 'draft'"/>
+          <button name="action_qs_review" string="QS Review" type="object" invisible="state != 'submitted'"/>
+          <button name="action_approve" string="Approve" type="object" class="btn-primary" invisible="state != 'qs_review'"/>
+          <button name="action_mark_paid" string="Mark Paid" type="object" class="btn-primary" invisible="state != 'approved'"/>
+          <button name="action_dispute" string="Dispute" type="object" invisible="state not in ['submitted','qs_review']"/>
+          <button name="action_reset_draft" string="Reset" type="object" invisible="state not in ['disputed']"/>
+          <field name="state" widget="statusbar" statusbar_visible="draft,submitted,qs_review,approved,paid"/>
+        </header>
+        <field name="over_certified" invisible="1"/>
+        <div class="alert alert-danger" role="alert" invisible="not over_certified">
+          Over-certification warning: certified amount exceeds contract value.
+        </div>
+        <sheet>
+          <div class="oe_title"><label for="name"/><h1><field name="name"/></h1>
+            <h3>Certificate #<field name="certificate_number"/> — <field name="contractor_id"/></h3>
+          </div>
+          <group>
+            <group string="Contract Details">
+              <field name="project_id"/><field name="contractor_id"/>
+              <field name="istisna_contract_id"/><field name="phase_id"/>
+              <field name="milestone_id"/><field name="tender_id"/>
+              <field name="currency_id" invisible="1"/>
+              <field name="contract_value"/>
+            </group>
+            <group string="Valuation Period">
+              <field name="period_start"/><field name="period_end"/>
+              <field name="submission_date" readonly="1"/>
+              <field name="qs_review_date" readonly="1"/>
+              <field name="approval_date" readonly="1"/>
+              <field name="payment_due_date"/>
+              <field name="paid_date" invisible="state != 'paid'"/>
+            </group>
+          </group>
+          <group string="Valuation">
+            <group>
+              <field name="gross_valuation_claimed"/>
+              <field name="gross_valuation_certified"/>
+              <field name="previous_certified_total"/>
+              <field name="pct_complete" readonly="1" widget="progressbar"/>
+            </group>
+            <group>
+              <field name="this_certificate_gross" readonly="1"/>
+              <field name="retention_pct"/>
+              <field name="this_certificate_retention" readonly="1"/>
+              <field name="net_amount_due" readonly="1"/>
+              <field name="retention_held" readonly="1"/>
+            </group>
+          </group>
+          <group string="Personnel">
+            <field name="submitted_by" readonly="1"/>
+            <field name="qs_reviewer_id"/>
+            <field name="approved_by" readonly="1"/>
+          </group>
+          <field name="notes" widget="text" string="QS Assessment Notes"/>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_ipc_list" model="ir.ui.view">
+    <field name="name">salaam.payment.certificate.list</field>
+    <field name="model">salaam.payment.certificate</field>
+    <field name="arch" type="xml">
+      <list string="Payment Certificates" decoration-success="state == 'paid'" decoration-warning="state == 'approved'" decoration-danger="over_certified == True">
+        <field name="name"/><field name="certificate_number"/><field name="project_id"/>
+        <field name="contractor_id"/><field name="period_end"/>
+        <field name="gross_valuation_certified"/><field name="net_amount_due"/>
+        <field name="pct_complete" widget="progressbar"/>
+        <field name="payment_due_date"/><field name="over_certified"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+
+  <record id="action_payment_certificate" model="ir.actions.act_window">
+    <field name="name">Payment Certificates (IPC)</field><field name="res_model">salaam.payment.certificate</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <record id="view_project_procurement_inherit" model="ir.ui.view">
+    <field name="name">salaam.construction.project.procurement.inherit</field>
+    <field name="model">salaam.construction.project</field>
+    <field name="inherit_id" ref="salaam_construction_mgmt.view_construction_project_form"/>
+    <field name="arch" type="xml">
+      <div name="button_box" position="inside">
+        <button name="action_open_tenders" type="object" class="oe_stat_button" icon="fa-gavel">
+          <div class="o_stat_info"><field name="tender_count" class="o_stat_value"/><span class="o_stat_text">Tenders</span></div>
+        </button>
+        <button name="action_open_ipcs" type="object" class="oe_stat_button" icon="fa-money">
+          <div class="o_stat_info"><field name="ipc_count" class="o_stat_value"/><span class="o_stat_text">IPCs</span></div>
+        </button>
+        <button name="action_open_ipcs" type="object" class="oe_stat_button" icon="fa-clock-o" invisible="pending_ipc_count == 0">
+          <div class="o_stat_info"><field name="pending_ipc_count" class="o_stat_value"/><span class="o_stat_text">Pending IPCs</span></div>
+        </button>
+      </div>
+    </field>
+  </record>
+
+  <menuitem id="menu_procurement_root" name="Procurement" parent="salaam_construction_mgmt.menu_construction_root" sequence="50"/>
+  <menuitem id="menu_tenders" name="Tenders" parent="menu_procurement_root" action="action_tender" sequence="10"/>
+  <menuitem id="menu_ipcs" name="Payment Certificates" parent="menu_procurement_root" action="action_payment_certificate" sequence="20"/>
+
+</odoo>

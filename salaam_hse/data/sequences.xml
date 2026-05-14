@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data noupdate="1">
+  <record id="seq_hse_incident" model="ir.sequence"><field name="name">HSE Incident</field><field name="code">salaam.hse.incident</field><field name="prefix">INC/%(year)s/</field><field name="padding">4</field></record>
+  <record id="seq_hse_rams" model="ir.sequence"><field name="name">RAMS</field><field name="code">salaam.hse.method.statement</field><field name="prefix">RAMS/%(year)s/</field><field name="padding">4</field></record>
+  <record id="seq_hse_toolbox" model="ir.sequence"><field name="name">Toolbox Talk</field><field name="code">salaam.hse.toolbox.talk</field><field name="prefix">TBT/%(year)s/</field><field name="padding">4</field></record>
+  <record id="seq_hse_audit" model="ir.sequence"><field name="name">HSE Audit</field><field name="code">salaam.hse.audit</field><field name="prefix">HSA/%(year)s/</field><field name="padding">4</field></record>
+</data></odoo>

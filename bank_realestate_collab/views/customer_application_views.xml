@@ -1,0 +1,573 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Application Stage Views -->
+    <record id="view_application_stage_list" model="ir.ui.view">
+        <field name="name">bre.application.stage.list</field>
+        <field name="model">bre.application.stage</field>
+        <field name="arch" type="xml">
+            <list string="Application Stages" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="stage_type"/>
+                <field name="fold"/>
+                <field name="is_final"/>
+                <field name="is_confirmed"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Application List View -->
+    <record id="view_customer_application_list" model="ir.ui.view">
+        <field name="name">bre.customer.application.list</field>
+        <field name="model">bre.customer.application</field>
+        <field name="arch" type="xml">
+            <list string="Customer Applications"
+                  decoration-success="bank_status=='approved'"
+                  decoration-danger="bank_status=='rejected'"
+                  decoration-warning="bank_status=='pending'"
+                  decoration-info="bank_status=='under_review'">
+                <field name="name"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="customer_name" invisible="1"/>
+                <field name="is_cash_purchase" invisible="1"/>
+                <field name="prioritization_number" optional="show" string="Prio#"/>
+                <field name="prioritization_file_number" optional="show" string="File#"/>
+                <field name="property_id"/>
+                <field name="financing_type"/>
+                <field name="financing_amount" widget="monetary"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="agent_id"/>
+                <field name="bank_officer_id"/>
+                <field name="stage_id"/>
+                <field name="bank_status" widget="badge"
+                       decoration-success="bank_status=='approved'"
+                       decoration-danger="bank_status=='rejected'"
+                       decoration-warning="bank_status=='pending'"
+                       decoration-info="bank_status=='under_review'"
+                       decoration-muted="bank_status=='not_submitted'"/>
+                <field name="priority" widget="priority"/>
+                <field name="application_date"/>
+                <field name="document_count"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Application Form View -->
+    <record id="view_customer_application_form" model="ir.ui.view">
+        <field name="name">bre.customer.application.form</field>
+        <field name="model">bre.customer.application</field>
+        <field name="arch" type="xml">
+            <form string="Customer Application">
+                <header>
+                    <!-- Agent Actions -->
+                    <button name="action_submit_to_bank" string="Submit to Bank"
+                            type="object" class="btn-primary"
+                            invisible="bank_status != 'not_submitted' or is_cash_purchase == True"
+                            groups="bank_realestate_collab.group_bre_real_estate_agent"/>
+                    <span invisible = "not is_cash_purchase"
+                          class="badge badge-success" style="font-size:13px;padding:6px 12px">
+                        ✓ Cash Purchase — No Bank Financing Required
+                    </span>
+                    <button name="action_resubmit" string="Resubmit"
+                            type="object"
+                            invisible = "bank_status not in ['rejected','on_hold']"
+                            groups="bank_realestate_collab.group_bre_real_estate_agent"/>
+
+                    <!-- Bank Officer Actions -->
+                    <button name="action_start_review" string="Start Review"
+                            type="object" class="btn-primary"
+                            invisible="bank_status != 'pending'"
+                            groups="bank_realestate_collab.group_bre_bank_officer"/>
+                    <button name="action_approve" string="Approve"
+                            type="object" class="btn-success"
+                            invisible="bank_status != 'under_review'"
+                            groups="bank_realestate_collab.group_bre_bank_officer"/>
+                    <button name="action_reject" string="Reject"
+                            type="object" class="btn-danger"
+                            invisible = "bank_status not in ['pending','under_review']"
+                            groups="bank_realestate_collab.group_bre_bank_officer"/>
+                    <button name="action_put_on_hold" string="Put on Hold"
+                            type="object"
+                            invisible = "bank_status not in ['pending','under_review']"
+                            groups="bank_realestate_collab.group_bre_bank_officer"/>
+
+                    <!-- Print -->
+                    <button name="action_print_report" string="Print Report"
+                            type="object" icon="fa-print"/>
+
+                    <!-- Single statusbar — onchange blocks bank stages for cash purchases with warning -->
+                    <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"
+                           statusbar_visible="New Application,Confirmed,Data Collection,Document Gathering,Submitted to Bank,Bank Review,Sharia Review,Approved,Rejected"/>
+                </header>
+                <sheet>
+                    <!-- Cash purchase info banner -->
+                    <div class="alert alert-warning o_form_no_edit mb-3"
+                         invisible = "not is_cash_purchase"
+                         role="alert" style="margin-bottom:12px">
+                        <strong>Cash Purchase:</strong>
+                        Bank financing stages (Submitted to Bank, Bank Review, Sharia Review)
+                        are not applicable for this application and are blocked.
+                    </div>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_documents" type="object"
+                                class="oe_stat_button" icon="fa-paperclip">
+                            <field name="document_count" widget="statinfo" string="Documents"/>
+                        </button>
+                        <button name="action_view_financing_requests" type="object"
+                                class="oe_stat_button" icon="fa-university">
+                            <field name="financing_request_count" widget="statinfo" string="Financing"/>
+                        </button>
+                    </div>
+
+                    <widget name="web_ribbon" title="Approved" bg_color="bg-success"
+                            invisible = "bank_status != 'approved'"/>
+                    <widget name="web_ribbon" title="Rejected" bg_color="bg-danger"
+                            invisible = "bank_status != 'rejected'"/>
+                    <widget name="web_ribbon" title="Under Review" bg_color="bg-warning"
+                            invisible = "bank_status != 'under_review'"/>
+
+                    <div class="oe_title">
+                        <label for="partner_id"/>
+                        <h1>
+                            <field name="partner_id"
+                                   placeholder="Select or create a CRM contact..."
+                                   options="{'no_quick_create': False}"
+                                   context="{'show_address': False}"/>
+                        </h1>
+                        <h3>
+                            <field name="name" readonly="1"/> |
+                            <field name="bank_status" widget="badge"
+                                   decoration-success="bank_status=='approved'"
+                                   decoration-danger="bank_status=='rejected'"
+                                   decoration-warning="bank_status=='pending'"
+                                   decoration-info="bank_status=='under_review'"/>
+                            <span invisible = "not prioritization_number">
+                                | Prio#: <field name="prioritization_number" readonly="1"
+                                               style="display:inline; font-weight:600; color:#2e6da4;"/>
+                            </span>
+                            <span invisible = "not prioritization_file_number">
+                                | File#: <field name="prioritization_file_number" readonly="1"
+                                               style="display:inline; font-weight:600; color:#7f8c8d;"/>
+                            </span>
+                        </h3>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <field name="progress" widget="progressbar"/>
+
+                    <group>
+                        <group string="Application Info">
+                            <field name="agent_id" readonly="bank_status != 'not_submitted'"/>
+                            <field name="bank_officer_id"/>
+                            <field name="application_date"/>
+                            <field name="priority" widget="priority"/>
+                            <field name="kanban_state" widget="state_selection"/>
+                        </group>
+                        <group string="Status Tracking">
+                            <field name="submission_date" readonly="1"/>
+                            <field name="review_start_date" readonly="1"/>
+                            <field name="decision_date" readonly="1"/>
+                            <field name="expected_completion_date"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+
+                        <!-- Customer Personal Information -->
+                        <page string="Personal Information" name="personal">
+                            <group string="CRM Contact">
+                                <field name="partner_id"
+                                       options="{'no_quick_create': False}"
+                                       widget="many2one"
+                                       readonly="bank_status != 'not_submitted'"/>
+                            </group>
+                            <group string="CRM &amp; Prioritization">
+                                <group>
+                                    <field name="crm_lead_id"
+                                           options="{'no_create': True}"
+                                           domain="[('partner_id','=',partner_id)]"
+                                           readonly="bank_status != 'not_submitted'"/>
+                                    <field name="prioritization_id"
+                                           options="{'no_create': True}"
+                                           readonly="bank_status != 'not_submitted'"/>
+                                </group>
+                                <group>
+                                    <field name="prioritization_number" readonly="1"/>
+                                    <field name="prioritization_file_number" readonly="1"/>
+                                </group>
+                                <group colspan="2" invisible = "not prioritization_description">
+                                    <field name="prioritization_description" readonly="1" nolabel="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Basic Details">
+                                    <field name="customer_name" readonly="1" string="Full Name (from CRM)"/>
+                                    <field name="customer_name_ar"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="age" readonly="1"/>
+                                    <field name="gender"/>
+                                    <field name="nationality_id"/>
+                                    <field name="marital_status"/>
+                                    <field name="dependents_count"/>
+                                </group>
+                                <group string="Contact Information">
+                                    <field name="email" widget="email"/>
+                                    <field name="mobile" widget="phone"/>
+                                    <field name="phone" widget="phone"/>
+                                    <field name="address"/>
+                                    <field name="city"/>
+                                    <field name="country_id"/>
+                                </group>
+                            </group>
+                            <group string="Identification">
+                                <group>
+                                    <field name="id_type"/>
+                                    <field name="id_number"/>
+                                    <field name="id_expiry_date"/>
+                                    <field name="id_issue_place"/>
+                                    <field name="tax_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Financial Information -->
+                        <page string="Financial Information" name="financial">
+                            <group>
+                                <group string="Employment">
+                                    <field name="employment_status"/>
+                                    <field name="employer_name"/>
+                                    <field name="job_title"/>
+                                    <field name="years_employed"/>
+                                </group>
+                                <group string="Income &amp; Obligations">
+                                    <field name="currency_id"/>
+                                    <field name="monthly_income" widget="monetary"/>
+                                    <field name="other_income" widget="monetary"/>
+                                    <field name="total_monthly_income" widget="monetary" readonly="1"/>
+                                    <field name="monthly_obligations" widget="monetary"/>
+                                    <field name="debt_burden_ratio" readonly="1" widget="percentage"/>
+                                </group>
+                            </group>
+                            <group string="Credit History">
+                                <group>
+                                    <field name="credit_score"/>
+                                    <field name="credit_rating"/>
+                                    <field name="has_existing_loans"/>
+                                    <field name="existing_loans_detail"
+                                           invisible = "not has_existing_loans"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Property & Financing -->
+                        <page string="Property &amp; Financing" name="financing">
+                            <group>
+                                <group string="Selected Property">
+                                    <field name="property_id"
+                                            options="{'no_create': True}"
+                                            domain="[('stage','in',['available','booked'])]"/>
+                                    <field name="property_type_mirror" readonly="1" string="Type"/>
+                                    <field name="property_city" readonly="1" string="City"/>
+                                    <field name="property_project" readonly="1" string="Project"/>
+                                    <field name="property_subproject" readonly="1" string="Sub Project"/>
+                                    <field name="property_landlord" readonly="1" string="Landlord"/>
+                                    <field name="property_zone" readonly="1" string="Zone"/>
+                                    <field name="property_lot" readonly="1" string="Lot"/>
+                                    <field name="property_block" readonly="1" string="Block"/>
+                                    <field name="property_tf_no" readonly="1" string="TF N#"/>
+                                    <field name="property_sequence_no" readonly="1" string="Property ID"
+                                           invisible = "not property_sequence_no"/>
+                                </group>
+                                <group string="Property Specifications">
+                                    <field name="property_total_area" readonly="1" string="Total Area"/>
+                                    <field name="property_bed" readonly="1" string="Rooms"/>
+                                    <field name="property_bathroom" readonly="1" string="Bathrooms"/>
+                                    <field name="property_floor" readonly="1" string="Floor"/>
+                                    <field name="property_parking" readonly="1" string="Parking"/>
+                                    <field name="property_price" widget="monetary" readonly="1"
+                                           string="Listed Price"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Financing Request">
+                                    <field name="financing_type"/>
+                                    <field name="is_cash_purchase" invisible="1"/>
+                                    <!-- Cash purchase notice -->
+                                    <div invisible = "not is_cash_purchase"
+                                         style="background:#e8f8f5;border-left:4px solid #17a589;padding:8px 12px;border-radius:0 6px 6px 0;margin:4px 0">
+                                        <span style="color:#0d6b55;font-weight:bold">&#x2714; Cash Purchase</span>
+                                        <span style="color:#0d6b55"> — No bank financing required. Enter the total purchase price as Down Payment.</span>
+                                    </div>
+                                    <field name="financing_amount" widget="monetary"
+                                            invisible="is_cash_purchase"
+                                            required="not is_cash_purchase"/>
+                                    <field name="down_payment" widget="monetary"
+                                           string="Down Payment / Total Cash Amount"/>
+                                    <field name="down_payment_pct" readonly="1" widget="percentage"
+                                           invisible="is_cash_purchase"/>
+                                    <field name="tenure_months"
+                                           invisible="is_cash_purchase"/>
+                                    <field name="expected_monthly_payment" widget="monetary"/>
+                                </group>
+                                <group string="Sharia Compliance">
+                                    <field name="is_sharia_compliant_request"/>
+                                    <field name="sharia_compliance_note"/>
+                                    <field name="sharia_review_date"/>
+                                    <field name="sharia_reviewer_id"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Bank Review Tab -->
+                        <page string="Bank Decision" name="bank_decision"
+                              groups="bank_realestate_collab.group_bre_bank_officer">
+                            <group invisible = "bank_status not in ['approved','conditional']">
+                                <group string="Approval Details">
+                                    <field name="approved_amount" widget="monetary"/>
+                                    <field name="approved_tenure"/>
+                                    <field name="approved_rate"/>
+                                    <field name="conditions"/>
+                                </group>
+                            </group>
+                            <group invisible = "bank_status != 'rejected'">
+                                <group string="Rejection Details">
+                                    <field name="rejection_reason"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="bank_notes"/>
+                            </group>
+                        </page>
+
+                        <!-- Documents -->
+                        <page string="Documents" name="documents">
+                            <field name="document_ids">
+                                <list string="Documents" editable="bottom">
+                                    <field name="document_type_id"/>
+                                    <field name="document_category"/>
+                                    <field name="name"/>
+                                    <field name="submitted_by"/>
+                                    <field name="submission_date"/>
+                                    <field name="expiry_date"/>
+                                    <field name="file_count"/>
+                                    <field name="verification_status" widget="badge"
+                                           decoration-success="verification_status=='verified'"
+                                           decoration-danger="verification_status in ('rejected','expired')"
+                                           decoration-warning="verification_status=='pending'"/>
+                                    <field name="is_mandatory" widget="boolean"/>
+                                    <button name="action_verify" string="Verify" type="object"
+                                            icon="fa-check" class="btn-success btn-sm"
+                                            invisible="verification_status == 'verified'"
+                                            groups="bank_realestate_collab.group_bre_bank_officer"/>
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Application Kanban View -->
+    <record id="view_customer_application_kanban" model="ir.ui.view">
+        <field name="name">bre.customer.application.kanban</field>
+        <field name="model">bre.customer.application</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="customer_name" invisible="1"/>
+                <field name="is_cash_purchase" invisible="1"/>
+                <field name="bank_status"/>
+                <field name="property_id"/>
+                <field name="financing_amount" invisible="is_cash_purchase"/>
+                <span invisible="not is_cash_purchase" class="badge badge-success">Cash Purchase</span>
+                <field name="currency_id"/>
+                <field name="agent_id"/>
+                <field name="priority"/>
+                <field name="kanban_state"/>
+                <field name="color"/>
+                <field name="stage_id"/>
+                <field name="document_count"/>
+                <progressbar field="bank_status"
+                             colors='{"approved": "success", "rejected": "danger", "under_review": "warning"}'/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="oe_kanban_card oe_kanban_global_click o_kanban_record_has_image_fill oe_kanban_color_#{record.color.raw_value}">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="partner_id"/>
+                                    </strong>
+                                    <small class="o_kanban_record_subtitle text-muted">
+                                        <field name="name"/>
+                                    </small>
+                                </div>
+                                <field name="priority" widget="priority"/>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div><i class="fa fa-building-o"/> <field name="property_id"/></div>
+                                <div><i class="fa fa-money"/> <field name="financing_amount" widget="monetary"/></div>
+                                <div>
+                                    <span t-attf-class="badge badge-pill #{record.bank_status.raw_value == 'approved' ? 'badge-success' : record.bank_status.raw_value == 'rejected' ? 'badge-danger' : record.bank_status.raw_value == 'under_review' ? 'badge-warning' : 'badge-secondary'}">
+                                        <field name="bank_status"/>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="kanban_state" widget="state_selection"/>
+                                    <i class="fa fa-paperclip"/> <field name="document_count"/>
+                                </div>
+                                <div class="oe_kanban_bottom_right">
+                                     <img t-att-src="record.agent_id.raw_value and '/web/image/res.users/' + record.agent_id.raw_value + '/image_128' or '/web/static/img/user_menu_default_avatar.png'"
+                                         class="oe_kanban_avatar" width="24" height="24"
+                                         t-att-title="record.agent_id.value"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Application Search View -->
+    <record id="view_customer_application_search" model="ir.ui.view">
+        <field name="name">bre.customer.application.search</field>
+        <field name="model">bre.customer.application</field>
+        <field name="arch" type="xml">
+            <search string="Search Applications">
+                <field name="name"/>
+                <field name="partner_id" string="Customer"/>
+                <field name="customer_name" string="Customer Name"/>
+                <field name="prioritization_number" string="Prioritization #"/>
+                <field name="prioritization_file_number" string="File #"/>
+                <field name="crm_lead_id" string="CRM Opportunity"/>
+                <field name="property_id"/>
+                <field name="agent_id"/>
+                <field name="bank_officer_id"/>
+                <filter string="My Applications" name="my_apps" domain="[('agent_id','=',uid)]"/>
+                <filter string="Assigned to Me (Bank)" name="bank_assigned" domain="[('bank_officer_id','=',uid)]"/>
+                <separator/>
+                <filter string="Not Submitted" name="not_submitted" domain="[('bank_status','=','not_submitted')]"/>
+                <filter string="Pending Review" name="pending" domain="[('bank_status','=','pending')]"/>
+                <filter string="Under Review" name="under_review" domain="[('bank_status','=','under_review')]"/>
+                <filter string="Approved" name="approved" domain="[('bank_status','=','approved')]"/>
+                <filter string="Rejected" name="rejected" domain="[('bank_status','=','rejected')]"/>
+                <separator/>
+                <filter string="Sharia Compliant" name="sharia" domain="[('is_sharia_compliant_request','=',True)]"/>
+                <filter string="High Priority" name="priority" domain="[('priority','in',['2','3'])]"/>
+                <group>
+                    <filter string="Stage" name="grp_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="Bank Status" name="grp_status" context="{'group_by': 'bank_status'}"/>
+                    <filter string="Financing Type" name="grp_financing" context="{'group_by': 'financing_type'}"/>
+                    <filter string="Agent" name="grp_agent" context="{'group_by': 'agent_id'}"/>
+                    <filter string="Bank Officer" name="grp_officer" context="{'group_by': 'bank_officer_id'}"/>
+                    <filter string="Month" name="grp_month" context="{'group_by': 'application_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Application Actions -->
+    <record id="action_customer_application_agent" model="ir.actions.act_window">
+        <field name="name">My Applications</field>
+        <field name="res_model">bre.customer.application</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('agent_id','=',uid)]</field>
+        <field name="search_view_id" ref="view_customer_application_search"/>
+        <field name="context">{'search_default_my_apps': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first customer application!
+            </p>
+        </field>
+    </record>
+
+    <record id="action_customer_application_all" model="ir.actions.act_window">
+        <field name="name">All Applications</field>
+        <field name="res_model">bre.customer.application</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_customer_application_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No applications found.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_customer_application_bank" model="ir.actions.act_window">
+        <field name="name">Financing Applications</field>
+        <field name="res_model">bre.customer.application</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('bank_status','!=','not_submitted')]</field>
+        <field name="search_view_id" ref="view_customer_application_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No applications submitted to bank yet.
+            </p>
+        </field>
+    </record>
+
+    <!-- Wizard Views -->
+    <record id="view_approval_wizard_form" model="ir.ui.view">
+        <field name="name">bre.approval.wizard.form</field>
+        <field name="model">bre.approval.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Approve Application">
+                <sheet>
+                    <group string="Approval Details">
+                        <field name="application_id" readonly="1"/>
+                        <field name="currency_id"/>
+                        <field name="approved_amount" widget="monetary"/>
+                        <field name="approved_tenure"/>
+                        <field name="approved_rate"/>
+                        <field name="offer_expiry_date"/>
+                    </group>
+                    <group string="Terms &amp; Conditions">
+                        <field name="conditions" nolabel="1" placeholder="Enter approval conditions..."/>
+                    </group>
+                    <group string="Bank Notes">
+                        <field name="bank_notes" nolabel="1" placeholder="Internal bank notes..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_approval" string="Confirm Approval"
+                            type="object" class="btn-success"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_rejection_wizard_form" model="ir.ui.view">
+        <field name="name">bre.rejection.wizard.form</field>
+        <field name="model">bre.rejection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Reject Application">
+                <sheet>
+                    <group>
+                        <field name="application_id" readonly="1"/>
+                        <field name="rejection_category"/>
+                        <field name="rejection_reason" nolabel="1" placeholder="Provide detailed rejection reason..."/>
+                        <field name="can_reapply"/>
+                        <field name="reapply_after_days"
+                               invisible="not can_reapply"/>
+                        <field name="bank_notes" nolabel="1" placeholder="Additional notes..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_rejection" string="Confirm Rejection"
+                            type="object" class="btn-danger"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data noupdate="1">
+  <record id="seq_reservation" model="ir.sequence">
+    <field name="name">Reservation</field>
+    <field name="code">salaam.reservation</field>
+    <field name="prefix">RES/%(year)s/</field>
+    <field name="padding">4</field>
+  </record>
+</data></odoo>

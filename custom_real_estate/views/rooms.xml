@@ -9,7 +9,7 @@
                     <sheet>
                         <div>
                             <group>
-                                <field name="name"/>
+                                <field name="name" placeholder="Example: 3 Bedrooms with 2 bathrooms"/>
                             </group>
                         </div>
                     </sheet>

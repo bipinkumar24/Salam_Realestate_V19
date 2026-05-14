@@ -602,7 +602,7 @@ class PropertyXlsReport(models.TransientModel):
             sheet1.write(0, 4, 'Total Invoiced')
             c = 1
 
-            for group in self.env['account.move'].read_group(
+            for group in self.env['account.move']._read_group(
                     [('tenancy_id', '!=', False), ('payment_state', '=', 'paid'),
                      ('invoice_date', '>=', self.start_date),
                      ('invoice_date', '<=', self.end_date)],
@@ -653,7 +653,7 @@ class PropertyXlsReport(models.TransientModel):
             sheet1.write(0, 4, 'Total Invoiced')
             c = 1
 
-            for group in self.env['account.move'].read_group(
+            for group in self.env['account.move']._read_group(
                     [('sold_id', '!=', False), ('payment_state', '=', 'paid'),
                      ('invoice_date', '>=', self.start_date),
                      ('invoice_date', '<=', self.end_date)],

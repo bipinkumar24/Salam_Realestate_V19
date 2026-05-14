@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tender_viewer,tender.viewer,model_salaam_tender,salaam_construction_mgmt.group_construction_viewer,1,0,0,0
+access_tender_officer,tender.officer,model_salaam_tender,salaam_construction_mgmt.group_construction_officer,1,1,1,0
+access_tender_manager,tender.manager,model_salaam_tender,salaam_construction_mgmt.group_construction_manager,1,1,1,1
+access_tender_invitee_officer,tender.invitee.officer,model_salaam_tender_invitee,salaam_construction_mgmt.group_construction_officer,1,1,1,0
+access_tender_invitee_manager,tender.invitee.manager,model_salaam_tender_invitee,salaam_construction_mgmt.group_construction_manager,1,1,1,1
+access_ipc_viewer,ipc.viewer,model_salaam_payment_certificate,salaam_construction_mgmt.group_construction_viewer,1,0,0,0
+access_ipc_officer,ipc.officer,model_salaam_payment_certificate,salaam_construction_mgmt.group_construction_officer,1,1,1,0
+access_ipc_manager,ipc.manager,model_salaam_payment_certificate,salaam_construction_mgmt.group_construction_manager,1,1,1,1

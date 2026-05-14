@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tool_cat_se,tool.cat.se,model_buruuj_tool_category,buruuj_base.group_buruuj_site_engineer,1,0,0,0
+access_tool_cat_store,tool.cat.store,model_buruuj_tool_category,buruuj_base.group_buruuj_storekeeper,1,1,1,0
+access_tool_cat_mgr,tool.cat.mgr,model_buruuj_tool_category,buruuj_base.group_buruuj_manager,1,1,1,1
+access_tool_se,tool.se,model_buruuj_tool,buruuj_base.group_buruuj_site_engineer,1,0,0,0
+access_tool_store,tool.store,model_buruuj_tool,buruuj_base.group_buruuj_storekeeper,1,1,1,0
+access_tool_pm,tool.pm,model_buruuj_tool,buruuj_base.group_buruuj_pm,1,1,1,1
+access_tool_iss_se,tool.iss.se,model_buruuj_tool_issuance,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_tool_iss_store,tool.iss.store,model_buruuj_tool_issuance,buruuj_base.group_buruuj_storekeeper,1,1,1,0
+access_tool_iss_pm,tool.iss.pm,model_buruuj_tool_issuance,buruuj_base.group_buruuj_pm,1,1,1,1
+access_tool_tfr_store,tool.tfr.store,model_buruuj_tool_transfer,buruuj_base.group_buruuj_storekeeper,1,1,1,0
+access_tool_tfr_pm,tool.tfr.pm,model_buruuj_tool_transfer,buruuj_base.group_buruuj_pm,1,1,1,1
+access_tool_cal_store,tool.cal.store,model_buruuj_tool_calibration,buruuj_base.group_buruuj_storekeeper,1,1,1,0
+access_tool_cal_pm,tool.cal.pm,model_buruuj_tool_calibration,buruuj_base.group_buruuj_pm,1,1,1,1
+access_tool_loss_se,tool.loss.se,model_buruuj_tool_loss,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_tool_loss_store,tool.loss.store,model_buruuj_tool_loss,buruuj_base.group_buruuj_storekeeper,1,1,1,0
+access_tool_loss_pm,tool.loss.pm,model_buruuj_tool_loss,buruuj_base.group_buruuj_pm,1,1,1,1

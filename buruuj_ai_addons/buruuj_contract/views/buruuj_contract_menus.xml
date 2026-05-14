@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_buruuj_contract_list" name="Contracts"
+              parent="buruuj_base.menu_buruuj_contracts_root"
+              action="action_buruuj_contract" sequence="10"/>
+    <menuitem id="menu_buruuj_claim" name="Claims"
+              parent="buruuj_base.menu_buruuj_contracts_root"
+              action="action_buruuj_claim" sequence="20"/>
+</odoo>

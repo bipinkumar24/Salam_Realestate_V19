@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_tender_list" model="ir.ui.view">
+        <field name="name">buruuj.tender.list</field>
+        <field name="model">buruuj.tender</field>
+        <field name="arch" type="xml">
+            <list string="Tenders" decoration-success="state=='won'"
+                  decoration-danger="state=='lost'"
+                  decoration-warning="state in ('reviewing','submitted')">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="client_id"/>
+                <field name="project_type"/>
+                <field name="submission_deadline"/>
+                <field name="estimated_value" sum="Estimated"/>
+                <field name="bid_value" sum="Bid"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='won'"
+                       decoration-danger="state=='lost'"
+                       decoration-warning="state in ('reviewing','submitted')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_buruuj_tender_kanban" model="ir.ui.view">
+        <field name="name">buruuj.tender.kanban</field>
+        <field name="model">buruuj.tender</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="client_id"/>
+                <field name="bid_value"/>
+                <field name="currency_id"/>
+                <field name="submission_deadline"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-2">
+                            <strong><field name="name"/></strong>
+                            <div><field name="title"/></div>
+                            <div class="text-muted"><field name="client_id"/></div>
+                            <div class="mt-2">
+                                <field name="bid_value" widget="monetary"/>
+                            </div>
+                            <div class="text-muted">
+                                Due: <field name="submission_deadline"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_buruuj_tender_form" model="ir.ui.view">
+        <field name="name">buruuj.tender.form</field>
+        <field name="model">buruuj.tender</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start_estimation" string="Start Estimation"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_send_for_review" string="Send for Review"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'estimating'"/>
+                    <button name="action_submit" string="Mark Submitted"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'reviewing'"/>
+                    <button name="action_won" string="Mark Won"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_lost" string="Mark Lost"
+                            type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_convert_to_project" string="Convert to Project"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'won' or project_id"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('won','lost','cancelled')"/>
+                    <button name="action_reset_draft" string="Reset to Draft"
+                            type="object" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,estimating,reviewing,submitted,won"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_project" type="object" class="oe_stat_button"
+                                icon="fa-folder-open" invisible="not project_id">
+                            <field name="project_id" widget="statinfo" string="Project"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h2><field name="title" placeholder="Tender title..."/></h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="client_id"/>
+                            <field name="consultant_id"/>
+                            <field name="project_type"/>
+                            <field name="location"/>
+                            <field name="duration_months"/>
+                        </group>
+                        <group>
+                            <field name="issue_date"/>
+                            <field name="submission_deadline"/>
+                            <field name="estimator_id"/>
+                            <field name="estimated_value"/>
+                            <field name="awarded_value" invisible="state != 'won'"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="BOQ &amp; Pricing">
+                            <group>
+                                <group string="Markup">
+                                    <field name="overhead_percent"/>
+                                    <field name="profit_percent"/>
+                                    <field name="contingency_percent"/>
+                                </group>
+                                <group string="Bid Summary">
+                                    <field name="bid_value" readonly="1"/>
+                                    <field name="boq_id"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Win / Loss">
+                            <field name="win_loss_reason"
+                                   placeholder="Capture reason for win or loss for lessons learned..."/>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_buruuj_tender" model="ir.actions.act_window">
+        <field name="name">Tenders</field>
+        <field name="res_model">buruuj.tender</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+</odoo>

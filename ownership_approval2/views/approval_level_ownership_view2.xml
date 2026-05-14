@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="approval_level_tree_view_ownership2">
+            <field name="name">approval.level.list.ownership2</field>
+            <field name="model">approval.level.ownership2</field>
+            <field name="arch" type="xml">
+                <list string="Approval Level Form" editable="bottom">
+                    <field name="name"/>
+                    <field name="level"/>
+                    <field name="is_last_approval"/>
+                    <field name="is_reject"/>
+                    <field name="is_prior_doc_required"/>
+                    <field name="is_res_doc_required"/>
+                    <field name="is_sell_doc_required"/>
+                    <field name="is_final_doc_required"/>
+                    <field name="is_send_email"/>
+                    <field name="approval_user_ids" widget="many2many_tags" required="not is_reject"/>
+<!--                    <field name="fields_ids" widget="many2many_tags" domain="[('model', '=', 'ownership.contract')]"/>-->
+                    <field name="fields_ids" widget="many2many_tags"/>
+                    <field name="display_message"/>
+                </list>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="approval_level_form_view_ownership2">
+            <field name="name">approval.level.form.ownership2</field>
+            <field name="model">approval.level.ownership2</field>
+            <field name="arch" type="xml">
+                <form string="Approval Level Form">
+                    <sheet>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="level" required="1"/>
+                            <field name="is_last_approval"/>
+                            <field name="is_reject"/>
+                            <field name="approval_user_ids" required="not is_reject"/>
+                            <field name="display_message"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_approval_level_ownership2" model="ir.actions.act_window">
+            <field name="name">Bank Mode Approval Levels Configurations</field>
+            <field name="res_model">approval.level.ownership2</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <!--        <menuitem action="action_approval_level_ownership2" name="Bank Mode Approval Level Configuration"-->
+        <!--                  id="menu_approval_level_ownership_config"-->
+        <!--                  parent="itsys_real_estate.menu_settings" sequence="40"/>-->
+
+
+        <!--        <record id="view_ownership_case_my_activities_filter_approvel" model="ir.ui.view">-->
+        <!--            <field name="name">ownership.contract</field>-->
+        <!--            <field name="model">ownership.contract</field>-->
+        <!--            <field name="inherit_id" ref="itsys_real_estate.ownership_contract_form_view"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//field[@name='state']" position="after">-->
+        <!--                    <field name="next_approval_id_2" widget="statusbar"-->
+        <!--                           attrs="{'invisible': ['|',('is_bank', '=', False),('state', '=', 'draft')]}"/>-->
+        <!--                </xpath>-->
+
+        <!--                <xpath expr="//button" position="after">-->
+        <!--                    <field name="is_button" invisible="1"/>-->
+        <!--                    <field name="is_last_level" invisible="1"/>-->
+        <!--                    <field name="hide_status" invisible="1"/>-->
+        <!--                    <field name="is_prior_doc_required2" invisible="1"/>-->
+        <!--                    <field name="is_res_doc_required2" invisible="1"/>-->
+        <!--                    <field name="is_sell_doc_required2" invisible="1"/>-->
+        <!--                    <field name="is_final_doc_required2" invisible="1"/>-->
+        <!--                    <field name="is_bank" invisible="1"/>-->
+        <!--                    <button name="action_approve2" type="object"-->
+        <!--                            attrs="{'invisible': ['|','|',('is_button', '=', False),('is_bank', '=', False),('state', '=', 'draft')]}"-->
+        <!--                            string="Next Stage / Reject" class="oe_highlight"/>-->
+        <!--                </xpath>-->
+        <!--                 <xpath expr="//field[@name='date_payment']" position="after">-->
+        <!--                    <field name="bbank" attrs="{'invisible': [('is_bank', '=', False),], 'required':[('is_bank', '=', True),]}"/>-->
+        <!--                </xpath>-->
+        <!--                <xpath expr="//notebook" position="inside">-->
+        <!--                    <page name="Contract Documents" string=" Bank Contract Documents"-->
+        <!--                          attrs="{'invisible': [('is_bank', '=', False),]}">-->
+        <!--                        <group>-->
+        <!--                            <field name="prioritisation" attrs="{'required': [('is_prior_doc_required2', '=', True)]}"/>-->
+        <!--                            <field name="reservation_agreement"-->
+        <!--                                   attrs="{'required': [('is_res_doc_required2', '=', True)]}"/>-->
+        <!--                            <field name="sell_agreement" attrs="{'required': [('is_sell_doc_required2', '=', True)]}"/>-->
+        <!--                            <field name="final_agreement"-->
+        <!--                                   attrs="{'required': [('is_final_doc_required2', '=', True)]}"/>-->
+        <!--                        </group>-->
+        <!--                    </page>-->
+        <!--                    <page name="bank remarks" string="Bank Mode Remarks"-->
+        <!--                          attrs="{'invisible': [('is_bank', '=', False),]}">-->
+        <!--                        <field name="remark2_ids" readonly="1">-->
+        <!--                            <tree>-->
+        <!--                                <field name="user_id" readonly="1"/>-->
+        <!--                                <field name="name" readonly="1"/>-->
+        <!--                                <field name="remark_datettime" readonly="1"/>-->
+        <!--                                <field name="consumed_hours" readonly="1"/>-->
+        <!--                                <field name="from_stage_id_2" readonly="1"/>-->
+        <!--                                <field name="to_stage_id_2" readonly="1"/>-->
+        <!--                                <field name="remark_type" readonly="1"/>-->
+        <!--                            </tree>-->
+        <!--                        </field>-->
+        <!--                    </page>-->
+        <!--                </xpath>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+    </data>
+</odoo>

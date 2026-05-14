@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_ncr_report">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Non-Conformance Report</h2>
+            <h3><t t-esc="o.name"/></h3>
+            <table class="table table-sm"><tr><td><b>Project</b></td><td><t t-esc="o.project_id.name"/></td><td><b>Severity</b></td><td><t t-esc="o.severity"/></td></tr>
+<tr><td><b>Contractor</b></td><td><t t-esc="o.contractor_id.name"/></td><td><b>Category</b></td><td><t t-esc="o.ncr_category"/></td></tr>
+<tr><td><b>Raised</b></td><td><t t-esc="o.raised_date"/></td><td><b>CAP Deadline</b></td><td><t t-esc="o.cap_response_deadline"/></td></tr>
+<tr><td><b>Work Stopped</b></td><td><t t-esc="'YES' if o.work_stopped else 'No'"/></td><td><b>Days Open</b></td><td><t t-esc="o.days_open"/></td></tr></table>
+<h4>Non-Conformance</h4><p><t t-esc="o.non_conformance_description"/></p>
+<h4>Specification Requirement</h4><p><t t-esc="o.specification_requirement"/></p>
+<h4>Corrective Action Plan</h4><p><t t-esc="o.cap_description or 'Not yet submitted'"/></p>
+            <p style="margin-top:16px;font-size:9px;color:#999;">Salaam Investment Bank · IAFAO · <t t-esc="o.name"/></p>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_ncr_report" model="ir.actions.report">
+    <field name="name">Non-Conformance Report</field><field name="model">salaam.ncr</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">salaam_contractor_mgmt.report_ncr_report</field>
+    <field name="binding_model_id" ref="model_salaam_ncr"/><field name="binding_type">report</field>
+  </record>
+</odoo>

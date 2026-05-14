@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="cause_scope_change" model="buruuj.variance.cause">
+            <field name="code">SCOPE</field>
+            <field name="name">Scope Change (Client)</field>
+            <field name="is_recoverable" eval="True"/>
+            <field name="description">Client-instructed change to scope. Recoverable through a Variation Order.</field>
+        </record>
+        <record id="cause_design_change" model="buruuj.variance.cause">
+            <field name="code">DESIGN</field>
+            <field name="name">Design Change</field>
+            <field name="is_recoverable" eval="True"/>
+            <field name="description">Consultant or client revised design after award. Usually recoverable.</field>
+        </record>
+        <record id="cause_market_price" model="buruuj.variance.cause">
+            <field name="code">PRICE</field>
+            <field name="name">Market Price Movement</field>
+            <field name="description">Material or labour cost has shifted vs. estimate. Generally not recoverable unless contract has price escalation clause.</field>
+        </record>
+        <record id="cause_productivity" model="buruuj.variance.cause">
+            <field name="code">PROD</field>
+            <field name="name">Productivity Loss</field>
+            <field name="description">Work took longer than estimated. Investigate root cause.</field>
+        </record>
+        <record id="cause_weather" model="buruuj.variance.cause">
+            <field name="code">WEATH</field>
+            <field name="name">Adverse Weather</field>
+            <field name="is_recoverable" eval="True"/>
+            <field name="description">Lost time due to weather. Time recoverable via EOT; cost prolongation may be claimable.</field>
+        </record>
+        <record id="cause_estimating" model="buruuj.variance.cause">
+            <field name="code">EST</field>
+            <field name="name">Estimating Error</field>
+            <field name="description">Quantity or rate underestimated at tender stage.</field>
+        </record>
+        <record id="cause_subcontractor" model="buruuj.variance.cause">
+            <field name="code">SUB</field>
+            <field name="name">Subcontractor Performance</field>
+            <field name="is_recoverable" eval="True"/>
+            <field name="description">Cost incurred due to subcontractor failure. Recoverable via back-charge.</field>
+        </record>
+        <record id="cause_force_majeure" model="buruuj.variance.cause">
+            <field name="code">FM</field>
+            <field name="name">Force Majeure</field>
+            <field name="is_recoverable" eval="True"/>
+            <field name="description">Events outside party control. Recovery depends on contract clauses.</field>
+        </record>
+        <record id="cause_rework" model="buruuj.variance.cause">
+            <field name="code">RWK</field>
+            <field name="name">Rework / Quality Failure</field>
+            <field name="description">Cost of fixing defective work. Investigate party at fault.</field>
+        </record>
+        <record id="cause_other" model="buruuj.variance.cause">
+            <field name="code">OTH</field>
+            <field name="name">Other</field>
+            <field name="description">Use sparingly — describe fully in the variance log.</field>
+        </record>
+    </data>
+</odoo>

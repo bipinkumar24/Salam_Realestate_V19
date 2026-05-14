@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cbs_list" model="ir.ui.view">
+        <field name="name">buruuj.cbs.list</field>
+        <field name="model">buruuj.cbs</field>
+        <field name="arch" type="xml">
+            <list decoration-success="variance_pct &gt;= 0"
+                  decoration-warning="variance_pct &lt; 0 and variance_pct &gt;= -5"
+                  decoration-danger="variance_pct &lt; -5">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="category_id"/>
+                <field name="phase_id" optional="hide"/>
+                <field name="baseline_budget" sum="Baseline"/>
+                <field name="revised_budget" sum="Revised"/>
+                <field name="committed_amount" sum="Committed"/>
+                <field name="actual_amount" sum="Actual"/>
+                <field name="estimate_to_complete" sum="ETC"/>
+                <field name="forecast_at_completion" sum="FAC"/>
+                <field name="variance_at_completion" sum="VAC"/>
+                <field name="variance_pct" widget="percentage"/>
+                <field name="physical_progress" widget="progressbar" optional="show"/>
+                <field name="budget_locked" widget="boolean_toggle" optional="hide"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_cbs_form" model="ir.ui.view">
+        <field name="name">buruuj.cbs.form</field>
+        <field name="model">buruuj.cbs</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_lock_budget" string="Lock Baseline"
+                            type="object" class="oe_highlight"
+                            invisible="budget_locked"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_entries" type="object"
+                                class="oe_stat_button" icon="fa-list">
+                            <field name="cost_entry_count" widget="statinfo"
+                                   string="Entries"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" placeholder="Code..." style="width: 8em;"/>
+                            <field name="name" placeholder="Description..."/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="parent_id"/>
+                            <field name="category_id"/>
+                            <field name="phase_id"/>
+                            <field name="cost_type" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="is_leaf" readonly="1"/>
+                            <field name="budget_locked" readonly="1"/>
+                            <field name="physical_progress" widget="progressbar"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Budget &amp; Forecast">
+                            <group>
+                                <group string="Budget">
+                                    <field name="baseline_budget"
+                                           readonly="budget_locked"/>
+                                    <field name="revised_budget"/>
+                                </group>
+                                <group string="Costs">
+                                    <field name="committed_amount" readonly="1"/>
+                                    <field name="actual_amount" readonly="1"/>
+                                    <field name="estimate_to_complete"/>
+                                </group>
+                            </group>
+                            <group string="Forecast">
+                                <group>
+                                    <field name="forecast_at_completion"
+                                           readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="variance_at_completion"
+                                           readonly="1"/>
+                                    <field name="variance_pct"
+                                           widget="percentage" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Children &amp; Rollup"
+                              invisible="is_leaf">
+                            <group string="Rolled-up totals (read-only)">
+                                <group>
+                                    <field name="rollup_baseline" readonly="1"/>
+                                    <field name="rollup_revised" readonly="1"/>
+                                    <field name="rollup_committed" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="rollup_actual" readonly="1"/>
+                                    <field name="rollup_etc" readonly="1"/>
+                                    <field name="rollup_fac" readonly="1"/>
+                                    <field name="rollup_vac" readonly="1"/>
+                                </group>
+                            </group>
+                            <field name="child_ids">
+                                <list>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="rollup_baseline" sum="Baseline"/>
+                                    <field name="rollup_actual" sum="Actual"/>
+                                    <field name="rollup_fac" sum="FAC"/>
+                                    <field name="rollup_vac" sum="VAC"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Cost Entries" invisible="not is_leaf">
+                            <field name="cost_entry_ids" readonly="1">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="name"/>
+                                    <field name="entry_type" widget="badge"/>
+                                    <field name="amount"/>
+                                    <field name="source_ref"/>
+                                    <field name="is_auto_generated"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_cbs_search" model="ir.ui.view">
+        <field name="name">buruuj.cbs.search</field>
+        <field name="model">buruuj.cbs</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="category_id"/>
+                <filter string="Top Level Only" name="top_level"
+                        domain="[('parent_id','=',False)]"/>
+                <filter string="Leaf Lines Only" name="leaves"
+                        domain="[('is_leaf','=',True)]"/>
+                <filter string="Locked Baseline" name="locked"
+                        domain="[('budget_locked','=',True)]"/>
+                <filter string="Overruns (&gt;5%)" name="overrun"
+                        domain="[('variance_pct','&lt;',-5)]"/>
+                <group>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Category" name="g_cat"
+                            context="{'group_by': 'category_id'}"/>
+                    <filter string="Cost Type" name="g_type"
+                            context="{'group_by': 'cost_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_cbs" model="ir.actions.act_window">
+        <field name="name">Cost Breakdown Structure</field>
+        <field name="res_model">buruuj.cbs</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_g_proj': 1}</field>
+    </record>
+
+    <record id="action_cbs_overruns" model="ir.actions.act_window">
+        <field name="name">Cost Overruns</field>
+        <field name="res_model">buruuj.cbs</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_overrun': 1, 'search_default_g_proj': 1}</field>
+    </record>
+</odoo>

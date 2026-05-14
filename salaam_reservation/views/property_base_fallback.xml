@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Minimal base view for property.details — ensures inherit views load without error.
+         The post_init_hook replaces this with the actual rental_management form view. -->
+        <record id="view_property_details_base_fallback" model="ir.ui.view">
+            <field name="name">property.details.form.base.fallback</field>
+            <field name="model">property.details</field>
+            <field name="priority">999</field>
+            <field name="arch" type="xml">
+                <form string="Property">
+                    <div class="oe_button_box" name="button_box" />
+                    <button name="action_open_reservations" type="object" class="oe_stat_button" icon="fa-bookmark">
+                        <div class="o_stat_info">
+                            <field name="reservation_count" class="o_stat_value" />
+                            <span class="o_stat_text">Reservations</span>
+                        </div>
+                    </button>
+                    <button name="action_create_reservation" type="object" class="oe_stat_button" icon="fa-plus" invisible="stage not in ('available','draft')">
+                        <span class="o_stat_text">Reserve Unit</span>
+                    </button>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" />
+                            </h1>
+                        </div>
+                        <field name="price" />
+                        <field name="active_reservation_id" invisible="1" />
+                        <field name="stage" invisible="1" />
+                        <!-- Active Reservation Banner -->
+                        <div class="alert alert-primary" role="alert" invisible="not active_reservation_id">
+                            <strong>Active Reservation:</strong>
+                            <field name="active_reservation_name" readonly="1" />
+                            —
+                            <field name="active_reservation_partner" readonly="1" />
+                            — Deadline:
+                            <field name="active_reservation_deadline" readonly="1" />
+                            <field name="active_reservation_deadline_status" readonly="1" />
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

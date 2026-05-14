@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="paperformat_construction_a4" model="report.paperformat">
+        <field name="name">Salaam Construction — A4</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">18</field>
+        <field name="margin_right">18</field>
+        <field name="header_line" eval="False"/>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Site Report PDF Action -->
+    <record id="action_report_site_report" model="ir.actions.report">
+        <field name="name">Site Progress Report</field>
+        <field name="model">salaam.site.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_construction_mgmt.report_site_report</field>
+        <field name="report_file">salaam_construction_mgmt.report_site_report</field>
+        <field name="paperformat_id" ref="paperformat_construction_a4"/>
+        <field name="binding_model_id" ref="model_salaam_site_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Site Report Template -->
+    <template id="report_site_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- HEADER -->
+                        <div style="background:#1A1A2E;color:#fff;padding:14px 18px;margin-bottom:18px;border-bottom:4px solid #C9A84C;">
+                            <table width="100%"><tr>
+                                <td>
+                                    <h2 style="margin:0;color:#C9A84C;font-size:17px;">SALAAM INVESTMENT BANK</h2>
+                                    <div style="font-size:11px;color:#aaa;">IAFAO — Construction Management</div>
+                                </td>
+                                <td style="text-align:right;vertical-align:top;">
+                                    <div style="font-size:14px;font-weight:bold;color:#C9A84C;"><t t-esc="doc.name"/></div>
+                                    <div style="font-size:11px;color:#ccc;">Site Progress Report</div>
+                                    <div style="font-size:10px;color:#aaa;"><t t-esc="doc.report_date"/> · <t t-esc="doc.report_period.title()"/></div>
+                                </td>
+                            </tr></table>
+                        </div>
+
+                        <!-- PROJECT & STATUS -->
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;">Project Details</h3>
+                        <table class="table table-sm" width="100%">
+                            <tr>
+                                <td width="25%"><strong>Project</strong></td>
+                                <td><t t-esc="doc.project_id.code"/> — <t t-esc="doc.project_id.name"/></td>
+                                <td width="25%"><strong>Main Contractor</strong></td>
+                                <td><t t-esc="doc.project_id.contractor_id.name or 'N/A'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Site Engineer</strong></td>
+                                <td><t t-esc="doc.submitted_by.name"/></td>
+                                <td><strong>Approved By</strong></td>
+                                <td><t t-esc="doc.approved_by.name or 'Pending Approval'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Weather</strong></td>
+                                <td><t t-esc="dict(doc._fields['weather_condition'].selection).get(doc.weather_condition,'')"/></td>
+                                <td><strong>Workforce on Site</strong></td>
+                                <td><t t-esc="doc.workforce_total"/> persons</td>
+                            </tr>
+                        </table>
+
+                        <!-- OVERALL PROGRESS -->
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Overall Progress</h3>
+                        <table class="table table-sm" width="100%">
+                            <tr>
+                                <td width="33%"><strong>Previous Progress</strong></td>
+                                <td><t t-esc="'{:.1f}%'.format(doc.previous_progress or 0)"/></td>
+                                <td width="33%"><strong>Progress This Period</strong></td>
+                                <td><strong style="color:#10B981;">+<t t-esc="'{:.1f}%'.format(doc.progress_this_period or 0)"/></strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Current Overall Progress</strong></td>
+                                <td colspan="3">
+                                    <strong style="color:#C9A84C;font-size:16px;"><t t-esc="'{:.1f}%'.format(doc.overall_progress_reported or 0)"/></strong>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- PHASE PROGRESS TABLE -->
+                        <t t-if="doc.phase_progress_ids">
+                            <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Phase Progress</h3>
+                            <table class="table table-sm table-striped" width="100%">
+                                <thead style="background:#1A1A2E;color:#fff;">
+                                    <tr>
+                                        <th>Phase</th>
+                                        <th>Type</th>
+                                        <th class="text-right">Previous %</th>
+                                        <th class="text-right">This Report %</th>
+                                        <th class="text-right">Change</th>
+                                        <th>Notes</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.phase_progress_ids" t-as="line">
+                                        <tr>
+                                            <td><t t-esc="line.phase_id.name"/></td>
+                                            <td><t t-esc="line.phase_type or ''"/></td>
+                                            <td class="text-right"><t t-esc="'{:.1f}%'.format(line.progress_previous or 0)"/></td>
+                                            <td class="text-right"><strong><t t-esc="'{:.1f}%'.format(line.progress_reported or 0)"/></strong></td>
+                                            <td class="text-right" style="color:#10B981;">+<t t-esc="'{:.1f}%'.format(line.progress_delta or 0)"/></td>
+                                            <td><t t-esc="line.notes or ''"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- WORKS THIS PERIOD -->
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:16px;">Works This Period</h3>
+                        <div style="font-size:11px;"><t t-raw="doc.works_completed or 'No details recorded.'"/></div>
+
+                        <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:14px;">Works Planned Next Period</h3>
+                        <div style="font-size:11px;"><t t-raw="doc.works_planned or 'No details recorded.'"/></div>
+
+                        <!-- ISSUES -->
+                        <t t-if="doc.issues_risks">
+                            <h3 style="color:#1A1A2E;border-bottom:2px solid #EF4444;padding-bottom:4px;margin-top:14px;">Issues, Risks &amp; Blockers</h3>
+                            <div style="font-size:11px;"><t t-raw="doc.issues_risks"/></div>
+                        </t>
+
+                        <!-- HSE -->
+                        <t t-if="doc.health_safety_notes">
+                            <h3 style="color:#1A1A2E;border-bottom:2px solid #C9A84C;padding-bottom:4px;margin-top:14px;">Health, Safety &amp; Environment</h3>
+                            <div style="font-size:11px;"><t t-esc="doc.health_safety_notes"/></div>
+                        </t>
+
+                        <!-- SIGNATURES -->
+                        <div style="margin-top:32px;">
+                            <table width="100%"><tr>
+                                <td width="45%" style="border-top:1px solid #333;padding-top:8px;">
+                                    <strong>Submitted By — Site Engineer</strong><br/>
+                                    <div style="margin-top:6px;">Name: <t t-esc="doc.submitted_by.name"/></div>
+                                    <div style="margin-top:6px;">Signature: ____________________</div>
+                                    <div style="margin-top:6px;">Date: <t t-esc="doc.report_date"/></div>
+                                </td>
+                                <td width="10%"/>
+                                <td width="45%" style="border-top:1px solid #333;padding-top:8px;">
+                                    <strong>Approved By — Project Manager</strong><br/>
+                                    <div style="margin-top:6px;">Name: <t t-esc="doc.approved_by.name if doc.approved_by else '________________________'"/></div>
+                                    <div style="margin-top:6px;">Signature: ____________________</div>
+                                    <div style="margin-top:6px;">Date: ____________________</div>
+                                </td>
+                            </tr></table>
+                        </div>
+
+                        <div style="margin-top:24px;padding-top:8px;border-top:1px solid #ccc;font-size:9px;color:#888;">
+                            CONFIDENTIAL · <t t-esc="doc.name"/> · <t t-esc="doc.project_id.name"/> ·
+                            Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %b %Y %H:%M')"/>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

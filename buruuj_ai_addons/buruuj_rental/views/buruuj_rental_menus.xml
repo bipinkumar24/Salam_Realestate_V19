@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_rental_root" name="Rentals"
+              parent="buruuj_base.menu_buruuj_root" sequence="68"
+              groups="buruuj_base.group_buruuj_pm"/>
+
+    <menuitem id="menu_rental_active" name="Active Rentals"
+              parent="menu_rental_root" action="action_rcontract_active"
+              sequence="10"/>
+    <menuitem id="menu_rental_requisition" name="Requisitions"
+              parent="menu_rental_root" action="action_rreq" sequence="20"/>
+    <menuitem id="menu_rental_contract" name="All Contracts"
+              parent="menu_rental_root" action="action_rcontract" sequence="30"/>
+    <menuitem id="menu_rental_timesheet" name="Daily Timesheets"
+              parent="menu_rental_root" action="action_rts" sequence="40"/>
+    <menuitem id="menu_rental_invoice" name="Vendor Invoices"
+              parent="menu_rental_root" action="action_rinv" sequence="50"/>
+    <menuitem id="menu_rental_disputed" name="Disputed Invoices"
+              parent="menu_rental_root" action="action_rinv_disputed"
+              sequence="55"/>
+</odoo>

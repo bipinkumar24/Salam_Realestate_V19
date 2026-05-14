@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_predevelopment_user,salaam.predevelopment user,model_salaam_predevelopment,base.group_user,1,1,1,0
+access_predevelopment_manager,salaam.predevelopment manager,model_salaam_predevelopment,base.group_system,1,1,1,1
+access_predevelopment_unit_mix_user,salaam.predevelopment.unit.mix user,model_salaam_predevelopment_unit_mix,base.group_user,1,1,1,0
+access_predevelopment_unit_mix_manager,salaam.predevelopment.unit.mix manager,model_salaam_predevelopment_unit_mix,base.group_system,1,1,1,1

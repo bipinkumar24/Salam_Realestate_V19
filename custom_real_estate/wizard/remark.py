@@ -33,7 +33,7 @@ class Remark(models.TransientModel):
     )
     attachment_ids = fields.Many2many('ir.attachment', 'pro_remark_attachment_id',
                                       'remark_id', 'attachment_id', string='Attachments')
-    body_html = fields.Html('Body', render_engine='qweb', translate=True, sanitize=False)
+    body_html = fields.Html('Body', translate=True, sanitize=False)
     is_send_email = fields.Boolean('Is Send Email')
 
     @api.onchange('lead_id')

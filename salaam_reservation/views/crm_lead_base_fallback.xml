@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <!-- Minimal base view for crm.lead — only our custom fields, no partner_id
+         (partner_id has a company_id domain that requires company_id in view).
+         post_init_hook replaces this with the real CRM form view after install. -->
+    <record id="view_crm_lead_base_fallback" model="ir.ui.view">
+      <field name="name">crm.lead.form.base.fallback</field>
+      <field name="model">crm.lead</field>
+      <field name="type">form</field>
+      <field name="priority">999</field>
+      <field name="arch" type="xml">
+        <form string="Lead">
+          <header/>
+          <group>
+            <field name="name"/>
+            <field name="company_id" invisible="1"/>
+            <field name="priority_number"/>
+            <field name="file_number"/>
+            <field name="reservation_id"/>
+          </group>
+        </form>
+      </field>
+    </record>
+  </data>
+</odoo>

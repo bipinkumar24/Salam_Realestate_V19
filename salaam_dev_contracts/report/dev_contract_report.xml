@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Paper Format -->
+    <record id="paperformat_dev_contract_a4" model="report.paperformat">
+        <field name="name">Salaam Contract — A4</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">25</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">20</field>
+        <field name="margin_right">20</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Sale Contract Report -->
+    <record id="action_report_dev_contract_sale" model="ir.actions.report">
+        <field name="name">Sale Contract</field>
+        <field name="model">dev.contract.sale</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_dev_contracts.report_dev_contract_sale</field>
+        <field name="report_file">salaam_dev_contracts.report_dev_contract_sale</field>
+        <field name="paperformat_id" ref="paperformat_dev_contract_a4"/>
+        <field name="binding_model_id" ref="model_dev_contract_sale"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Istisna Report -->
+    <record id="action_report_dev_contract_istisna" model="ir.actions.report">
+        <field name="name">Istisna Contract</field>
+        <field name="model">dev.contract.istisna</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_dev_contracts.report_dev_contract_istisna</field>
+        <field name="report_file">salaam_dev_contracts.report_dev_contract_istisna</field>
+        <field name="paperformat_id" ref="paperformat_dev_contract_a4"/>
+        <field name="binding_model_id" ref="model_dev_contract_istisna"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Ijara Report -->
+    <record id="action_report_dev_contract_ijara" model="ir.actions.report">
+        <field name="name">Ijara Contract</field>
+        <field name="model">dev.contract.ijara</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_dev_contracts.report_dev_contract_ijara</field>
+        <field name="report_file">salaam_dev_contracts.report_dev_contract_ijara</field>
+        <field name="paperformat_id" ref="paperformat_dev_contract_a4"/>
+        <field name="binding_model_id" ref="model_dev_contract_ijara"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Musharaka Report -->
+    <record id="action_report_dev_contract_musharaka" model="ir.actions.report">
+        <field name="name">Musharaka Contract</field>
+        <field name="model">dev.contract.musharaka</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_dev_contracts.report_dev_contract_musharaka</field>
+        <field name="report_file">salaam_dev_contracts.report_dev_contract_musharaka</field>
+        <field name="paperformat_id" ref="paperformat_dev_contract_a4"/>
+        <field name="binding_model_id" ref="model_dev_contract_musharaka"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Subcontractor Report -->
+    <record id="action_report_dev_contract_subcontractor" model="ir.actions.report">
+        <field name="name">Subcontractor Agreement</field>
+        <field name="model">dev.contract.subcontractor</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_dev_contracts.report_dev_contract_subcontractor</field>
+        <field name="report_file">salaam_dev_contracts.report_dev_contract_subcontractor</field>
+        <field name="paperformat_id" ref="paperformat_dev_contract_a4"/>
+        <field name="binding_model_id" ref="model_dev_contract_subcontractor"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Consultancy Report -->
+    <record id="action_report_dev_contract_consultancy" model="ir.actions.report">
+        <field name="name">Consultancy Agreement</field>
+        <field name="model">dev.contract.consultancy</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">salaam_dev_contracts.report_dev_contract_consultancy</field>
+        <field name="report_file">salaam_dev_contracts.report_dev_contract_consultancy</field>
+        <field name="paperformat_id" ref="paperformat_dev_contract_a4"/>
+        <field name="binding_model_id" ref="model_dev_contract_consultancy"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

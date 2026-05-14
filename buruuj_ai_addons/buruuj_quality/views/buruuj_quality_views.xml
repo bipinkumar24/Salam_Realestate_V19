@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Drawings -->
+    <record id="view_buruuj_drawing_list" model="ir.ui.view">
+        <field name="name">buruuj.drawing.list</field>
+        <field name="model">buruuj.drawing</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="drawing_no"/>
+                <field name="title"/>
+                <field name="project_id"/>
+                <field name="discipline"/>
+                <field name="revision"/>
+                <field name="purpose"/>
+                <field name="issue_date"/>
+                <field name="status" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_drawing_form" model="ir.ui.view">
+        <field name="name">buruuj.drawing.form</field>
+        <field name="model">buruuj.drawing</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="drawing_no"/>
+                            <field name="title"/>
+                            <field name="project_id"/>
+                            <field name="discipline"/>
+                        </group>
+                        <group>
+                            <field name="revision"/>
+                            <field name="sheet_size"/>
+                            <field name="scale"/>
+                            <field name="purpose"/>
+                            <field name="issue_date"/>
+                            <field name="status"/>
+                            <field name="drawn_by"/>
+                            <field name="checked_by"/>
+                        </group>
+                    </group>
+                    <field name="file_attachment" filename="file_name"/>
+                    <field name="file_name" invisible="1"/>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_drawing" model="ir.actions.act_window">
+        <field name="name">Drawing Register</field>
+        <field name="res_model">buruuj.drawing</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Transmittals -->
+    <record id="view_buruuj_transmittal_list" model="ir.ui.view">
+        <field name="name">buruuj.transmittal.list</field>
+        <field name="model">buruuj.transmittal</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="sent_to"/>
+                <field name="purpose"/>
+                <field name="method"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_transmittal_form" model="ir.ui.view">
+        <field name="name">buruuj.transmittal.form</field>
+        <field name="model">buruuj.transmittal</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_send" string="Send" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_acknowledge" string="Mark Acknowledged"
+                            type="object" invisible="state != 'sent'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                            <field name="sent_by"/>
+                        </group>
+                        <group>
+                            <field name="sent_to"/>
+                            <field name="purpose"/>
+                            <field name="method"/>
+                        </group>
+                    </group>
+                    <field name="drawing_ids" widget="many2many_tags"/>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_transmittal" model="ir.actions.act_window">
+        <field name="name">Transmittals</field>
+        <field name="res_model">buruuj.transmittal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Submittals -->
+    <record id="view_buruuj_submittal_list" model="ir.ui.view">
+        <field name="name">buruuj.submittal.list</field>
+        <field name="model">buruuj.submittal</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="submittal_type"/>
+                <field name="item"/>
+                <field name="manufacturer"/>
+                <field name="submitted_to"/>
+                <field name="response"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_submittal_form" model="ir.ui.view">
+        <field name="name">buruuj.submittal.form</field>
+        <field name="model">buruuj.submittal</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_respond" string="Mark Responded" type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_close" string="Close" type="object"
+                            invisible="state != 'responded'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_id"/>
+                            <field name="submittal_type"/>
+                            <field name="item"/>
+                            <field name="manufacturer"/>
+                            <field name="spec_section"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="submitted_by"/>
+                            <field name="submitted_to"/>
+                            <field name="response_date"/>
+                            <field name="response"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                    <field name="attachment_ids" widget="many2many_binary"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_submittal" model="ir.actions.act_window">
+        <field name="name">Submittals</field>
+        <field name="res_model">buruuj.submittal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

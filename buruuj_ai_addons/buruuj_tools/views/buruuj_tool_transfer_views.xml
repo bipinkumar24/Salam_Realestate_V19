@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tool_transfer_list" model="ir.ui.view">
+        <field name="name">buruuj.tool.transfer.list</field>
+        <field name="model">buruuj.tool.transfer</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="tool_id"/>
+                <field name="from_project_id"/>
+                <field name="to_project_id"/>
+                <field name="transport_method"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tool_transfer_form" model="ir.ui.view">
+        <field name="name">buruuj.tool.transfer.form</field>
+        <field name="model">buruuj.tool.transfer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_dispatch" string="Dispatch"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_receive" string="Confirm Receipt"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'dispatched'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('received','cancelled')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tool_id"/>
+                            <field name="date"/>
+                            <field name="transport_method"/>
+                        </group>
+                        <group>
+                            <field name="from_project_id"/>
+                            <field name="to_project_id"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Dispatch">
+                            <field name="from_storekeeper_id"/>
+                            <field name="condition_at_dispatch"/>
+                        </group>
+                        <group string="Receipt">
+                            <field name="to_storekeeper_id"/>
+                            <field name="condition_at_receipt"
+                                   required="state == 'dispatched'"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tool_transfer" model="ir.actions.act_window">
+        <field name="name">Tool Transfers</field>
+        <field name="res_model">buruuj.tool.transfer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

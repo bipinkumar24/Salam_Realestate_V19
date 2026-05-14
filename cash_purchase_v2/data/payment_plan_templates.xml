@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- ── Full Upfront ── -->
+    <record id="template_full_upfront" model="cash.payment.plan.template">
+        <field name="name">Full Payment Upfront</field>
+        <field name="plan_type">full</field>
+        <field name="description">100% of the purchase price due on booking/contract signing.</field>
+    </record>
+    <record id="tl_full_1" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_full_upfront"/>
+        <field name="sequence">10</field>
+        <field name="name">Full Payment — Due on Booking</field>
+        <field name="percentage">100.0</field>
+        <field name="trigger_type">on_booking</field>
+        <field name="offset_value">0</field>
+    </record>
+
+    <!-- ── Standard Instalment ── -->
+    <record id="template_standard_instalment" model="cash.payment.plan.template">
+        <field name="name">Standard 3-Instalment Plan</field>
+        <field name="plan_type">instalment</field>
+        <field name="description">30% on booking, 40% at 6 months, 30% on handover.</field>
+    </record>
+    <record id="tl_inst_1" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_standard_instalment"/>
+        <field name="sequence">10</field>
+        <field name="name">Booking Deposit (30%)</field>
+        <field name="percentage">30.0</field>
+        <field name="trigger_type">on_booking</field>
+        <field name="offset_value">0</field>
+    </record>
+    <record id="tl_inst_2" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_standard_instalment"/>
+        <field name="sequence">20</field>
+        <field name="name">Progress Payment (40%)</field>
+        <field name="percentage">40.0</field>
+        <field name="trigger_type">months</field>
+        <field name="offset_value">6</field>
+    </record>
+    <record id="tl_inst_3" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_standard_instalment"/>
+        <field name="sequence">30</field>
+        <field name="name">Final Payment on Handover (30%)</field>
+        <field name="percentage">30.0</field>
+        <field name="trigger_type">on_handover</field>
+        <field name="offset_value">18</field>
+    </record>
+
+    <!-- ── Extended 4-Instalment ── -->
+    <record id="template_extended_instalment" model="cash.payment.plan.template">
+        <field name="name">Extended 4-Instalment Plan</field>
+        <field name="plan_type">instalment</field>
+        <field name="description">20% booking, 30% at 6 months, 30% at 12 months, 20% on handover.</field>
+    </record>
+    <record id="tl_ext_1" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_extended_instalment"/>
+        <field name="sequence">10</field>
+        <field name="name">Booking Deposit (20%)</field>
+        <field name="percentage">20.0</field>
+        <field name="trigger_type">on_booking</field>
+        <field name="offset_value">0</field>
+    </record>
+    <record id="tl_ext_2" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_extended_instalment"/>
+        <field name="sequence">20</field>
+        <field name="name">2nd Instalment (30%) — 6 Months</field>
+        <field name="percentage">30.0</field>
+        <field name="trigger_type">months</field>
+        <field name="offset_value">6</field>
+    </record>
+    <record id="tl_ext_3" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_extended_instalment"/>
+        <field name="sequence">30</field>
+        <field name="name">3rd Instalment (30%) — 12 Months</field>
+        <field name="percentage">30.0</field>
+        <field name="trigger_type">months</field>
+        <field name="offset_value">12</field>
+    </record>
+    <record id="tl_ext_4" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_extended_instalment"/>
+        <field name="sequence">40</field>
+        <field name="name">Final Payment on Handover (20%)</field>
+        <field name="percentage">20.0</field>
+        <field name="trigger_type">on_handover</field>
+        <field name="offset_value">24</field>
+    </record>
+
+    <!-- ── Construction-Linked ── -->
+    <record id="template_construction" model="cash.payment.plan.template">
+        <field name="name">Standard Construction-Linked Plan</field>
+        <field name="plan_type">construction</field>
+        <field name="description">5 milestone payments linked to construction progress over 24 months.</field>
+    </record>
+    <record id="tl_con_1" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_construction"/>
+        <field name="sequence">10</field>
+        <field name="name">Booking / Contract Signing (10%)</field>
+        <field name="percentage">10.0</field>
+        <field name="trigger_type">on_booking</field>
+        <field name="offset_value">0</field>
+        <field name="milestone_description">Contract execution</field>
+    </record>
+    <record id="tl_con_2" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_construction"/>
+        <field name="sequence">20</field>
+        <field name="name">Foundation Completion (20%)</field>
+        <field name="percentage">20.0</field>
+        <field name="trigger_type">milestone</field>
+        <field name="offset_value">4</field>
+        <field name="milestone_description">Foundation slab complete</field>
+    </record>
+    <record id="tl_con_3" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_construction"/>
+        <field name="sequence">30</field>
+        <field name="name">Structure 50% Complete (30%)</field>
+        <field name="percentage">30.0</field>
+        <field name="trigger_type">milestone</field>
+        <field name="offset_value">10</field>
+        <field name="milestone_description">Floors to mid-level complete</field>
+    </record>
+    <record id="tl_con_4" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_construction"/>
+        <field name="sequence">40</field>
+        <field name="name">Structure 100% Complete (25%)</field>
+        <field name="percentage">25.0</field>
+        <field name="trigger_type">milestone</field>
+        <field name="offset_value">16</field>
+        <field name="milestone_description">Full structure complete, MEP roughed in</field>
+    </record>
+    <record id="tl_con_5" model="cash.payment.plan.template.line">
+        <field name="template_id" ref="template_construction"/>
+        <field name="sequence">50</field>
+        <field name="name">Handover / Snag Resolution (15%)</field>
+        <field name="percentage">15.0</field>
+        <field name="trigger_type">on_handover</field>
+        <field name="offset_value">24</field>
+        <field name="milestone_description">Unit handed over to buyer — all snags resolved</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_investment_app_officer,investment.application.officer,model_property_investment_application,group_credit_officer,1,1,1,0
+access_investment_app_manager,investment.application.manager,model_property_investment_application,group_credit_manager,1,1,1,1
+access_investment_liability_officer,investment.liability.officer,model_property_investment_liability,group_credit_officer,1,1,1,0
+access_investment_liability_manager,investment.liability.manager,model_property_investment_liability,group_credit_manager,1,1,1,1
+access_investment_collateral_officer,investment.collateral.officer,model_property_investment_collateral,group_credit_officer,1,1,1,0
+access_investment_collateral_manager,investment.collateral.manager,model_property_investment_collateral,group_credit_manager,1,1,1,1
+access_property_sector_officer,property.sector.officer,model_property_sector,group_credit_officer,1,0,0,0
+access_property_sector_manager,property.sector.manager,model_property_sector,group_credit_manager,1,1,1,1

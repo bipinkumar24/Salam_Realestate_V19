@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_construction_project_contractor_inherit" model="ir.ui.view">
+        <field name="name">salaam.construction.project.contractor.inherit</field>
+        <field name="model">salaam.construction.project</field>
+        <field name="inherit_id" ref="salaam_construction_mgmt.view_construction_project_form" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_open_site_instructions" type="object" class="oe_stat_button" icon="fa-file-text">
+                    <div class="o_stat_info">
+                        <field name="si_count" class="o_stat_value" /><span class="o_stat_text">Site Instructions</span></div>
+                </button>
+                <field name="ncr_count" invisible="1" />
+                <button name="action_open_ncrs" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" invisible="ncr_count == 0">
+                    <div class="o_stat_info">
+                        <field name="open_ncr_count" class="o_stat_value" />
+                        <span class="o_stat_text">Open NCRs</span>
+                    </div>
+                </button>
+                <button name="action_open_eots" type="object" class="oe_stat_button" icon="fa-clock-o" invisible="eot_count == 0">
+                    <div class="o_stat_info">
+                        <field name="eot_count" class="o_stat_value" /><span class="o_stat_text">EOT Claims</span></div>
+                </button>
+                <button name="action_open_programmes" type="object" class="oe_stat_button" icon="fa-bar-chart">
+                    <div class="o_stat_info">
+                        <field name="programme_count" class="o_stat_value" /><span class="o_stat_text">Programmes</span></div>
+                </button>
+            </div>
+        </field>
+    </record>
+</odoo>

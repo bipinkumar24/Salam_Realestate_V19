@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ts_list" model="ir.ui.view">
+        <field name="name">buruuj.timesheet.list</field>
+        <field name="model">buruuj.timesheet</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'paid'"
+                  decoration-info="state == 'approved'"
+                  decoration-warning="state == 'submitted'">
+                <field name="date"/>
+                <field name="worker_id"/>
+                <field name="trade_id" optional="show"/>
+                <field name="project_id"/>
+                <field name="phase_id" optional="show"/>
+                <field name="cbs_id" optional="show"/>
+                <field name="activity"/>
+                <field name="regular_hours" sum="Regular"/>
+                <field name="overtime_hours" sum="OT"/>
+                <field name="total_hours" sum="Total"/>
+                <field name="total_cost" sum="Cost"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ts_form" model="ir.ui.view">
+        <field name="name">buruuj.timesheet.form</field>
+        <field name="model">buruuj.timesheet</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'submitted'"
+                            groups="buruuj_base.group_buruuj_pm"/>
+                    <button name="action_back_to_draft" string="Back to Draft"
+                            type="object"
+                            invisible="state in ('draft','paid')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="worker_id"/>
+                            <field name="trade_id" readonly="1"/>
+                            <field name="employment_type" readonly="1"/>
+                            <field name="date"/>
+                            <field name="activity"/>
+                        </group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="phase_id"/>
+                            <field name="cbs_id"/>
+                            <field name="subcontract_id"/>
+                            <field name="workorder_id"/>
+                        </group>
+                    </group>
+                    <group string="Hours &amp; Cost">
+                        <group>
+                            <field name="regular_hours"/>
+                            <field name="overtime_hours"/>
+                            <field name="total_hours"/>
+                        </group>
+                        <group>
+                            <field name="hourly_rate"/>
+                            <field name="daily_rate"/>
+                            <field name="regular_cost" readonly="1"/>
+                            <field name="overtime_cost" readonly="1"/>
+                            <field name="total_cost" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group invisible="not wage_run_id">
+                        <field name="wage_run_id" readonly="1"/>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ts_search" model="ir.ui.view">
+        <field name="name">buruuj.timesheet.search</field>
+        <field name="model">buruuj.timesheet</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="worker_id"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="cbs_id"/>
+                <field name="date"/>
+                <filter string="Draft" name="draft"
+                        domain="[('state','=','draft')]"/>
+                <filter string="To Approve" name="submitted"
+                        domain="[('state','=','submitted')]"/>
+                <filter string="Approved" name="approved"
+                        domain="[('state','=','approved')]"/>
+                <filter string="This Week" name="week"
+                        domain="[('date','&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Worker" name="g_worker"
+                            context="{'group_by': 'worker_id'}"/>
+                    <filter string="Trade" name="g_trade"
+                            context="{'group_by': 'trade_id'}"/>
+                    <filter string="Date" name="g_date"
+                            context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_ts" model="ir.actions.act_window">
+        <field name="name">Timesheets</field>
+        <field name="res_model">buruuj.timesheet</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_ts_pending" model="ir.actions.act_window">
+        <field name="name">Timesheets To Approve</field>
+        <field name="res_model">buruuj.timesheet</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','submitted')]</field>
+    </record>
+</odoo>

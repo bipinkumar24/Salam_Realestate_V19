@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_dev_contract_musharaka_form" model="ir.ui.view">
+        <field name="name">dev.contract.musharaka.form</field>
+        <field name="model">dev.contract.musharaka</field>
+        <field name="arch" type="xml">
+            <form string="Diminishing Musharaka Contract">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_under_review" string="Under Review" type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_approve" string="Board Approve" type="object" class="btn-primary"
+                            groups="salaam_dev_contracts.group_dev_contracts_admin"
+                            invisible="state != 'under_review'"/>
+                    <button name="action_sign" string="Mark Signed" type="object"
+                            invisible="state != 'approved'"/>
+                    <button name="action_activate" string="Activate" type="object"
+                            invisible="state != 'signed'"/>
+                    <button name="action_complete" string="Complete" type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_certify_sharia" string="☽ Certify Sharia" type="object"
+                            groups="salaam_dev_contracts.group_dev_contracts_sharia"
+                            invisible="sharia_certified"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ['completed','cancelled']"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,under_review,approved,signed,active,completed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_milestones" type="object"
+                                class="oe_stat_button" icon="fa-flag">
+                            <field name="milestone_count" widget="statinfo" string="Milestones"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3>Diminishing Musharaka — Joint Venture</h3>
+                    </div>
+                    <group>
+                        <group string="Parties">
+                            <field name="partner_id"/>
+                            <field name="officer_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="property_id"/>
+                        </group>
+                        <group string="Sharia">
+                            <field name="sharia_required" readonly="1"/>
+                            <field name="sharia_certified" readonly="1"/>
+                            <field name="sharia_ref"/>
+                            <field name="aaoifi_standard_ref"/>
+                            <field name="annual_sharia_audit" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Partnership Structure">
+                            <group>
+                                <group string="Project Value">
+                                    <field name="currency_id"/>
+                                    <field name="total_project_value"/>
+                                    <field name="contract_value"/>
+                                    <field name="date_start"/>
+                                    <field name="date_end"/>
+                                </group>
+                                <group string="Ownership Shares">
+                                    <field name="bank_share_pct"/>
+                                    <field name="partner_share_pct" readonly="1"/>
+                                    <field name="bank_contribution" readonly="1"/>
+                                    <field name="partner_contribution" readonly="1"/>
+                                    <field name="current_bank_share_pct" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Profit Distribution">
+                                    <field name="profit_distribution_basis"/>
+                                    <field name="agreed_profit_ratio_bank"
+                                           invisible="profit_distribution_basis != 'agreed_ratio'" required="profit_distribution_basis == 'agreed_ratio'"/>
+                                </group>
+                                <group string="Management">
+                                    <field name="management_party"/>
+                                </group>
+                            </group>
+                            <separator string="Exit Mechanism"/>
+                            <field name="exit_mechanism"/>
+                        </page>
+                        <page string="Redemption Schedule">
+                            <field name="redemption_ids">
+                                <list editable="bottom"
+                                      decoration-success="state=='paid'"
+                                      decoration-warning="state=='due'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="planned_date"/>
+                                    <field name="actual_date"/>
+                                    <field name="tranche_pct"/>
+                                    <field name="tranche_amount" readonly="1"/>
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Milestones">
+                            <field name="milestone_ids" context="{'default_res_model': 'dev.contract.musharaka', 'default_res_id': id}">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="planned_date"/>
+                                    <field name="payment_amount"/>
+                                    <field name="state"/>
+                                    <field name="res_model" invisible="1"/>
+                                    <field name="res_id" invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Clauses">
+                            <field name="clause_ids" widget="many2many_tags"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="note"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_dev_contract_musharaka_tree" model="ir.ui.view">
+        <field name="name">dev.contract.musharaka.list</field>
+        <field name="model">dev.contract.musharaka</field>
+        <field name="arch" type="xml">
+            <list string="Musharaka Contracts"
+                  decoration-success="state in ('signed','active','completed')"
+                  decoration-warning="state=='under_review'"
+                  decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="property_id"/>
+                <field name="total_project_value" sum="Total"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="bank_share_pct"/>
+                <field name="current_bank_share_pct"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="sharia_certified" widget="boolean_toggle"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('signed','active','completed')"
+                       decoration-warning="state=='under_review'"
+                       decoration-danger="state=='cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_dev_contract_musharaka" model="ir.actions.act_window">
+        <field name="name">Musharaka Contracts</field>
+        <field name="res_model">dev.contract.musharaka</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="context">{'default_contract_type': 'musharaka'}</field>
+    </record>
+
+</odoo>

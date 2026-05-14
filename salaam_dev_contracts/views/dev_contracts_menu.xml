@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TOP LEVEL MENU -->
+    <menuitem id="menu_dev_contracts_root"
+              name="Developer Contracts"
+              sequence="85"
+              web_icon="salaam_dev_contracts,static/description/icon.png"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <!-- CONTRACT MENUS -->
+    <menuitem id="menu_dev_contracts_all"
+              name="All Contracts"
+              parent="menu_dev_contracts_root"
+              sequence="10"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <menuitem id="menu_dev_contract_sale"
+              name="Sale Contracts"
+              parent="menu_dev_contracts_root"
+              action="action_dev_contract_sale"
+              sequence="20"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <menuitem id="menu_dev_contract_istisna"
+              name="Istisna (Construction)"
+              parent="menu_dev_contracts_root"
+              action="action_dev_contract_istisna"
+              sequence="30"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <menuitem id="menu_dev_contract_ijara"
+              name="Ijara (Lease)"
+              parent="menu_dev_contracts_root"
+              action="action_dev_contract_ijara"
+              sequence="40"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <menuitem id="menu_dev_contract_musharaka"
+              name="Musharaka (JV)"
+              parent="menu_dev_contracts_root"
+              action="action_dev_contract_musharaka"
+              sequence="50"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <menuitem id="menu_dev_contract_subcontractor"
+              name="Subcontractor Agreements"
+              parent="menu_dev_contracts_root"
+              action="action_dev_contract_subcontractor"
+              sequence="60"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <menuitem id="menu_dev_contract_consultancy"
+              name="Consultancy Agreements"
+              parent="menu_dev_contracts_root"
+              action="action_dev_contract_consultancy"
+              sequence="70"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <menuitem id="menu_dev_contract_milestones"
+              name="All Milestones"
+              parent="menu_dev_contracts_root"
+              action="action_dev_contract_milestone_all"
+              sequence="80"
+              groups="salaam_dev_contracts.group_dev_contracts_viewer"/>
+
+    <!-- CONFIGURATION -->
+    <menuitem id="menu_dev_contracts_config"
+              name="Configuration"
+              parent="menu_dev_contracts_root"
+              sequence="100"
+              groups="salaam_dev_contracts.group_dev_contracts_admin"/>
+
+    <menuitem id="menu_dev_contracts_clause_library"
+              name="Clause Library"
+              parent="menu_dev_contracts_config"
+              action="action_dev_contract_clause"
+              sequence="10"
+              groups="salaam_dev_contracts.group_dev_contracts_admin"/>
+
+</odoo>

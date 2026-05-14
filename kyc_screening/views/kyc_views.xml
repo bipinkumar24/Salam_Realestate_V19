@@ -1,0 +1,574 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════
+         1. KYC WATCHLIST ENTRY — list + search views
+    ════════════════════════════════════════════════════════ -->
+    <record id="view_kyc_watchlist_entry_list" model="ir.ui.view">
+        <field name="name">kyc.watchlist.entry.list</field>
+        <field name="model">kyc.watchlist.entry</field>
+        <field name="arch" type="xml">
+            <list string="KYC Watchlist">
+                <field name="name"/>
+                <field name="id_number"/>
+                <field name="nationality"/>
+                <field name="list_name"/>
+                <field name="reason"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_kyc_watchlist_entry_search" model="ir.ui.view">
+        <field name="name">kyc.watchlist.entry.search</field>
+        <field name="model">kyc.watchlist.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Name"/>
+                <field name="id_number" string="ID Number"/>
+                <field name="nationality"/>
+                <field name="list_name"/>
+                <filter string="Active" name="active" domain="[('active','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_kyc_watchlist_entries" model="ir.actions.act_window">
+        <field name="name">Watchlist Entries</field>
+        <field name="res_model">kyc.watchlist.entry</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════
+         1b. BANK APPROVED LIST — list + search views
+    ════════════════════════════════════════════════════════ -->
+    <record id="view_kyc_approved_entry_list" model="ir.ui.view">
+        <field name="name">kyc.approved.entry.list</field>
+        <field name="model">kyc.approved.entry</field>
+        <field name="arch" type="xml">
+            <list string="Bank Approved List">
+                <field name="name"/>
+                <field name="id_number"/>
+                <field name="nationality"/>
+                <field name="approved_by"/>
+                <field name="approval_ref"/>
+                <field name="approval_date"/>
+                <field name="category"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_kyc_approved_entry_search" model="ir.ui.view">
+        <field name="name">kyc.approved.entry.search</field>
+        <field name="model">kyc.approved.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"         string="Name"/>
+                <field name="id_number"    string="ID Number"/>
+                <field name="nationality"/>
+                <field name="approved_by"/>
+                <field name="category"/>
+                <filter string="Active" name="active" domain="[('active','=',True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_kyc_approved_entries" model="ir.actions.act_window">
+        <field name="name">Bank Approved List</field>
+        <field name="res_model">kyc.approved.entry</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════
+         2. KYC SYNC STATUS — form view
+    ════════════════════════════════════════════════════════ -->
+    <record id="view_kyc_watchlist_sync_form" model="ir.ui.view">
+        <field name="name">kyc.watchlist.sync.form</field>
+        <field name="model">kyc.watchlist.sync</field>
+        <field name="arch" type="xml">
+            <form string="KYC Watchlist Sync">
+                <header>
+                    <button name="action_manual_sync"
+                            string="Sync Now"
+                            type="object"
+                            class="btn-primary"
+                            confirm="Refresh the watchlist from Google Drive / Dropbox now?"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>KYC Watchlist Sync Status</h1>
+                    </div>
+                    <group>
+                        <group string="Watchlist (Sanctions List)">
+                            <field name="last_sync"    readonly="1"/>
+                            <field name="last_source"  readonly="1"/>
+                            <field name="entry_count"  readonly="1"/>
+                            <field name="stale"        readonly="1" widget="boolean"
+                                   decoration-warning="stale == True"/>
+                            <field name="last_error"   readonly="1" widget="text"
+                                   invisible="not last_error"/>
+                        </group>
+                        <group string="Bank Approved List">
+                            <field name="approved_last_sync"   readonly="1"/>
+                            <field name="approved_last_source" readonly="1"/>
+                            <field name="approved_count"       readonly="1"/>
+                            <field name="approved_stale"       readonly="1" widget="boolean"
+                                   decoration-warning="approved_stale == True"/>
+                            <field name="approved_last_error"  readonly="1" widget="text"
+                                   invisible="not approved_last_error"/>
+                        </group>
+                    </group>
+                    <div class="alert alert-warning" role="alert" invisible="not stale">
+                        <b>⚠ Watchlist Stale</b> — Screening uses the last cached watchlist.
+                        Check your Watchlist sync source settings and click <b>Sync Now</b>.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not approved_stale">
+                        <b>⚠ Approved List Stale</b> — Approved list screening uses cached data.
+                        Check your Approved List sync source settings and click <b>Sync Now</b>.
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="stale">
+                        <b>✓ Both lists are live.</b>
+                        Auto-sync runs every 30 minutes. Use <b>Sync Now</b> after urgent updates.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_kyc_sync_status" model="ir.actions.act_window">
+        <field name="name">Sync Status</field>
+        <field name="res_model">kyc.watchlist.sync</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════
+         3. MENUS
+    ════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_kyc_root"
+              name="KYC Screening"
+              sequence="99"
+              groups="bank_realestate_collab.group_bre_bank_officer"/>
+
+    <menuitem id="menu_kyc_sync"
+              name="Sync Status"
+              parent="menu_kyc_root"
+              action="action_kyc_sync_status"
+              sequence="1"/>
+
+    <menuitem id="menu_kyc_entries"
+              name="Watchlist Entries (Sanctions)"
+              parent="menu_kyc_root"
+              action="action_kyc_watchlist_entries"
+              sequence="2"/>
+
+    <menuitem id="menu_kyc_approved"
+              name="Bank Approved List"
+              parent="menu_kyc_root"
+              action="action_kyc_approved_entries"
+              sequence="3"/>
+
+    <!-- ═══════════════════════════════════════════════════
+         4. BRE APPLICATION FORM — KYC injection
+    ════════════════════════════════════════════════════════ -->
+    <record id="view_bre_application_kyc" model="ir.ui.view">
+        <field name="name">bre.application.form.kyc</field>
+        <field name="model">bre.customer.application</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_customer_application_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Declare KYC fields so attrs work throughout the inherited view -->
+            <xpath expr="//field[@name='name']" position="before">
+                <field name="kyc_status" invisible="1"/>
+                <field name="kyc_last_run" invisible="1"/>
+                <field name="kyc_reference" invisible="1"/>
+                <field name="kyc_result_summary" invisible="1"/>
+            </xpath>
+
+            <!-- KYC button in header -->
+            <xpath expr="//header/button[last()]" position="after">
+                <button name="action_run_kyc_screening"
+                        string="🔍 Run KYC Screening"
+                        type="object"
+                        class="btn-warning"
+                        confirm="Run KYC/AML screening against the internal watchlist for this applicant?"/>
+            </xpath>
+
+            <!-- KYC status alert banner below header -->
+            <xpath expr="//sheet//group[1]" position="before">
+                <div class="alert alert-info mb-2" role="alert" invisible="kyc_status == 'pending'">
+                    <span invisible="kyc_status != 'cleared'">
+                        ✅ <b>KYC Status: CLEARED</b>
+                    </span>
+                    <span invisible="kyc_status != 'pre_approved'">
+                        🟢 <b>KYC Status: PRE-APPROVED — Found in Bank Approved List</b>
+                    </span>
+                    <span invisible="kyc_status != 'hit'">
+                        ⚠️ <b>KYC Status: HIT — Review Required</b>
+                    </span>
+                    <span invisible="kyc_status != 'error'">
+                        ❌ <b>KYC Status: Error — Check chatter for details</b>
+                    </span>
+                    <field name="kyc_last_run" readonly="1"
+                           class="ml-3 text-muted small"
+                           invisible="not kyc_last_run"/>
+                </div>
+            </xpath>
+
+            <!-- KYC Tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="KYC Screening" name="kyc_tab">
+                    <group string="Screening Status">
+                        <field name="kyc_status" readonly="1" widget="badge"
+                               decoration-success="kyc_status in ('cleared','pre_approved')"
+                               decoration-warning="kyc_status == 'hit'"
+                               decoration-danger="kyc_status == 'error'"
+                               decoration-muted="kyc_status == 'pending'"/>
+                        <field name="kyc_last_run" readonly="1"/>
+                        <field name="kyc_reference" readonly="1"/>
+                    </group>
+                    <group string="Last Result">
+                        <field name="kyc_result_summary" readonly="1" nolabel="1"
+                               widget="text"
+                               style="font-family:monospace;font-size:12px"/>
+                    </group>
+                    <div class="mt-3">
+                        <button name="action_run_kyc_screening"
+                                string="🔍 Run KYC Screening Now"
+                                type="object"
+                                class="btn-primary"
+                                confirm="Run KYC/AML screening against the internal watchlist?"/>
+                    </div>
+                    <p class="text-muted mt-2">
+                        <i>Screening uses the internal Odoo watchlist, auto-synced every 30 minutes
+                        from Google Drive (primary) and Dropbox (fallback).
+                        The officer retains full decision authority regardless of the result.</i>
+                    </p>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════
+         5. FIVE CS APPRAISAL — KYC injection
+    ════════════════════════════════════════════════════════ -->
+    <record id="view_investment_appraisal_kyc" model="ir.ui.view">
+        <field name="name">investment.appraisal.form.kyc</field>
+        <field name="model">property.investment.application</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_investment_application_form_bre_bridge"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="inside">
+                <button name="action_run_kyc_screening"
+                        string="🔍 Run KYC Screening"
+                        type="object"
+                        class="btn-warning"
+                        confirm="Run KYC/AML screening for the linked applicant?"/>
+            </xpath>
+
+            <xpath expr="//page[@name='tab_character']//group[last()]" position="after">
+                <separator string="KYC / AML Watchlist Screening"/>
+                <group>
+                    <field name="kyc_status" readonly="1" widget="badge"
+                           decoration-success="kyc_status in ('cleared','pre_approved')"
+                           decoration-warning="kyc_status == 'hit'"
+                           decoration-danger="kyc_status == 'error'"
+                           decoration-muted="kyc_status == 'pending'"/>
+                    <field name="kyc_last_run" readonly="1"/>
+                </group>
+                <group>
+                    <field name="kyc_result_summary" readonly="1" nolabel="1"
+                           widget="text" style="font-family:monospace;font-size:12px"/>
+                </group>
+                <div class="mt-2">
+                    <button name="action_run_kyc_screening"
+                            string="🔍 Run KYC Screening"
+                            type="object" class="btn-primary btn-sm"
+                            confirm="Run KYC/AML screening for the linked applicant?"/>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════
+         6. APPLICATION LIST — KYC status column
+    ════════════════════════════════════════════════════════ -->
+    <record id="view_bre_application_list_kyc" model="ir.ui.view">
+        <field name="name">bre.application.list.kyc</field>
+        <field name="model">bre.customer.application</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_customer_application_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[last()]" position="after">
+                <field name="kyc_status" optional="show"
+                       decoration-success="kyc_status == 'cleared'"
+                       decoration-warning="kyc_status == 'hit'"
+                       decoration-danger="kyc_status == 'error'"
+                       decoration-muted="kyc_status == 'pending'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════
+         7. SETTINGS — KYC configuration panel
+    ════════════════════════════════════════════════════════ -->
+    <record id="res_config_settings_kyc_view" model="ir.ui.view">
+        <field name="name">res.config.settings.kyc</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="KYC / AML Watchlist" string="KYC / AML Watchlist" name="kyc_screening_settings">
+                        
+                <div class="app_settings_block" id="kyc_screening_settings"
+                     data-string="KYC Screening" string="KYC / AML Watchlist">
+                    <h2>KYC / AML Watchlist Screening</h2>
+                    <p class="text-muted">
+                        Watchlist is synced automatically every 30 minutes in priority order:
+                        <b>Google Sheets → Google Drive CSV → Dropbox → Dropbox Sandbox → Stale Cache</b>.
+                        Configure at least one source below.
+                    </p>
+
+                    <!-- ── Google Service Account (shared) ── -->
+                    <h3 class="mt-3">Google Authentication (shared by Sheets &amp; Drive)</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_gdrive_sa_path"
+                                       string="Service Account JSON Path"/>
+                                <div class="text-muted mb-2">
+                                    Absolute path on the Odoo server to the Google service
+                                    account JSON key file. Used for both Sheets and Drive.
+                                </div>
+                                <field name="kyc_gdrive_sa_path"
+                                       placeholder="/etc/odoo/gdrive_kyc_sa.json"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Source 1: Google Sheets ── -->
+                    <h3 class="mt-3" style="color:#17A589">⭐ Source 1 — Google Sheets (Primary)</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_gsheets_spreadsheet_id"
+                                       string="Spreadsheet ID"/>
+                                <div class="text-muted mb-2">
+                                    From the URL:
+                                    <code>docs.google.com/spreadsheets/d/<b>ID</b>/edit</code>
+                                </div>
+                                <field name="kyc_gsheets_spreadsheet_id"
+                                       placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgVE2upms"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_gsheets_sheet_name"
+                                       string="Sheet / Tab Name"/>
+                                <div class="text-muted mb-2">
+                                    Name of the tab containing the watchlist (e.g. Sheet1, Watchlist).
+                                </div>
+                                <field name="kyc_gsheets_sheet_name"
+                                       placeholder="Sheet1"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Source 2: Google Drive CSV ── -->
+                    <h3 class="mt-3">Source 2 — Google Drive CSV (Fallback)</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_gdrive_file_id"
+                                       string="Google Drive CSV File ID"/>
+                                <div class="text-muted mb-2">
+                                    File ID from:
+                                    <code>drive.google.com/file/d/<b>FILE_ID</b>/view</code>
+                                </div>
+                                <field name="kyc_gdrive_file_id"
+                                       placeholder="1A2B3C4D5E6F..."/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Source 3: Dropbox ── -->
+                    <h3 class="mt-3">Source 3 — Dropbox</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_dropbox_token"
+                                       string="Dropbox Access Token"/>
+                                <div class="text-muted mb-2">
+                                    Long-lived token from
+                                    <a href="https://www.dropbox.com/developers/apps"
+                                       target="_blank">Dropbox App Console</a>.
+                                </div>
+                                <field name="kyc_dropbox_token"
+                                       password="True"
+                                       placeholder="sl.xxxxxxxx"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_dropbox_path"
+                                       string="Dropbox File Path"/>
+                                <field name="kyc_dropbox_path"
+                                       placeholder="/kyc/watchlist.csv"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Source 4: Dropbox Sandbox ── -->
+                    <h3 class="mt-3">Source 4 — Dropbox Sandbox</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_dropbox_sandbox_token"
+                                       string="Sandbox Access Token"/>
+                                <div class="text-muted mb-2">
+                                    Access token for the Dropbox sandbox/test app.
+                                </div>
+                                <field name="kyc_dropbox_sandbox_token"
+                                       password="True"
+                                       placeholder="sl.sandbox_xxxxxxxx"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_dropbox_sandbox_path"
+                                       string="Sandbox File Path"/>
+                                <field name="kyc_dropbox_sandbox_path"
+                                       placeholder="/watchlist.csv"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_dropbox_sandbox_namespace"
+                                       string="Namespace ID (optional)"/>
+                                <div class="text-muted mb-2">
+                                    Team namespace ID for Dropbox team folders. Leave blank for personal sandbox.
+                                </div>
+                                <field name="kyc_dropbox_sandbox_namespace"
+                                       placeholder="123456789"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ── Matching ── -->
+                    <h3 class="mt-3">Matching Settings (applies to both lists)</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_match_threshold"
+                                       string="Name Match Threshold"/>
+                                <div class="text-muted mb-2">
+                                    Minimum similarity 0.0–1.0.
+                                    Default 0.7 = 70% token overlap. Lower = more sensitive.
+                                </div>
+                                <field name="kyc_match_threshold"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ═══════════════════════════════════════════
+                         BANK APPROVED LIST — separate sync sources
+                    ════════════════════════════════════════════════ -->
+                    <h2 class="mt-4" style="color:#0D2B45">Bank Approved List Sources</h2>
+                    <p class="text-muted">
+                        Separate from the Watchlist. Uses the same Google service account
+                        (configured above). Configure at least one source.
+                    </p>
+
+                    <!-- Approved — Google Sheets -->
+                    <h3 class="mt-3" style="color:#17A589">⭐ Source 1 — Google Sheets (Primary)</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_gsheets_id"
+                                       string="Approved List Spreadsheet ID"/>
+                                <div class="text-muted mb-2">
+                                    Spreadsheet ID for the bank approved clients sheet.
+                                </div>
+                                <field name="kyc_approved_gsheets_id"
+                                       placeholder="1BxiMVs0XRA5nFMdKvBdBZjgm..."/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_gsheets_sheet"
+                                       string="Sheet / Tab Name"/>
+                                <field name="kyc_approved_gsheets_sheet"
+                                       placeholder="Approved"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approved — Google Drive -->
+                    <h3 class="mt-3">Source 2 — Google Drive CSV (Fallback)</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_gdrive_id"
+                                       string="Approved List Drive File ID"/>
+                                <field name="kyc_approved_gdrive_id"
+                                       placeholder="1A2B3C4D5E6F..."/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approved — Dropbox -->
+                    <h3 class="mt-3">Source 3 — Dropbox</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_dropbox_token"
+                                       string="Approved List Dropbox Token"/>
+                                <field name="kyc_approved_dropbox_token"
+                                       password="True" placeholder="sl.xxxxxxxx"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_dropbox_path"
+                                       string="Approved List Dropbox Path"/>
+                                <field name="kyc_approved_dropbox_path"
+                                       placeholder="/approved_list.csv"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Approved — Dropbox Sandbox -->
+                    <h3 class="mt-3">Source 4 — Dropbox Sandbox</h3>
+                    <div class="row mt8 o_settings_container">
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_sbx_token"
+                                       string="Sandbox Token"/>
+                                <field name="kyc_approved_sbx_token"
+                                       password="True" placeholder="sl.sandbox_xxxxxxxx"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_sbx_path"
+                                       string="Sandbox File Path"/>
+                                <field name="kyc_approved_sbx_path"
+                                       placeholder="/approved_list.csv"/>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box">
+                            <div class="o_setting_right_pane">
+                                <label for="kyc_approved_sbx_ns"
+                                       string="Namespace ID (optional)"/>
+                                <field name="kyc_approved_sbx_ns"
+                                       placeholder="123456789"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </app>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

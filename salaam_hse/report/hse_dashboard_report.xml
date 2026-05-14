@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_hse_dashboard">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>HSE Dashboard Report</h2>
+            <h3>Project: <t t-esc="o.name"/></h3>
+            <table class="table table-sm">
+              <tr><td><b>Total Incidents</b></td><td><t t-esc="o.hse_incident_count"/></td>
+                  <td><b>LTIs</b></td><td><t t-esc="o.hse_lti_count"/></td></tr>
+              <tr><td><b>RAMS Approved</b></td><td><t t-esc="o.hse_rams_count"/></td>
+                  <td><b>Pending RAMS</b></td><td><t t-esc="o.hse_open_rams_count"/></td></tr>
+              <tr><td><b>Toolbox Talks</b></td><td><t t-esc="o.hse_toolbox_count"/></td>
+                  <td><b>HSE Audits</b></td><td><t t-esc="o.hse_audit_count"/></td></tr>
+            </table>
+            <h4>Recent Incidents</h4>
+            <table class="table table-bordered table-sm">
+              <thead><tr><th>Ref</th><th>Type</th><th>Date</th><th>Contractor</th><th>Status</th></tr></thead>
+              <tbody>
+                <t t-foreach="o.hse_incident_ids[:10]" t-as="inc">
+                  <tr><td><t t-esc="inc.name"/></td><td><t t-esc="inc.incident_type"/></td>
+                  <td><t t-esc="inc.incident_datetime"/></td><td><t t-esc="inc.contractor_id.name"/></td>
+                  <td><t t-esc="inc.state"/></td></tr>
+                </t>
+              </tbody>
+            </table>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_hse_dashboard" model="ir.actions.report">
+    <field name="name">HSE Dashboard Report</field><field name="model">salaam.construction.project</field>
+    <field name="report_type">qweb-pdf</field><field name="report_name">salaam_hse.report_hse_dashboard</field>
+    <field name="binding_model_id" ref="salaam_construction_mgmt.model_salaam_construction_project"/><field name="binding_type">report</field>
+  </record>
+</odoo>

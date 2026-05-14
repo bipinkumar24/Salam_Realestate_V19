@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+acc_portal_project,portal.project,buruuj_project.model_buruuj_phase,base.group_portal,1,0,0,0
+acc_portal_milestone,portal.milestone,buruuj_project.model_buruuj_milestone,base.group_portal,1,0,0,0
+acc_portal_ipc_line,portal.ipc.line,buruuj_ipc.model_buruuj_ipc_line,base.group_portal,1,0,0,0
+acc_portal_wo,portal.wo,buruuj_subcontractor.model_buruuj_workorder,base.group_portal,1,0,0,0
+acc_portal_sub,portal.sub,buruuj_subcontractor.model_buruuj_subcontract,base.group_portal,1,0,0,0
+acc_portal_bc,portal.bc,buruuj_subcontractor.model_buruuj_backcharge,base.group_portal,1,0,0,0
+acc_portal_score,portal.score,buruuj_subcontractor.model_buruuj_scorecard,base.group_portal,1,0,0,0
+acc_portal_rfi,portal.rfi,buruuj_site_ops.model_buruuj_rfi,base.group_portal,1,0,0,0
+acc_portal_drawing,portal.drawing,buruuj_quality.model_buruuj_drawing,base.group_portal,1,0,0,0
+acc_portal_ipc,portal.ipc,buruuj_ipc.model_buruuj_ipc,base.group_portal,1,0,0,0
+acc_portal_var,portal.var,buruuj_project.model_buruuj_variation,base.group_portal,1,0,0,0

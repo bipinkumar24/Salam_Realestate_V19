@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_site_report_form" model="ir.ui.view">
+        <field name="name">salaam.site.report.form</field>
+        <field name="model">salaam.site.report</field>
+        <field name="arch" type="xml">
+            <form string="Site Progress Report">
+                <header>
+                    <button name="action_submit" string="Submit Report"
+                            type="object" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve &amp; Update Progress"
+                            type="object" class="btn-primary"
+                            groups="salaam_construction_mgmt.group_construction_manager"
+                            invisible = "state != 'submitted'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Report Details">
+                            <field name="project_id"/>
+                            <field name="report_date"/>
+                            <field name="report_period"/>
+                            <field name="submitted_by"/>
+                            <field name="approved_by" readonly="1"/>
+                        </group>
+                        <group string="Site Conditions">
+                            <field name="weather_condition"/>
+                            <field name="workforce_total"/>
+                            <field name="overall_progress_reported"
+                                   widget="progressbar"/>
+                            <field name="previous_progress" readonly="1"/>
+                            <field name="progress_this_period" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Phase Progress">
+                            <field name="phase_progress_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="phase_id"/>
+                                    <field name="phase_type" readonly="1"/>
+                                    <field name="progress_previous" readonly="1"/>
+                                    <field name="progress_reported"/>
+                                    <field name="progress_delta" readonly="1"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Works This Period">
+                            <separator string="Works Completed"/>
+                            <field name="works_completed"/>
+                            <separator string="Works Planned Next Period"/>
+                            <field name="works_planned"/>
+                        </page>
+                        <page string="Issues &amp; Risks">
+                            <field name="issues_risks"/>
+                            <separator string="Site Instructions / Variation Orders"/>
+                            <field name="instructions_received"/>
+                            <separator string="HSE Notes"/>
+                            <field name="health_safety_notes"/>
+                        </page>
+                        <page string="Workforce &amp; Equipment">
+                            <group>
+                                <field name="workforce_breakdown"/>
+                                <field name="equipment_on_site"/>
+                                <field name="general_notes"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_site_report_list" model="ir.ui.view">
+        <field name="name">salaam.site.report.list</field>
+        <field name="model">salaam.site.report</field>
+        <field name="arch" type="xml">
+            <list string="Site Reports"
+                  decoration-success="state=='approved'"
+                  decoration-warning="state=='submitted'"
+                  decoration-muted="state=='draft'">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="report_date"/>
+                <field name="report_period"/>
+                <field name="weather_condition"/>
+                <field name="workforce_total"/>
+                <field name="previous_progress"/>
+                <field name="overall_progress_reported"/>
+                <field name="progress_this_period"/>
+                <field name="submitted_by"/>
+                <field name="state" widget="badge"
+                       decoration-success="state=='approved'"
+                       decoration-warning="state=='submitted'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_site_report" model="ir.actions.act_window">
+        <field name="name">Site Reports</field>
+        <field name="res_model">salaam.site.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

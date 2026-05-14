@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Application Stages -->
+        <record id="stage_new" model="bre.application.stage">
+            <field name="name">New Application</field>
+            <field name="sequence">10</field>
+            <field name="fold">False</field>
+            <field name="color">0</field>
+            <field name="stage_type">agent</field>
+        </record>
+
+        <record id="stage_confirmed" model="bre.application.stage">
+            <field name="name">Confirmed</field>
+            <field name="sequence">15</field>
+            <field name="fold">False</field>
+            <field name="is_confirmed">True</field>
+            <field name="color">10</field>
+            <field name="stage_type">agent</field>
+        </record>
+
+        <record id="stage_data_collection" model="bre.application.stage">
+            <field name="name">Data Collection</field>
+            <field name="sequence">20</field>
+            <field name="fold">False</field>
+            <field name="color">3</field>
+            <field name="stage_type">agent</field>
+        </record>
+
+        <record id="stage_document_gathering" model="bre.application.stage">
+            <field name="name">Document Gathering</field>
+            <field name="sequence">30</field>
+            <field name="fold">False</field>
+            <field name="color">4</field>
+            <field name="stage_type">agent</field>
+        </record>
+
+        <record id="stage_submitted_to_bank" model="bre.application.stage">
+            <field name="name">Submitted to Bank</field>
+            <field name="sequence">40</field>
+            <field name="fold">False</field>
+            <field name="color">6</field>
+            <field name="stage_type">shared</field>
+        </record>
+
+        <record id="stage_bank_review" model="bre.application.stage">
+            <field name="name">Bank Review</field>
+            <field name="sequence">50</field>
+            <field name="fold">False</field>
+            <field name="color">2</field>
+            <field name="stage_type">bank</field>
+        </record>
+
+        <record id="stage_sharia_review" model="bre.application.stage">
+            <field name="name">Sharia Review</field>
+            <field name="sequence">60</field>
+            <field name="fold">False</field>
+            <field name="color">5</field>
+            <field name="stage_type">bank</field>
+        </record>
+
+        <record id="stage_approved" model="bre.application.stage">
+            <field name="name">Approved</field>
+            <field name="sequence">70</field>
+            <field name="fold">False</field>
+            <field name="is_final">True</field>
+            <field name="color">10</field>
+            <field name="stage_type">shared</field>
+        </record>
+
+        <record id="stage_rejected" model="bre.application.stage">
+            <field name="name">Rejected</field>
+            <field name="sequence">80</field>
+            <field name="fold">True</field>
+            <field name="is_final">True</field>
+            <field name="color">1</field>
+            <field name="stage_type">shared</field>
+        </record>
+
+        <!-- Document Types -->
+        <record id="doctype_national_id" model="bre.document.type">
+            <field name="name">National ID / Passport</field>
+            <field name="code">ID</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">all</field>
+        </record>
+
+        <record id="doctype_salary_slip" model="bre.document.type">
+            <field name="name">Salary Slips (Last 3 months)</field>
+            <field name="code">SAL</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">employed</field>
+        </record>
+
+        <record id="doctype_bank_statement" model="bre.document.type">
+            <field name="name">Bank Statement (Last 6 months)</field>
+            <field name="code">BANK</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">all</field>
+        </record>
+
+        <record id="doctype_employment_letter" model="bre.document.type">
+            <field name="name">Employment Letter</field>
+            <field name="code">EMP</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">employed</field>
+        </record>
+
+        <record id="doctype_cr" model="bre.document.type">
+            <field name="name">Commercial Registration</field>
+            <field name="code">CR</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">self_employed</field>
+        </record>
+
+        <record id="doctype_financial_statement" model="bre.document.type">
+            <field name="name">Financial Statements (2 Years)</field>
+            <field name="code">FIN</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">self_employed</field>
+        </record>
+
+        <record id="doctype_property_deed" model="bre.document.type">
+            <field name="name">Property Title Deed</field>
+            <field name="code">DEED</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">all</field>
+        </record>
+
+        <record id="doctype_property_valuation" model="bre.document.type">
+            <field name="name">Property Valuation Report</field>
+            <field name="code">VAL</field>
+            <field name="is_mandatory">False</field>
+            <field name="applicable_for">all</field>
+        </record>
+
+        <record id="doctype_sharia_cert" model="bre.document.type">
+            <field name="name">Sharia Compliance Certificate</field>
+            <field name="code">SHA</field>
+            <field name="is_mandatory">True</field>
+            <field name="applicable_for">sharia</field>
+        </record>
+
+        <record id="doctype_tax_return" model="bre.document.type">
+            <field name="name">Tax Return (Last 2 Years)</field>
+            <field name="code">TAX</field>
+            <field name="is_mandatory">False</field>
+            <field name="applicable_for">all</field>
+        </record>
+
+    </data>
+</odoo>

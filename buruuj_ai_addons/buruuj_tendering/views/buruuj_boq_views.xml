@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_boq_list" model="ir.ui.view">
+        <field name="name">buruuj.boq.list</field>
+        <field name="model">buruuj.boq</field>
+        <field name="arch" type="xml">
+            <list string="BOQ">
+                <field name="name"/>
+                <field name="tender_id"/>
+                <field name="project_id"/>
+                <field name="revision"/>
+                <field name="line_count"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_buruuj_boq_form" model="ir.ui.view">
+        <field name="name">buruuj.boq.form</field>
+        <field name="model">buruuj.boq</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="%(action_buruuj_boq_import_wizard)d" string="Import CSV" type="action" icon="fa-upload"/>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_freeze" string="Freeze as Baseline"
+                            type="object" invisible="state != 'confirmed'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="tender_id"/>
+                            <field name="project_id"/>
+                        </group>
+                        <group>
+                            <field name="revision"/>
+                            <field name="total_amount"/>
+                            <field name="currency_id" groups="base.group_multi_currency"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_no"/>
+                                    <field name="section_id"/>
+                                    <field name="description"/>
+                                    <field name="trade_id"/>
+                                    <field name="uom_id"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_rate"/>
+                                    <field name="amount" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Sections">
+                            <field name="section_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="code"/>
+                                    <field name="name"/>
+                                    <field name="parent_id"/>
+                                    <field name="section_amount" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_buruuj_boq_line_form" model="ir.ui.view">
+        <field name="name">buruuj.boq.line.form</field>
+        <field name="model">buruuj.boq.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="item_no"/>
+                            <field name="section_id"/>
+                            <field name="trade_id"/>
+                            <field name="rate_id"/>
+                        </group>
+                        <group>
+                            <field name="uom_id"/>
+                            <field name="quantity"/>
+                            <field name="unit_rate"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="description"/>
+                    <group string="Rate Build-up">
+                        <group>
+                            <field name="labor_cost"/>
+                            <field name="material_cost"/>
+                        </group>
+                        <group>
+                            <field name="equipment_cost"/>
+                            <field name="subcontract_cost"/>
+                            <field name="wastage_percent"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_buruuj_boq" model="ir.actions.act_window">
+        <field name="name">BOQ</field>
+        <field name="res_model">buruuj.boq</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

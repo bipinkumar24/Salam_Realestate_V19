@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_hse_incident_form" model="ir.ui.view">
+        <field name="name">salaam.hse.incident.form</field>
+        <field name="model">salaam.hse.incident</field>
+        <field name="arch" type="xml">
+            <form string="HSE Incident">
+                <header>
+                    <button name="action_investigate" string="Investigate" type="object" class="btn-primary" invisible="state != 'reported'" />
+                    <button name="action_close" string="Close" type="object" class="btn-primary" invisible="state != 'investigating'" />
+                    <button name="action_escalate" string="Escalate to Regulatory" type="object" invisible="state != 'investigating'" />
+                    <field name="state" widget="statusbar" statusbar_visible="reported,investigating,closed" />
+                </header>
+                <div class="alert alert-danger" role="alert" invisible="not requires_immediate_notification">
+                    IMMEDIATE NOTIFICATION REQUIRED — IAFAO and Regulatory Authority must be notified within 24 hours.
+                </div>
+                <sheet>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Incident">
+                            <field name="project_id" />
+                            <field name="phase_id" />
+                            <field name="contractor_id" />
+                            <field name="incident_type" tracking="1" />
+                            <field name="incident_datetime" />
+                            <field name="location_description" />
+                            <field name="reported_by" />
+                        </group>
+                        <group string="Notifications">
+                            <field name="requires_immediate_notification" readonly="1" />
+                            <field name="work_stopped" />
+                            <field name="iafao_notified" />
+                            <field name="iafao_notification_date" invisible="not iafao_notified" />
+                            <field name="regulatory_notified" />
+                            <field name="regulatory_notification_date" invisible="not regulatory_notified" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" widget="text" />
+                            <field name="immediate_actions" widget="text" />
+                        </page>
+                        <page string="Injured Party" invisible="incident_type not in ('first_aid','lost_time','fatality')">
+                            <group>
+                                <field name="injured_party_name" />
+                                <field name="injured_party_employer" />
+                                <field name="injury_description" widget="text" />
+                                <field name="lost_time_days" />
+                                <field name="hospital_attended" />
+                            </group>
+                        </page>
+                        <page string="Investigation">
+                            <field name="investigator_id" />
+                            <field name="root_cause" widget="text" />
+                            <field name="contributing_factors" widget="text" />
+                            <field name="corrective_actions" widget="text" />
+                            <field name="preventive_measures" widget="text" />
+                            <field name="investigation_closed_date" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+    <record id="view_hse_incident_list" model="ir.ui.view">
+        <field name="name">salaam.hse.incident.list</field>
+        <field name="model">salaam.hse.incident</field>
+        <field name="arch" type="xml">
+            <list string="HSE Incidents" decoration-danger="incident_type in ['lost_time','fatality','dangerous_occurrence']" decoration-success="state == 'closed'">
+                <field name="name" />
+                <field name="project_id" />
+                <field name="incident_type" />
+                <field name="incident_datetime" />
+                <field name="contractor_id" />
+                <field name="requires_immediate_notification" />
+                <field name="iafao_notified" />
+                <field name="work_stopped" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <record id="action_hse_incident" model="ir.actions.act_window">
+        <field name="name">HSE Incidents</field>
+        <field name="res_model">salaam.hse.incident</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_hse_rams_form" model="ir.ui.view">
+        <field name="name">salaam.hse.method.statement.form</field>
+        <field name="model">salaam.hse.method.statement</field>
+        <field name="arch" type="xml">
+            <form string="Method Statement / RAMS">
+                <header>
+                    <button name="action_submit" string="Submit for Approval" type="object" class="btn-primary" invisible="state != 'draft'" />
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary" invisible="state != 'submitted'" />
+                    <button name="action_reject" string="Reject" type="object" invisible="state != 'submitted'" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved" />
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <h2>
+                            <field name="title" />
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" />
+                            <field name="phase_id" />
+                            <field name="contractor_id" />
+                            <field name="submitted_by" readonly="1" />
+                        </group>
+                        <group>
+                            <field name="submission_date" />
+                            <field name="approval_date" readonly="1" />
+                            <field name="valid_until" />
+                            <field name="reviewer_id" />
+                            <field name="approved_by" readonly="1" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="RAMS Content">
+                            <field name="work_description" widget="text" />
+                            <field name="hazards_identified" widget="text" />
+                            <field name="risk_controls" widget="text" />
+                            <field name="ppe_required" widget="text" />
+                            <field name="emergency_procedure" widget="text" />
+                        </page>
+                        <page string="Rejection" invisible="state != 'rejected'">
+                            <field name="rejection_reason" widget="text" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+    <record id="view_hse_rams_list" model="ir.ui.view">
+        <field name="name">salaam.hse.method.statement.list</field>
+        <field name="model">salaam.hse.method.statement</field>
+        <field name="arch" type="xml">
+            <list string="RAMS" decoration-success="state == 'approved'" decoration-danger="state == 'rejected'">
+                <field name="name" />
+                <field name="title" />
+                <field name="project_id" />
+                <field name="phase_id" />
+                <field name="contractor_id" />
+                <field name="submission_date" />
+                <field name="approval_date" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <record id="action_hse_rams" model="ir.actions.act_window">
+        <field name="name">Method Statements (RAMS)</field>
+        <field name="res_model">salaam.hse.method.statement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_hse_toolbox_form" model="ir.ui.view">
+        <field name="name">salaam.hse.toolbox.talk.form</field>
+        <field name="model">salaam.hse.toolbox.talk</field>
+        <field name="arch" type="xml">
+            <form string="Toolbox Talk">
+                <sheet>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" />
+                            <field name="phase_id" />
+                            <field name="contractor_id" />
+                            <field name="conductor_id" />
+                        </group>
+                        <group>
+                            <field name="talk_date" />
+                            <field name="topic" />
+                            <field name="topic_category" />
+                            <field name="attendee_count" />
+                            <field name="duration_minutes" />
+                            <field name="language" />
+                        </group>
+                    </group>
+                    <field name="content_summary" widget="text" />
+                    <field name="actions_arising" widget="text" />
+                    <field name="attendance_list" widget="text" />
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_hse_toolbox_list" model="ir.ui.view">
+        <field name="name">salaam.hse.toolbox.talk.list</field>
+        <field name="model">salaam.hse.toolbox.talk</field>
+        <field name="arch" type="xml">
+            <list string="Toolbox Talks">
+                <field name="name" />
+                <field name="project_id" />
+                <field name="talk_date" />
+                <field name="topic" />
+                <field name="topic_category" />
+                <field name="contractor_id" />
+                <field name="attendee_count" />
+                <field name="language" />
+            </list>
+        </field>
+    </record>
+    <record id="action_hse_toolbox" model="ir.actions.act_window">
+        <field name="name">Toolbox Talks</field>
+        <field name="res_model">salaam.hse.toolbox.talk</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_hse_audit_form" model="ir.ui.view">
+        <field name="name">salaam.hse.audit.form</field>
+        <field name="model">salaam.hse.audit</field>
+        <field name="arch" type="xml">
+            <form string="HSE Audit">
+                <header>
+                    <button name="action_conduct" string="Mark Conducted" type="object" class="btn-primary" invisible="state != 'planned'" />
+                    <button name="action_issue_findings" string="Issue Findings" type="object" class="btn-primary" invisible="state != 'conducted'" />
+                    <button name="action_close" string="Close" type="object" class="btn-primary" invisible="state != 'findings_issued'" />
+                    <field name="state" widget="statusbar" statusbar_visible="planned,conducted,findings_issued,closed" />
+                </header>
+                <sheet>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id" />
+                            <field name="audit_type" />
+                            <field name="auditor_id" />
+                            <field name="auditor_organisation" />
+                        </group>
+                        <group>
+                            <field name="audit_date" />
+                            <field name="findings_issued_date" invisible="state == 'planned'" />
+                            <field name="response_deadline" />
+                            <field name="closed_date" invisible="state != 'closed'" />
+                            <field name="overall_rating" />
+                        </group>
+                    </group>
+                    <group string="Finding Counts" col="4">
+                        <field name="critical_findings" />
+                        <field name="major_findings" />
+                        <field name="minor_findings" />
+                        <field name="observations" />
+                    </group>
+                    <field name="scope" widget="text" />
+                    <field name="findings" widget="text" />
+                    <field name="corrective_actions" widget="text" />
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+    <record id="view_hse_audit_list" model="ir.ui.view">
+        <field name="name">salaam.hse.audit.list</field>
+        <field name="model">salaam.hse.audit</field>
+        <field name="arch" type="xml">
+            <list string="HSE Audits" decoration-danger="overall_rating in ['unsatisfactory','stop_work']" decoration-success="state == 'closed'">
+                <field name="name" />
+                <field name="project_id" />
+                <field name="audit_type" />
+                <field name="audit_date" />
+                <field name="auditor_organisation" />
+                <field name="critical_findings" />
+                <field name="major_findings" />
+                <field name="overall_rating" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <record id="action_hse_audit" model="ir.actions.act_window">
+        <field name="name">HSE Audits</field>
+        <field name="res_model">salaam.hse.audit</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_project_hse_inherit" model="ir.ui.view">
+        <field name="name">salaam.construction.project.hse.inherit</field>
+        <field name="model">salaam.construction.project</field>
+        <field name="inherit_id" ref="salaam_construction_mgmt.view_construction_project_form" />
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_open_hse" type="object" class="oe_stat_button" icon="fa-shield">
+                    <div class="o_stat_info">
+                        <field name="hse_incident_count" class="o_stat_value" /><span class="o_stat_text">Incidents</span></div>
+                </button>
+                <button name="action_open_hse" type="object" class="oe_stat_button" icon="fa-exclamation-triangle" invisible="hse_lti_count == 0">
+                    <div class="o_stat_info">
+                        <field name="hse_lti_count" class="o_stat_value" /><span class="o_stat_text">LTIs</span></div>
+                </button>
+                <button name="action_open_hse" type="object" class="oe_stat_button" icon="fa-file-text-o">
+                    <div class="o_stat_info">
+                        <field name="hse_rams_count" class="o_stat_value" /><span class="o_stat_text">RAMS</span></div>
+                </button>
+            </div>
+        </field>
+    </record>
+    <menuitem id="menu_hse_root" name="HSE" parent="salaam_construction_mgmt.menu_construction_root" sequence="60" />
+    <menuitem id="menu_hse_incidents" name="Incidents" parent="menu_hse_root" action="action_hse_incident" sequence="10" />
+    <menuitem id="menu_hse_rams" name="RAMS / Method Statements" parent="menu_hse_root" action="action_hse_rams" sequence="20" />
+    <menuitem id="menu_hse_toolbox" name="Toolbox Talks" parent="menu_hse_root" action="action_hse_toolbox" sequence="30" />
+    <menuitem id="menu_hse_audits" name="HSE Audits" parent="menu_hse_root" action="action_hse_audit" sequence="40" />
+</odoo>

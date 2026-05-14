@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════
+         ROOT MENU  (no group = visible to all internal users)
+    ═══════════════════════════════════════ -->
+    <menuitem id="menu_bre_root"
+              name="RE &amp; Bank Platform"
+              sequence="50"/>
+
+    <!-- ═══════════════════════════════════════
+         REAL ESTATE MENU  (visible to all internal users)
+    ═══════════════════════════════════════ -->
+    <menuitem id="menu_bre_real_estate"
+              name="Real Estate"
+              parent="menu_bre_root"
+              sequence="10"/>
+
+    <menuitem id="menu_bre_my_applications"
+              name="My Applications"
+              parent="menu_bre_real_estate"
+              action="action_customer_application_agent"
+              sequence="10"/>
+
+    <menuitem id="menu_bre_properties"
+              name="Property Listings"
+              parent="menu_bre_real_estate"
+              action="action_property_listing"
+              sequence="20"/>
+
+    <menuitem id="menu_bre_documents_agent"
+              name="Documents"
+              parent="menu_bre_real_estate"
+              action="action_document_attachment"
+              sequence="30"/>
+
+    <menuitem id="menu_bre_agent_reports"
+              name="Reports &amp; Analytics"
+              parent="menu_bre_real_estate"
+              sequence="40"/>
+
+    <menuitem id="menu_bre_agent_dashboard"
+              name="Application Dashboard"
+              parent="menu_bre_agent_reports"
+              action="action_agent_dashboard"
+              sequence="10"/>
+
+    <menuitem id="menu_bre_property_analytics"
+              name="Property Analytics"
+              parent="menu_bre_agent_reports"
+              action="action_property_analytics"
+              sequence="20"/>
+
+    <!-- ═══════════════════════════════════════
+         BANK MENU  (visible to all internal users)
+    ═══════════════════════════════════════ -->
+    <menuitem id="menu_bre_bank"
+              name="Bank Operations"
+              parent="menu_bre_root"
+              sequence="20"/>
+
+    <menuitem id="menu_bre_bank_applications"
+              name="Financing Applications"
+              parent="menu_bre_bank"
+              action="action_customer_application_bank"
+              sequence="10"/>
+
+    <menuitem id="menu_bre_financing_requests"
+              name="Financing Requests"
+              parent="menu_bre_bank"
+              action="action_financing_request_bank"
+              sequence="20"/>
+
+    <menuitem id="menu_bre_documents_bank"
+              name="Document Verification"
+              parent="menu_bre_bank"
+              action="action_document_attachment"
+              sequence="30"/>
+
+    <menuitem id="menu_bre_bank_reports"
+              name="Reports &amp; Analytics"
+              parent="menu_bre_bank"
+              sequence="40"/>
+
+    <menuitem id="menu_bre_bank_dashboard"
+              name="Bank Dashboard"
+              parent="menu_bre_bank_reports"
+              action="action_bank_dashboard"
+              sequence="10"/>
+
+    <menuitem id="menu_bre_app_analytics"
+              name="Application Analytics"
+              parent="menu_bre_bank_reports"
+              action="action_application_analytics"
+              sequence="20"/>
+
+    <!-- ═══════════════════════════════════════
+         MANAGER / ADMIN MENU  (visible to all internal users)
+    ═══════════════════════════════════════ -->
+    <menuitem id="menu_bre_manager"
+              name="Management"
+              parent="menu_bre_root"
+              sequence="30"/>
+
+    <menuitem id="menu_bre_all_applications"
+              name="All Applications"
+              parent="menu_bre_manager"
+              action="action_customer_application_all"
+              sequence="10"/>
+
+    <menuitem id="menu_bre_all_financing"
+              name="All Financing Requests"
+              parent="menu_bre_manager"
+              action="action_financing_request_bank"
+              sequence="20"/>
+
+    <!-- ═══════════════════════════════════════
+         CONFIGURATION MENU  (admin / manager only)
+    ═══════════════════════════════════════ -->
+    <menuitem id="menu_bre_config"
+              name="Configuration"
+              parent="menu_bre_root"
+              sequence="100"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_bre_stages"
+              name="Application Stages"
+              parent="menu_bre_config"
+              action="action_application_stages"
+              sequence="10"
+              groups="base.group_system"/>
+
+    <menuitem id="menu_bre_document_types"
+              name="Document Types"
+              parent="menu_bre_config"
+              action="action_document_types"
+              sequence="20"
+              groups="base.group_system"/>
+
+    <!-- ═══════════════════════════════════════
+         INVESTMENT APPRAISAL (Five Cs) — under Bank Operations
+    ═══════════════════════════════════════ -->
+    <menuitem id="menu_bre_appraisals"
+              name="Investment Appraisals"
+              parent="menu_bre_bank"
+              action="action_combined_appraisal_analytics"
+              sequence="25"/>
+
+    <!-- ═══════════════════════════════════════
+         APPRAISAL ANALYTICS — under Bank Reports
+    ═══════════════════════════════════════ -->
+    <menuitem id="menu_bre_appraisal_analytics"
+              name="Appraisal &amp; Credit Analytics"
+              parent="menu_bre_bank_reports"
+              action="action_combined_appraisal_analytics"
+              sequence="15"/>
+
+</odoo>

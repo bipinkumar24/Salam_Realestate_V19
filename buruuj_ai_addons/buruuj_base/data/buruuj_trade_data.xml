@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="trade_civil" model="buruuj.trade">
+            <field name="code">CIV</field>
+            <field name="name">Civil &amp; Structural Works</field>
+            <field name="sequence">10</field>
+        </record>
+
+        <record id="trade_mep" model="buruuj.trade">
+            <field name="code">MEP</field>
+            <field name="name">Mechanical, Electrical &amp; Plumbing</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="trade_hvac" model="buruuj.trade">
+            <field name="code">HVAC</field>
+            <field name="name">HVAC</field>
+            <field name="parent_id" ref="trade_mep"/>
+            <field name="sequence">21</field>
+        </record>
+
+        <record id="trade_elec" model="buruuj.trade">
+            <field name="code">ELEC</field>
+            <field name="name">Electrical</field>
+            <field name="parent_id" ref="trade_mep"/>
+            <field name="sequence">22</field>
+        </record>
+
+        <record id="trade_plumb" model="buruuj.trade">
+            <field name="code">PLUMB</field>
+            <field name="name">Plumbing</field>
+            <field name="parent_id" ref="trade_mep"/>
+            <field name="sequence">23</field>
+        </record>
+
+        <record id="trade_finish" model="buruuj.trade">
+            <field name="code">FIN</field>
+            <field name="name">Finishing Works</field>
+            <field name="sequence">30</field>
+        </record>
+
+        <record id="trade_paint" model="buruuj.trade">
+            <field name="code">PAINT</field>
+            <field name="name">Painting</field>
+            <field name="parent_id" ref="trade_finish"/>
+        </record>
+
+        <record id="trade_tile" model="buruuj.trade">
+            <field name="code">TILE</field>
+            <field name="name">Tiling &amp; Flooring</field>
+            <field name="parent_id" ref="trade_finish"/>
+        </record>
+
+        <record id="trade_alum" model="buruuj.trade">
+            <field name="code">ALUM</field>
+            <field name="name">Aluminium &amp; Glazing</field>
+            <field name="sequence">40</field>
+        </record>
+
+        <record id="trade_road" model="buruuj.trade">
+            <field name="code">ROAD</field>
+            <field name="name">Roadworks &amp; Asphalt</field>
+            <field name="sequence">50</field>
+        </record>
+
+        <record id="trade_landscape" model="buruuj.trade">
+            <field name="code">LAND</field>
+            <field name="name">Landscaping</field>
+            <field name="sequence">60</field>
+        </record>
+
+    </data>
+</odoo>

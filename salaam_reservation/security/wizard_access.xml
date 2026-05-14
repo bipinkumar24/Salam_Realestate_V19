@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="access_create_bre_app_wizard" model="ir.model.access">
+      <field name="name">salaam.create.bre.application.wizard access</field>
+      <field name="model_id" ref="model_salaam_create_bre_application_wizard"/>
+      <field name="group_id" ref="base.group_user"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+    </record>
+  </data>
+</odoo>

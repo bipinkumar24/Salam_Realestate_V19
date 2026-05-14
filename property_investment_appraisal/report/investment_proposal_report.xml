@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_report_investment_proposal" model="ir.actions.report">
+        <field name="name">Investment Proposal Report</field>
+        <field name="model">property.investment.application</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">property_investment_appraisal.report_investment_proposal_template</field>
+        <field name="report_file">property_investment_appraisal.report_investment_proposal_template</field>
+        <field name="binding_model_id" ref="model_property_investment_application"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_bid_decision_list" model="ir.ui.view">
+        <field name="name">tender.bid.decision.list</field>
+        <field name="model">tender.bid.decision</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'approved'" decoration-danger="state == 'rejected'" decoration-info="state == 'submitted'">
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <field name="decision_date"/>
+                <field name="decision"/>
+                <field name="total_score"/>
+                <field name="cost_of_bid" widget="monetary"/>
+                <field name="expected_return" widget="monetary"/>
+                <field name="currency_id" column_invisible="True"/>
+                <field name="approver_id"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_bid_decision_form" model="ir.ui.view">
+        <field name="name">tender.bid.decision.form</field>
+        <field name="model">tender.bid.decision</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" type="object" string="Submit" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Approve" class="oe_highlight" invisible="state != 'submitted'" groups="pre_tender_management.group_tender_approver"/>
+                    <button name="action_reject" type="object" string="Reject" invisible="state != 'submitted'" groups="pre_tender_management.group_tender_approver"/>
+                    <button name="action_reset" type="object" string="Reset to Draft" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="decision_date"/>
+                            <field name="decision"/>
+                            <field name="approver_id"/>
+                        </group>
+                        <group>
+                            <field name="cost_of_bid"/>
+                            <field name="expected_return"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Scoring (0–10 each)">
+                        <group>
+                            <field name="score_capability"/>
+                            <field name="score_capacity"/>
+                            <field name="score_profit"/>
+                        </group>
+                        <group>
+                            <field name="score_risk"/>
+                            <field name="score_strategic"/>
+                            <field name="total_score" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rationale" name="rationale">
+                            <field name="rationale" nolabel="1" placeholder="Decision rationale, conditions, dissenting opinions…"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_bid_decision" model="ir.actions.act_window">
+        <field name="name">Bid / No-Bid Decisions</field>
+        <field name="res_model">tender.bid.decision</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

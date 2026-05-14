@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_reservation_officer,reservation.officer,model_salaam_reservation,base.group_user,1,1,1,0
+access_reservation_manager,reservation.manager,model_salaam_reservation,base.group_system,1,1,1,1
+access_res_payment_officer,res.payment.officer,model_salaam_reservation_payment,base.group_user,1,1,1,0
+access_res_payment_manager,res.payment.manager,model_salaam_reservation_payment,base.group_system,1,1,1,1
+access_salaam_project_user,salaam.project user,model_salaam_project,base.group_user,1,1,1,0
+access_salaam_project_manager,salaam.project manager,model_salaam_project,base.group_system,1,1,1,1
+access_salaam_sub_project_user,salaam.sub.project user,model_salaam_sub_project,base.group_user,1,1,1,0
+access_salaam_sub_project_manager,salaam.sub.project manager,model_salaam_sub_project,base.group_system,1,1,1,1

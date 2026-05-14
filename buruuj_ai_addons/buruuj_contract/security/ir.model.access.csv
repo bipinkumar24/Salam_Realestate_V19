@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_contract_pm,contract.pm,model_buruuj_contract,buruuj_base.group_buruuj_pm,1,1,1,0
+access_contract_dir,contract.dir,model_buruuj_contract,buruuj_base.group_buruuj_director,1,1,1,1
+access_claim_qs,claim.qs,model_buruuj_claim,buruuj_base.group_buruuj_qs,1,1,1,0
+access_claim_pm,claim.pm,model_buruuj_claim,buruuj_base.group_buruuj_pm,1,1,1,1
+access_claim_dir,claim.dir,model_buruuj_claim,buruuj_base.group_buruuj_director,1,1,0,0

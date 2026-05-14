@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cash_payment_plan_officer,cash.payment.plan officer,model_cash_payment_plan,bank_realestate_collab.group_bre_bank_officer,1,1,1,0
+access_cash_payment_plan_agent,cash.payment.plan agent,model_cash_payment_plan,bank_realestate_collab.group_bre_real_estate_agent,1,1,1,0
+access_cash_payment_plan_manager,cash.payment.plan manager,model_cash_payment_plan,bank_realestate_collab.group_bre_manager,1,1,1,1
+access_cash_payment_plan_line_officer,cash.payment.plan.line officer,model_cash_payment_plan_line,bank_realestate_collab.group_bre_bank_officer,1,1,1,0
+access_cash_payment_plan_line_agent,cash.payment.plan.line agent,model_cash_payment_plan_line,bank_realestate_collab.group_bre_real_estate_agent,1,1,1,0
+access_cash_payment_plan_line_manager,cash.payment.plan.line manager,model_cash_payment_plan_line,bank_realestate_collab.group_bre_manager,1,1,1,1
+access_cash_plan_template_officer,cash.payment.plan.template officer,model_cash_payment_plan_template,bank_realestate_collab.group_bre_bank_officer,1,0,0,0
+access_cash_plan_template_manager,cash.payment.plan.template manager,model_cash_payment_plan_template,bank_realestate_collab.group_bre_manager,1,1,1,1
+access_cash_plan_template_line_officer,cash.payment.plan.template.line officer,model_cash_payment_plan_template_line,bank_realestate_collab.group_bre_bank_officer,1,0,0,0
+access_cash_plan_template_line_manager,cash.payment.plan.template.line manager,model_cash_payment_plan_template_line,bank_realestate_collab.group_bre_manager,1,1,1,1

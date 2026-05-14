@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="costcat_direct_material" model="buruuj.cost.category">
+            <field name="code">DM</field>
+            <field name="name">Direct Materials</field>
+            <field name="cost_type">direct_material</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="costcat_subcontract" model="buruuj.cost.category">
+            <field name="code">SC</field>
+            <field name="name">Subcontracts</field>
+            <field name="cost_type">subcontract</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="costcat_labor" model="buruuj.cost.category">
+            <field name="code">LB</field>
+            <field name="name">Direct Labor</field>
+            <field name="cost_type">labor</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="costcat_plant" model="buruuj.cost.category">
+            <field name="code">PL</field>
+            <field name="name">Plant &amp; Equipment</field>
+            <field name="cost_type">plant</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="costcat_rental" model="buruuj.cost.category">
+            <field name="code">RN</field>
+            <field name="name">Equipment Rental</field>
+            <field name="cost_type">rental</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="costcat_site_overhead" model="buruuj.cost.category">
+            <field name="code">SOH</field>
+            <field name="name">Site Overhead</field>
+            <field name="cost_type">site_overhead</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="costcat_indirect" model="buruuj.cost.category">
+            <field name="code">IND</field>
+            <field name="name">Indirect / Head Office</field>
+            <field name="cost_type">indirect</field>
+            <field name="sequence">70</field>
+        </record>
+        <record id="costcat_other" model="buruuj.cost.category">
+            <field name="code">OTH</field>
+            <field name="name">Other</field>
+            <field name="cost_type">other</field>
+            <field name="sequence">80</field>
+        </record>
+    </data>
+</odoo>

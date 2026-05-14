@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_snag_list">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Snagging List</h2>
+            <h3><t t-esc="o.name"/> — <t t-esc="o.property_id.name"/> Round <t t-esc="o.round_number"/></h3>
+            <table class="table table-sm"><tr><td><b>Inspection Date</b></td><td><t t-esc="o.inspection_date"/></td><td><b>Inspector</b></td><td><t t-esc="o.inspector_id.name"/></td></tr>
+            <tr><td><b>Total Items</b></td><td><t t-esc="o.total_items"/></td><td><b>Verified Closed</b></td><td><t t-esc="o.verified_items"/></td></tr></table>
+            <h4>Snag Items</h4>
+            <table class="table table-bordered table-sm">
+              <thead><tr><th>#</th><th>Room</th><th>Description</th><th>Category</th><th>Severity</th><th>Trade</th><th>Status</th></tr></thead>
+              <tbody>
+                <t t-foreach="o.snag_item_ids" t-as="item">
+                  <tr><td><t t-esc="item_index+1"/></td><td><t t-esc="item.room"/></td><td><t t-esc="item.description"/></td>
+                  <td><t t-esc="item.category"/></td><td><t t-esc="item.severity"/></td><td><t t-esc="item.responsible_trade"/></td><td><t t-esc="item.state"/></td></tr>
+                </t>
+              </tbody>
+            </table>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_snag_list" model="ir.actions.report">
+    <field name="name">Snag List Report</field><field name="model">salaam.snag.list</field>
+    <field name="report_type">qweb-pdf</field><field name="report_name">salaam_handover.report_snag_list</field>
+    <field name="binding_model_id" ref="model_salaam_snag_list"/><field name="binding_type">report</field>
+  </record>
+</odoo>

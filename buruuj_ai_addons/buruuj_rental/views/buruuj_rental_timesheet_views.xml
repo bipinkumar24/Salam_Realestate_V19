@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rts_list" model="ir.ui.view">
+        <field name="name">buruuj.rental.timesheet.list</field>
+        <field name="model">buruuj.rental.timesheet</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="date"/>
+                <field name="contract_id"/>
+                <field name="project_id" optional="hide"/>
+                <field name="equipment_description" optional="hide"/>
+                <field name="working_hours" sum="Working"/>
+                <field name="idle_hours" sum="Idle"/>
+                <field name="breakdown_hours" sum="Breakdown" optional="show"/>
+                <field name="operator_name" optional="show"/>
+                <field name="fuel_consumed_liters" optional="show" sum="Fuel"/>
+                <field name="fuel_supplied_by" optional="hide"/>
+                <field name="work_description"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rts_form" model="ir.ui.view">
+        <field name="name">buruuj.rental.timesheet.form</field>
+        <field name="model">buruuj.rental.timesheet</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="contract_id"/>
+                            <field name="date"/>
+                            <field name="operator_name"/>
+                        </group>
+                        <group>
+                            <field name="working_hours"/>
+                            <field name="idle_hours"/>
+                            <field name="breakdown_hours"/>
+                            <field name="fuel_consumed_liters"/>
+                            <field name="fuel_supplied_by"/>
+                        </group>
+                    </group>
+                    <field name="work_description"/>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rts" model="ir.actions.act_window">
+        <field name="name">Rental Timesheets</field>
+        <field name="res_model">buruuj.rental.timesheet</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

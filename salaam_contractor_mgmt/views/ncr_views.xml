@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_ncr_form" model="ir.ui.view">
+    <field name="name">salaam.ncr.form</field>
+    <field name="model">salaam.ncr</field>
+    <field name="arch" type="xml">
+      <form string="Non-Conformance Report">
+        <header>
+          <button name="action_submit_cap" string="Submit CAP" type="object" class="btn-primary" invisible="state != 'open'"/>
+          <button name="action_approve_cap" string="Approve CAP" type="object" class="btn-primary" invisible="state != 'cap_submitted'"/>
+          <button name="action_reject_cap" string="Reject CAP" type="object" invisible="state != 'cap_submitted'"/>
+          <button name="action_start_rectifying" string="Start Rectifying" type="object" invisible="state != 'cap_approved'"/>
+          <button name="action_submit_for_verification" string="Submit for Verification" type="object" class="btn-primary" invisible="state != 'rectifying'"/>
+          <button name="action_close" string="Close NCR" type="object" class="btn-primary" invisible="state != 'verification'"/>
+          <button name="action_reject_permanent" string="Permanently Reject" type="object" invisible="state not in ['cap_rejected', 'verification']"/>
+          <field name="state" widget="statusbar" statusbar_visible="open,cap_submitted,cap_approved,rectifying,closed"/>
+        </header>
+        <div class="alert alert-danger" role="alert" invisible="severity != 'critical' or state == 'closed'">
+          [STOP] CRITICAL NCR — Work stopped in affected area: <field name="location_description"/>
+        </div>
+        <sheet>
+          <div class="oe_title"><label for="name"/><h1><field name="name"/></h1><h2><field name="title"/></h2></div>
+          <group>
+            <group string="NCR Details">
+              <field name="project_id"/><field name="phase_id"/>
+              <field name="ncr_category"/><field name="severity"/>
+              <field name="raised_by"/><field name="raised_date"/>
+              <field name="cap_response_deadline"/><field name="days_open" readonly="1"/>
+              <field name="work_stopped"/>
+            </group>
+            <group string="Contractor">
+              <field name="contractor_party_id"/><field name="contractor_id" readonly="1"/>
+              <field name="qa_reviewer_id"/>
+              <field name="drawing_ref"/><field name="spec_clause"/>
+              <field name="site_instruction_id"/><field name="snag_list_id"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Non-Conformance">
+              <field name="location_description"/>
+              <field name="non_conformance_description" widget="text"/>
+              <field name="specification_requirement" widget="text"/>
+              <field name="evidence_notes" widget="text"/>
+            </page>
+            <page string="CAP">
+              <group>
+                <field name="cap_description" widget="text"/>
+                <field name="cap_rejection_reason" widget="text" invisible="state != 'cap_rejected'"/>
+                <field name="cap_submitted_date" readonly="1"/>
+                <field name="cap_approved_date" readonly="1"/>
+                <field name="rectification_deadline"/>
+                <field name="cap_resubmission_count" readonly="1"/>
+              </group>
+            </page>
+            <page string="Rectification and Verification">
+              <field name="rectification_description" widget="text"/>
+              <field name="verification_notes" widget="text"/>
+              <field name="verification_date" readonly="1"/>
+              <field name="closed_date" readonly="1"/>
+            </page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+  <record id="view_ncr_list" model="ir.ui.view">
+    <field name="name">salaam.ncr.list</field>
+    <field name="model">salaam.ncr</field>
+    <field name="arch" type="xml">
+      <list string="NCRs" decoration-danger="severity == 'critical' and state != 'closed'" decoration-success="state == 'closed'" decoration-muted="state == 'rejected_permanent'">
+        <field name="name"/><field name="title"/><field name="project_id"/><field name="phase_id"/>
+        <field name="ncr_category"/>
+        <field name="severity"/>
+        <field name="contractor_id"/><field name="raised_date"/>
+        <field name="cap_response_deadline"/><field name="days_open"/>
+        <field name="work_stopped"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+  <record id="action_ncr" model="ir.actions.act_window">
+    <field name="name">Non-Conformance Reports</field><field name="res_model">salaam.ncr</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

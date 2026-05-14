@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_balance_list" model="ir.ui.view">
+        <field name="name">buruuj.stock.balance.list</field>
+        <field name="model">buruuj.stock.balance</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="project_id"/>
+                <field name="material_id"/>
+                <field name="quantity" sum="Total Qty"/>
+                <field name="uom_id"/>
+                <field name="last_movement_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_stock_balance_search" model="ir.ui.view">
+        <field name="name">buruuj.stock.balance.search</field>
+        <field name="model">buruuj.stock.balance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="material_id"/>
+                <filter string="Has Stock" name="has_stock"
+                        domain="[('quantity','>',0)]"/>
+                <filter string="Zero Balance" name="zero"
+                        domain="[('quantity','=',0)]"/>
+                <group>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Material" name="g_mat"
+                            context="{'group_by': 'material_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_stock_balance" model="ir.actions.act_window">
+        <field name="name">Project Stock Balance</field>
+        <field name="res_model">buruuj.stock.balance</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_has_stock': 1}</field>
+    </record>
+
+    <record id="view_stock_movement_list" model="ir.ui.view">
+        <field name="name">buruuj.stock.movement.list</field>
+        <field name="model">buruuj.stock.movement</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+                <field name="project_id"/>
+                <field name="material_id"/>
+                <field name="movement_type"/>
+                <field name="qty"/>
+                <field name="reference"/>
+                <field name="user_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_stock_movement" model="ir.actions.act_window">
+        <field name="name">Stock Movements</field>
+        <field name="res_model">buruuj.stock.movement</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

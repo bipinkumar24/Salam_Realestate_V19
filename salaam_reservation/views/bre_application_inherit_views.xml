@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bre_customer_application_salaam_inherit" model="ir.ui.view">
+        <field name="name">bre.customer.application.salaam.inherit</field>
+        <field name="model">bre.customer.application</field>
+        <field name="inherit_id" ref="bank_realestate_collab.view_customer_application_form" />
+        <field name="arch" type="xml">
+            <!-- Move financing_type before agent_id in the Application Info group -->
+            <field name="agent_id" position="before">
+                <field name="financing_type" readonly="bank_status != 'not_submitted'" />
+            </field>
+            <!-- Remove financing_type from the Property &amp; Financing tab -->
+            <xpath expr="//page[@name='financing']//field[@name='financing_type']" position="replace" />
+        </field>
+    </record>
+</odoo>

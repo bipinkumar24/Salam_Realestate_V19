@@ -1,0 +1,68 @@
+/* ============================================================
+   Bank & Real Estate Collaboration Platform – Custom Styles
+   ============================================================ */
+
+/* ── Status Badge Colours ── */
+.bre_status_approved  { color: #27ae60 !important; font-weight: 600; }
+.bre_status_rejected  { color: #e74c3c !important; font-weight: 600; }
+.bre_status_pending   { color: #f39c12 !important; font-weight: 600; }
+.bre_status_review    { color: #2980b9 !important; font-weight: 600; }
+
+/* ── Kanban Card Enhancements ── */
+.o_kanban_view .bre_kanban_card {
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
+    transition: transform .15s, box-shadow .15s;
+}
+.o_kanban_view .bre_kanban_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,.14);
+}
+
+/* ── DBR Warning Highlight ── */
+.bre_dbr_danger  { color: #e74c3c !important; font-weight: 700; }
+.bre_dbr_warning { color: #f39c12 !important; font-weight: 700; }
+.bre_dbr_ok      { color: #27ae60 !important; font-weight: 700; }
+
+/* ── Stat Buttons ── */
+.o_form_view .oe_button_box .oe_stat_button {
+    border-radius: 5px;
+}
+
+/* ── Document Status Pill ── */
+.bre_doc_verified { background: #d5f5e3; color: #27ae60; border-radius: 10px; padding: 2px 8px; font-size: 11px; }
+.bre_doc_pending  { background: #fef9e7; color: #f39c12; border-radius: 10px; padding: 2px 8px; font-size: 11px; }
+.bre_doc_rejected { background: #fdecea; color: #e74c3c; border-radius: 10px; padding: 2px 8px; font-size: 11px; }
+
+/* ── Progress Bar ── */
+.o_field_progressbar .o_progress {
+    height: 14px !important;
+    border-radius: 7px !important;
+}
+
+/* ── Form Header Decoration ── */
+.o_form_view .o_form_statusbar {
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+/* ── Dashboard KPI Cards ── */
+.bre_kpi_card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    text-align: center;
+    border-left: 4px solid #2e6da4;
+}
+.bre_kpi_card .bre_kpi_value {
+    font-size: 32px;
+    font-weight: 700;
+    color: #2e6da4;
+}
+.bre_kpi_card .bre_kpi_label {
+    font-size: 12px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}

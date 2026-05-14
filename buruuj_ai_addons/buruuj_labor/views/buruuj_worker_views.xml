@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_worker_list" model="ir.ui.view">
+        <field name="name">buruuj.worker.list</field>
+        <field name="model">buruuj.worker</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'active'"
+                  decoration-warning="state == 'on_leave'"
+                  decoration-muted="state == 'terminated'">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="trade_id"/>
+                <field name="skill_level"/>
+                <field name="employment_type" widget="badge"/>
+                <field name="subcontractor_id" optional="show"/>
+                <field name="current_project_id"/>
+                <field name="daily_rate"/>
+                <field name="last_attendance_date" optional="show"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_worker_form" model="ir.ui.view">
+        <field name="name">buruuj.worker.form</field>
+        <field name="model">buruuj.worker</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_attendance" type="object"
+                                class="oe_stat_button" icon="fa-calendar-check-o">
+                            <field name="attendance_count" widget="statinfo"
+                                   string="Attendance"/>
+                        </button>
+                        <button name="action_view_timesheets" type="object"
+                                class="oe_stat_button" icon="fa-clock-o">
+                            <field name="timesheet_count" widget="statinfo"
+                                   string="Timesheets"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Worker name..."/></h1>
+                        <h3><field name="code" readonly="1"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employment_type"/>
+                            <field name="employee_id"
+                                   invisible="employment_type != 'own'"/>
+                            <field name="subcontractor_id"
+                                   invisible="employment_type != 'subcontractor'"
+                                   required="employment_type == 'subcontractor'"/>
+                            <field name="trade_id"/>
+                            <field name="skill_level"/>
+                            <field name="current_project_id"/>
+                            <field name="state"/>
+                        </group>
+                        <group>
+                            <field name="daily_rate"/>
+                            <field name="hourly_rate"/>
+                            <field name="overtime_rate_multiplier"/>
+                            <field name="hire_date"/>
+                            <field name="termination_date"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Personal &amp; ID">
+                            <group>
+                                <group>
+                                    <field name="nationality"/>
+                                    <field name="id_type"/>
+                                    <field name="id_number"/>
+                                    <field name="id_expiry"/>
+                                </group>
+                                <group>
+                                    <field name="contact_phone"/>
+                                    <field name="emergency_contact"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="HSE &amp; Certifications">
+                            <group>
+                                <group>
+                                    <field name="hse_induction_date"/>
+                                    <field name="safety_card_no"/>
+                                    <field name="safety_card_expiry"/>
+                                </group>
+                                <group>
+                                    <field name="medical_fitness_expiry"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_worker_search" model="ir.ui.view">
+        <field name="name">buruuj.worker.search</field>
+        <field name="model">buruuj.worker</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="trade_id"/>
+                <field name="current_project_id"/>
+                <field name="subcontractor_id"/>
+                <filter string="Active" name="active"
+                        domain="[('state','=','active')]"/>
+                <filter string="Own Employees" name="own"
+                        domain="[('employment_type','=','own')]"/>
+                <filter string="Subcontractor Labor" name="sub"
+                        domain="[('employment_type','=','subcontractor')]"/>
+                <filter string="ID Expiring Soon" name="id_exp"
+                        domain="[('id_expiry','&lt;=', (context_today() + relativedelta(days=60)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Safety Card Expired" name="sc_exp"
+                        domain="[('safety_card_expiry','&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Trade" name="g_trade"
+                            context="{'group_by': 'trade_id'}"/>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'current_project_id'}"/>
+                    <filter string="Employment" name="g_emp"
+                            context="{'group_by': 'employment_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_worker" model="ir.actions.act_window">
+        <field name="name">Workforce</field>
+        <field name="res_model">buruuj.worker</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

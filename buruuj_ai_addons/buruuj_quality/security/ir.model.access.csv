@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dwg_se,dwg.se,model_buruuj_drawing,buruuj_base.group_buruuj_site_engineer,1,1,0,0
+access_dwg_pm,dwg.pm,model_buruuj_drawing,buruuj_base.group_buruuj_pm,1,1,1,1
+access_trans_se,trans.se,model_buruuj_transmittal,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_trans_pm,trans.pm,model_buruuj_transmittal,buruuj_base.group_buruuj_pm,1,1,1,1
+access_sub_se,sub.se,model_buruuj_submittal,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_sub_pm,sub.pm,model_buruuj_submittal,buruuj_base.group_buruuj_pm,1,1,1,1

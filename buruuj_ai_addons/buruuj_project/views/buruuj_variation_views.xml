@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_variation_list" model="ir.ui.view">
+        <field name="name">buruuj.variation.list</field>
+        <field name="model">buruuj.variation</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state=='approved'" decoration-danger="state=='rejected'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="initiated_by"/>
+                <field name="amount" sum="Total"/>
+                <field name="time_impact_days"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_variation_form" model="ir.ui.view">
+        <field name="name">buruuj.variation.form</field>
+        <field name="model">buruuj.variation</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit to Client" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Mark Approved" type="object"
+                            class="oe_highlight" invisible="state != 'submitted'"/>
+                    <button name="action_reject" string="Mark Rejected" type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('approved','rejected','cancelled')"/>
+                    <button name="action_reset" string="Reset" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3><field name="title"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                            <field name="initiated_by"/>
+                        </group>
+                        <group>
+                            <field name="cost_impact"/>
+                            <field name="time_impact_days"/>
+                            <field name="amount"/>
+                            <field name="approval_ref"/>
+                            <field name="approval_date"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="description"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_variation" model="ir.actions.act_window">
+        <field name="name">Variation Orders</field>
+        <field name="res_model">buruuj.variation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

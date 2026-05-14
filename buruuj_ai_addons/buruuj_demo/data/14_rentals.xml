@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ============================================================
+             RENTAL VENDORS — independent of subcontractor partners
+             ============================================================ -->
+        <record id="demo_rental_vendor_heavyhire" model="res.partner">
+            <field name="name">Heavy Hire Rentals LLC</field>
+            <field name="is_company" eval="True"/>
+            <field name="supplier_rank">1</field>
+            <field name="street">Industrial Zone, Block 14</field>
+            <field name="city">Coastal City</field>
+            <field name="phone">+966-12-555-9100</field>
+            <field name="email">hire@heavyhire.example</field>
+        </record>
+
+        <record id="demo_rental_vendor_cranetech" model="res.partner">
+            <field name="name">CraneTech Equipment Co.</field>
+            <field name="is_company" eval="True"/>
+            <field name="supplier_rank">1</field>
+            <field name="street">Industrial Park, Plot 5</field>
+            <field name="city">Capital City</field>
+            <field name="phone">+966-11-555-9200</field>
+            <field name="email">rentals@cranetech.example</field>
+        </record>
+
+        <record id="demo_rental_vendor_powergen" model="res.partner">
+            <field name="name">PowerGen Rentals</field>
+            <field name="is_company" eval="True"/>
+            <field name="supplier_rank">1</field>
+            <field name="street">Service Road 7</field>
+            <field name="city">Capital City</field>
+            <field name="phone">+966-11-555-9300</field>
+            <field name="email">info@powergen.example</field>
+        </record>
+
+
+        <!-- ============================================================
+             REQUISITIONS — different states
+             ============================================================ -->
+
+        <!-- Draft — newly raised by site engineer, not yet sent -->
+        <record id="demo_rreq_compactor" model="buruuj.rental.requisition">
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="required_from" eval="(DateTime.today() + relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="required_to" eval="(DateTime.today() + relativedelta(days=40)).strftime('%Y-%m-%d')"/>
+            <field name="equipment_type">compactor</field>
+            <field name="capacity_required">12-ton vibratory roller</field>
+            <field name="quantity">1</field>
+            <field name="priority">normal</field>
+            <field name="estimated_cost">28000.00</field>
+            <field name="work_description">Subgrade compaction along Highway HC-7 chainage 2+000 to 4+500. Required after earthworks completion mid-month.</field>
+            <field name="state">draft</field>
+        </record>
+
+        <!-- Submitted — procurement is quoting -->
+        <record id="demo_rreq_pump" model="buruuj.rental.requisition">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="required_from" eval="(DateTime.today() + relativedelta(days=14)).strftime('%Y-%m-%d')"/>
+            <field name="required_to" eval="(DateTime.today() + relativedelta(days=21)).strftime('%Y-%m-%d')"/>
+            <field name="equipment_type">concrete_pump</field>
+            <field name="capacity_required">52m boom pump</field>
+            <field name="quantity">1</field>
+            <field name="priority">high</field>
+            <field name="estimated_cost">42000.00</field>
+            <field name="work_description">Concrete pour for L8 floor slab. Single-day pour 480m³.</field>
+            <field name="state">quoting</field>
+        </record>
+
+        <!-- Already contracted (linked to demo contract below) -->
+        <record id="demo_rreq_excavator" model="buruuj.rental.requisition">
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="required_from" eval="(DateTime.today() - relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="required_to" eval="(DateTime.today() + relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="equipment_type">excavator</field>
+            <field name="capacity_required">20-ton tracked excavator</field>
+            <field name="quantity">1</field>
+            <field name="priority">normal</field>
+            <field name="estimated_cost">120000.00</field>
+            <field name="work_description">Earthworks for highway widening. Long-term hire.</field>
+            <field name="state">contracted</field>
+        </record>
+
+
+        <!-- ============================================================
+             RENTAL CONTRACTS
+             ============================================================ -->
+
+        <!-- ACTIVE: 20-ton excavator on highway project (long-running) -->
+        <record id="demo_rcontract_excavator" model="buruuj.rental.contract">
+            <field name="requisition_id" ref="demo_rreq_excavator"/>
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="vendor_id" ref="demo_rental_vendor_heavyhire"/>
+            <field name="equipment_description">CAT 320D2 — 20-ton tracked excavator with operator</field>
+            <field name="serial_no">CAT320-A-4521</field>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="rate_basis">daily</field>
+            <field name="base_rate">850.00</field>
+            <field name="idle_rate">350.00</field>
+            <field name="minimum_hire_period">7</field>
+            <field name="mobilization_cost">2500.00</field>
+            <field name="demobilization_cost">2500.00</field>
+            <field name="operator_included" eval="True"/>
+            <field name="operator_name">Yousef Ali (vendor employee)</field>
+            <field name="fuel_terms">by_hire</field>
+            <field name="insurance_by">vendor</field>
+            <field name="operator_liability">vendor</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- ACTIVE: Mobile crane at Marina Tower -->
+        <record id="demo_rcontract_crane" model="buruuj.rental.contract">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="vendor_id" ref="demo_rental_vendor_cranetech"/>
+            <field name="equipment_description">25-ton mobile crane (Tadano TR-250M) with operator</field>
+            <field name="serial_no">TDN-TR250-887</field>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="rate_basis">monthly</field>
+            <field name="base_rate">38000.00</field>
+            <field name="idle_rate">15000.00</field>
+            <field name="minimum_hire_period">30</field>
+            <field name="mobilization_cost">3500.00</field>
+            <field name="demobilization_cost">3500.00</field>
+            <field name="operator_included" eval="True"/>
+            <field name="operator_name">Tariq Hussain (vendor employee)</field>
+            <field name="fuel_terms">by_hire</field>
+            <field name="insurance_by">vendor</field>
+            <field name="operator_liability">vendor</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- OFF-HIRE PENDING: Generator at Gov Plaza — past planned end date -->
+        <record id="demo_rcontract_generator" model="buruuj.rental.contract">
+            <field name="project_id" ref="demo_project_plaza"/>
+            <field name="vendor_id" ref="demo_rental_vendor_powergen"/>
+            <field name="equipment_description">100kVA Diesel Generator (Cummins C100D5)</field>
+            <field name="serial_no">CMM-C100-2241</field>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() - relativedelta(days=6)).strftime('%Y-%m-%d')"/>
+            <field name="rate_basis">weekly</field>
+            <field name="base_rate">2800.00</field>
+            <field name="idle_rate">1400.00</field>
+            <field name="minimum_hire_period">7</field>
+            <field name="mobilization_cost">800.00</field>
+            <field name="demobilization_cost">800.00</field>
+            <field name="operator_included" eval="False"/>
+            <field name="fuel_terms">by_hire</field>
+            <field name="insurance_by">hirer</field>
+            <field name="operator_liability">hirer</field>
+            <field name="state">off_hire_pending</field>
+            <field name="notes">&lt;p&gt;Project commissioning complete. Off-hire requested by site team. Awaiting vendor demob arrangement.&lt;/p&gt;</field>
+        </record>
+
+        <!-- DRAFT: Newly issued, not yet on site (forklift for marina) -->
+        <record id="demo_rcontract_forklift_draft" model="buruuj.rental.contract">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="vendor_id" ref="demo_rental_vendor_heavyhire"/>
+            <field name="equipment_description">3-ton diesel forklift</field>
+            <field name="start_date" eval="(DateTime.today() + relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(days=35)).strftime('%Y-%m-%d')"/>
+            <field name="rate_basis">daily</field>
+            <field name="base_rate">320.00</field>
+            <field name="idle_rate">120.00</field>
+            <field name="minimum_hire_period">7</field>
+            <field name="mobilization_cost">600.00</field>
+            <field name="demobilization_cost">600.00</field>
+            <field name="operator_included" eval="False"/>
+            <field name="fuel_terms">by_hire</field>
+            <field name="insurance_by">vendor</field>
+            <field name="state">draft</field>
+        </record>
+
+        <!-- CLOSED: Earlier scissor lift contract on Marina, fully closed -->
+        <record id="demo_rcontract_scissor_closed" model="buruuj.rental.contract">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="vendor_id" ref="demo_rental_vendor_heavyhire"/>
+            <field name="equipment_description">12m electric scissor lift</field>
+            <field name="serial_no">JLG-1932E-114</field>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=5)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="actual_off_hire_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="rate_basis">daily</field>
+            <field name="base_rate">280.00</field>
+            <field name="idle_rate">100.00</field>
+            <field name="minimum_hire_period">7</field>
+            <field name="mobilization_cost">450.00</field>
+            <field name="demobilization_cost">450.00</field>
+            <field name="state">closed</field>
+        </record>
+
+
+        <!-- ============================================================
+             DAILY TIMESHEETS — for the active excavator contract
+             Show working/idle pattern over the last 5 days
+             ============================================================ -->
+
+        <record id="demo_rts_excavator_d1" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_excavator"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">8.5</field>
+            <field name="idle_hours">0.5</field>
+            <field name="operator_name">Yousef Ali</field>
+            <field name="fuel_consumed_liters">85.0</field>
+            <field name="fuel_supplied_by">hirer</field>
+            <field name="work_description">Excavation chainage 2+200 to 2+500</field>
+        </record>
+
+        <record id="demo_rts_excavator_d2" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_excavator"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=4)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">9.0</field>
+            <field name="idle_hours">0.0</field>
+            <field name="operator_name">Yousef Ali</field>
+            <field name="fuel_consumed_liters">92.0</field>
+            <field name="fuel_supplied_by">hirer</field>
+            <field name="work_description">Excavation chainage 2+500 to 2+800</field>
+        </record>
+
+        <record id="demo_rts_excavator_d3" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_excavator"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">2.0</field>
+            <field name="idle_hours">6.0</field>
+            <field name="breakdown_hours">0.0</field>
+            <field name="operator_name">Yousef Ali</field>
+            <field name="fuel_consumed_liters">22.0</field>
+            <field name="fuel_supplied_by">hirer</field>
+            <field name="work_description">Heavy rain — limited operations. Standby most of shift.</field>
+            <field name="notes">Weather lost time may be claimable under EOT.</field>
+        </record>
+
+        <record id="demo_rts_excavator_d4" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_excavator"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">8.0</field>
+            <field name="idle_hours">1.0</field>
+            <field name="operator_name">Yousef Ali</field>
+            <field name="fuel_consumed_liters">78.0</field>
+            <field name="fuel_supplied_by">hirer</field>
+            <field name="work_description">Bulk excavation continued.</field>
+        </record>
+
+        <record id="demo_rts_excavator_d5" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_excavator"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">0.0</field>
+            <field name="idle_hours">0.0</field>
+            <field name="breakdown_hours">9.0</field>
+            <field name="operator_name">Yousef Ali</field>
+            <field name="fuel_consumed_liters">0.0</field>
+            <field name="work_description">Hydraulic line burst — not chargeable</field>
+            <field name="notes">Vendor mechanic on site. Down-day not chargeable per contract.</field>
+        </record>
+
+        <!-- A few timesheets for the crane -->
+        <record id="demo_rts_crane_d1" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_crane"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">7.5</field>
+            <field name="idle_hours">1.5</field>
+            <field name="operator_name">Tariq Hussain</field>
+            <field name="work_description">Lifting precast facade panels L8.</field>
+        </record>
+
+        <record id="demo_rts_crane_d2" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_crane"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">8.0</field>
+            <field name="idle_hours">1.0</field>
+            <field name="operator_name">Tariq Hussain</field>
+            <field name="work_description">Continued facade lifting and material hoisting.</field>
+        </record>
+
+        <record id="demo_rts_crane_d3" model="buruuj.rental.timesheet">
+            <field name="contract_id" ref="demo_rcontract_crane"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="working_hours">3.0</field>
+            <field name="idle_hours">5.0</field>
+            <field name="operator_name">Tariq Hussain</field>
+            <field name="work_description">Standby waiting for material delivery.</field>
+            <field name="notes">Material delay caused 5h standby — followup with procurement.</field>
+        </record>
+
+
+        <!-- ============================================================
+             VENDOR INVOICES — including a disputed one
+             ============================================================ -->
+
+        <!-- Approved invoice for the excavator (last full month) -->
+        <record id="demo_rinv_excavator_paid" model="buruuj.rental.invoice">
+            <field name="name">HHR/INV/2026/0421</field>
+            <field name="contract_id" ref="demo_rcontract_excavator"/>
+            <field name="invoice_date" eval="(DateTime.today() - relativedelta(months=1)).strftime('%Y-%m-%d')"/>
+            <field name="period_from" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="period_to" eval="(DateTime.today() - relativedelta(months=1)).strftime('%Y-%m-%d')"/>
+            <field name="amount">25500.00</field>
+            <field name="state">paid</field>
+        </record>
+
+        <!-- DISPUTED invoice — vendor charged for full days that include
+             the breakdown day, which contract says is not chargeable -->
+        <record id="demo_rinv_excavator_disputed" model="buruuj.rental.invoice">
+            <field name="name">HHR/INV/2026/0589</field>
+            <field name="contract_id" ref="demo_rcontract_excavator"/>
+            <field name="invoice_date" eval="(DateTime.today() - relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+            <field name="period_from" eval="(DateTime.today() - relativedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="period_to" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="amount">5950.00</field>
+            <field name="disputed_amount">850.00</field>
+            <field name="dispute_reason">Vendor invoiced 7 working days. Site records show 1 day was hydraulic breakdown (not chargeable per contract clause 8.2). Should be 6 days = $5,100, not $5,950.</field>
+            <field name="state">disputed</field>
+        </record>
+
+        <!-- Crane invoice under review -->
+        <record id="demo_rinv_crane_review" model="buruuj.rental.invoice">
+            <field name="name">CT/INV/2026/0114</field>
+            <field name="contract_id" ref="demo_rcontract_crane"/>
+            <field name="invoice_date" eval="(DateTime.today() - relativedelta(days=4)).strftime('%Y-%m-%d')"/>
+            <field name="period_from" eval="(DateTime.today() - relativedelta(months=1)).strftime('%Y-%m-%d')"/>
+            <field name="period_to" eval="(DateTime.today() - relativedelta(days=4)).strftime('%Y-%m-%d')"/>
+            <field name="amount">38000.00</field>
+            <field name="state">under_review</field>
+        </record>
+
+        <!-- Closed scissor lift — final invoice paid -->
+        <record id="demo_rinv_scissor_paid" model="buruuj.rental.invoice">
+            <field name="name">HHR/INV/2025/0987</field>
+            <field name="contract_id" ref="demo_rcontract_scissor_closed"/>
+            <field name="invoice_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="period_from" eval="(DateTime.today() - relativedelta(months=5)).strftime('%Y-%m-%d')"/>
+            <field name="period_to" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="amount">8400.00</field>
+            <field name="state">paid</field>
+        </record>
+
+    </data>
+</odoo>

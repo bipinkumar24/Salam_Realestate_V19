@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_stakeholder_list" model="ir.ui.view">
+        <field name="name">tender.stakeholder.list</field>
+        <field name="model">tender.stakeholder</field>
+        <field name="arch" type="xml">
+            <list decoration-success="relationship_strength == '5'" decoration-info="relationship_strength == '4'" decoration-danger="relationship_strength == '1'">
+                <field name="opportunity_id"/>
+                <field name="partner_id"/>
+                <field name="organisation_id"/>
+                <field name="role"/>
+                <field name="title_position"/>
+                <field name="relationship_strength" widget="badge"/>
+                <field name="last_contact_date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_stakeholder_form" model="ir.ui.view">
+        <field name="name">tender.stakeholder.form</field>
+        <field name="model">tender.stakeholder</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="partner_id"/>
+                            <field name="organisation_id"/>
+                            <field name="title_position"/>
+                        </group>
+                        <group>
+                            <field name="role"/>
+                            <field name="relationship_strength"/>
+                            <field name="last_contact_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" nolabel="1" placeholder="Background, motivations, alignment with our value proposition…"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_stakeholder" model="ir.actions.act_window">
+        <field name="name">Stakeholders</field>
+        <field name="res_model">tender.stakeholder</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

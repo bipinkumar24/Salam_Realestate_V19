@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_tender_form_bridge" model="ir.ui.view">
+        <field name="name">buruuj.tender.form.bridge</field>
+        <field name="model">buruuj.tender</field>
+        <field name="inherit_id" ref="buruuj_tendering.view_buruuj_tender_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet" position="inside">
+                <group string="Pre-Tender Link" invisible="not crm_lead_id">
+                    <group>
+                        <field name="crm_lead_id" readonly="1"/>
+                        <field name="pretender_tier1_complete" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="pretender_compliance_progress" widget="progressbar" readonly="1"/>
+                        <field name="pretender_high_risk_count" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button name="action_open_pretender" type="object"
+                        string="Open Pre-Tender Opportunity"
+                        invisible="not crm_lead_id"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

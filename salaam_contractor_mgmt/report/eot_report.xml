@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_eot_report">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Extension of Time Assessment</h2>
+            <h3><t t-esc="o.name"/></h3>
+            <table class="table table-sm"><tr><td><b>Project</b></td><td><t t-esc="o.project_id.name"/></td><td><b>Contractor</b></td><td><t t-esc="o.contractor_id.name"/></td></tr>
+<tr><td><b>Delay Event</b></td><td><t t-esc="o.delay_event"/></td><td><b>Entitlement</b></td><td><t t-esc="o.entitlement_basis"/></td></tr>
+<tr><td><b>Days Claimed</b></td><td><t t-esc="o.days_claimed"/></td><td><b>Days Granted</b></td><td><t t-esc="o.days_granted"/></td></tr>
+<tr><td><b>Original Completion</b></td><td><t t-esc="o.original_completion_date"/></td><td><b>Revised Completion</b></td><td><t t-esc="o.revised_completion_date"/></td></tr>
+<tr><td><b>Notice Given</b></td><td><t t-esc="'Yes' if o.notice_given else 'No'"/></td><td><b>Within Period</b></td><td><t t-esc="'Yes' if o.notice_within_contract else 'No'"/></td></tr></table>
+<h4>Contractor Narrative</h4><p><t t-esc="o.contractor_narrative"/></p>
+<h4>PM Assessment</h4><p><t t-esc="o.pm_assessment_notes"/></p>
+            <p style="margin-top:16px;font-size:9px;color:#999;">Salaam Investment Bank · IAFAO · <t t-esc="o.name"/></p>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_eot_report" model="ir.actions.report">
+    <field name="name">Extension of Time Assessment</field><field name="model">salaam.eot.claim</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">salaam_contractor_mgmt.report_eot_report</field>
+    <field name="binding_model_id" ref="model_salaam_eot_claim"/><field name="binding_type">report</field>
+  </record>
+</odoo>

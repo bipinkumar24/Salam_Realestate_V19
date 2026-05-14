@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_prebid_meeting_list" model="ir.ui.view">
+        <field name="name">tender.prebid.meeting.list</field>
+        <field name="model">tender.prebid.meeting</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'attended'" decoration-danger="state == 'missed'">
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <field name="meeting_type"/>
+                <field name="meeting_date"/>
+                <field name="location"/>
+                <field name="is_mandatory"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_prebid_meeting_form" model="ir.ui.view">
+        <field name="name">tender.prebid.meeting.form</field>
+        <field name="model">tender.prebid.meeting</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="meeting_type"/>
+                            <field name="is_mandatory"/>
+                            <field name="calendar_event_id"/>
+                        </group>
+                        <group>
+                            <field name="meeting_date"/>
+                            <field name="location"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="attendee_ids" widget="many2many_tags"/>
+                        <field name="external_attendee_ids" widget="many2many_tags"/>
+                    </group>
+                    <notebook>
+                        <page string="Minutes" name="minutes">
+                            <field name="minutes" nolabel="1"/>
+                        </page>
+                        <page string="Attachments" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_prebid_meeting" model="ir.actions.act_window">
+        <field name="name">Pre-Bid Meetings</field>
+        <field name="res_model">tender.prebid.meeting</field>
+        <field name="view_mode">list,form,calendar</field>
+    </record>
+
+</odoo>

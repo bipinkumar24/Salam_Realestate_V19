@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_snag_list_form" model="ir.ui.view">
+        <field name="name">salaam.snag.list.form</field>
+        <field name="model">salaam.snag.list</field>
+        <field name="arch" type="xml">
+            <form string="Snagging List">
+                <header>
+                    <button name="action_start_inspection" string="Start Inspection" type="object" class="btn-primary" invisible="state != 'draft'" />
+                    <button name="action_issue_to_contractor" string="Issue to Contractor" type="object" class="btn-primary" invisible="state != 'in_progress'" />
+                    <button name="action_schedule_reinspection" string="Schedule Re-Inspection" type="object" invisible="state != 'contractor_response'" />
+                    <button name="action_close" string="Close Snag List" type="object" class="btn-primary" invisible="state not in ['contractor_response', 're_inspection']" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,in_progress,contractor_response,closed" />
+                </header>
+                <div class="alert alert-danger" role="alert" invisible="critical_items == 0">
+                    Critical items still open:
+                    <field name="critical_items" />
+                </div>
+                <sheet>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <field name="completion_pct" widget="progressbar" />
+                    <group>
+                        <group string="Property">
+                            <field name="project_id" />
+                            <field name="property_id" />
+                            <field name="phase_id" />
+                            <field name="sale_contract_id" />
+                        </group>
+                        <group string="Parties and Dates">
+                            <field name="inspector_id" />
+                            <field name="contractor_id" />
+                            <field name="buyer_id" />
+                            <field name="buyer_attended" />
+                            <field name="inspection_date" />
+                            <field name="contractor_response_deadline" />
+                            <field name="closed_date" invisible="state != 'closed'" />
+                        </group>
+                    </group>
+                    <group col="4">
+                        <field name="total_items" />
+                        <field name="open_items" />
+                        <field name="verified_items" />
+                        <field name="critical_items" />
+                    </group>
+                    <notebook>
+                        <page string="Snag Items">
+                            <field name="snag_item_ids">
+                                <list decoration-danger="severity == 'critical' and state != 'verified'" decoration-success="state == 'verified'" editable="bottom">
+                                    <field name="sequence" widget="handle" />
+                                    <field name="room" />
+                                    <field name="description" />
+                                    <field name="category" />
+                                    <field name="severity" />
+                                    <field name="responsible_trade" />
+                                    <field name="rectification_deadline" />
+                                    <field name="state" />
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="general_notes" widget="text" />
+                            <field name="contractor_comments" widget="text" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_snag_list_list" model="ir.ui.view">
+        <field name="name">salaam.snag.list.list</field>
+        <field name="model">salaam.snag.list</field>
+        <field name="arch" type="xml">
+            <list string="Snag Lists" decoration-success="state == 'closed'" decoration-danger="critical_items &gt; 0 and state != 'closed'">
+                <field name="name" />
+                <field name="property_id" />
+                <field name="project_id" />
+                <field name="round_number" />
+                <field name="inspection_date" />
+                <field name="contractor_response_deadline" />
+                <field name="total_items" />
+                <field name="open_items" />
+                <field name="critical_items" />
+                <field name="completion_pct" widget="progressbar" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <record id="action_snag_list" model="ir.actions.act_window">
+        <field name="name">Snag Lists</field>
+        <field name="res_model">salaam.snag.list</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="action_warranty_claim" model="ir.actions.act_window">
+        <field name="name">Warranty Claims</field>
+        <field name="res_model">salaam.warranty.claim</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_handover_cert_form" model="ir.ui.view">
+        <field name="name">salaam.handover.certificate.form</field>
+        <field name="model">salaam.handover.certificate</field>
+        <field name="arch" type="xml">
+            <form string="Handover Certificate">
+                <header>
+                    <button name="action_issue" string="Issue to Buyer" type="object" class="btn-primary" invisible="state != 'draft'" />
+                    <button name="action_buyer_signed" string="Buyer Signed" type="object" class="btn-primary" invisible="state != 'issued'" />
+                    <button name="action_register" string="Register" type="object" invisible="state != 'buyer_signed'" />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,issued,buyer_signed,registered" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="%(action_warranty_claim)d" type="action" class="oe_stat_button" icon="fa-wrench" context="{'default_certificate_id': id}">
+                            <div class="o_stat_info">
+                                <field name="warranty_claim_count" class="o_stat_value" /><span class="o_stat_text">Warranty</span></div>
+                        </button>
+                    </div>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Unit and Buyer">
+                            <field name="project_id" />
+                            <field name="property_id" />
+                            <field name="buyer_id" />
+                            <field name="sale_contract_id" />
+                            <field name="snag_list_id" />
+                        </group>
+                        <group string="DLP">
+                            <field name="handover_date" />
+                            <field name="buyer_signed_date" invisible="state == 'draft'" />
+                            <field name="dlp_start_date" readonly="1" invisible="state == 'draft'" />
+                            <field name="dlp_end_date" readonly="1" invisible="state == 'draft'" />
+                            <field name="dlp_expired" readonly="1" invisible="state == 'draft'" />
+                        </group>
+                    </group>
+                    <group string="Checklist">
+                        <field name="outstanding_payments_cleared" />
+                        <field name="keys_released" />
+                        <field name="keys_release_date" invisible="not keys_released" />
+                        <field name="issued_by" />
+                    </group>
+                    <group>
+                        <field name="meter_readings" widget="text" />
+                        <field name="snagging_notes" widget="text" />
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="view_handover_cert_list" model="ir.ui.view">
+        <field name="name">salaam.handover.certificate.list</field>
+        <field name="model">salaam.handover.certificate</field>
+        <field name="arch" type="xml">
+            <list string="Handover Certificates" decoration-success="state == 'registered'">
+                <field name="name" />
+                <field name="property_id" />
+                <field name="buyer_id" />
+                <field name="handover_date" />
+                <field name="dlp_end_date" />
+                <field name="dlp_expired" />
+                <field name="open_warranty_count" />
+                <field name="keys_released" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <record id="action_handover_certificate" model="ir.actions.act_window">
+        <field name="name">Handover Certificates</field>
+        <field name="res_model">salaam.handover.certificate</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_warranty_claim_form" model="ir.ui.view">
+        <field name="name">salaam.warranty.claim.form</field>
+        <field name="model">salaam.warranty.claim</field>
+        <field name="arch" type="xml">
+            <form string="Warranty Claim">
+                <header>
+                    <button name="action_assess_warranty" string="Assess: Warranty" type="object" class="btn-primary" ainvisible="state != 'open'" />
+                    <button name="action_assess_maintenance" string="Assess: Maintenance Only" type="object" invisible="state != 'open'" />
+                    <button name="action_notify_contractor" string="Notify Contractor" type="object" class="btn-primary" invisible="state != 'assessed'" />
+                    <button name="action_rectified" string="Mark Rectified" type="object" invisible="state != 'contractor_notified'" />
+                    <button name="action_close" string="Close Claim" type="object" class="btn-primary" invisible="state != 'rectified'" />
+                    <button name="action_reject" string="Reject" type="object" invisible="state not in ('open','assessed')" />
+                    <field name="state" widget="statusbar" statusbar_visible="open,assessed,contractor_notified,closed" />
+                </header>
+                <div class="alert alert-warning" role="alert" invisible="within_dlp">
+                    Claim reported outside DLP. DLP ended:
+                    <field name="dlp_end_date" />
+                </div>
+                <sheet>
+                    <div class="oe_title"><label for="name" />
+                        <h1>
+                            <field name="name" />
+                        </h1>
+                        <h2>
+                            <field name="title" />
+                        </h2>
+                    </div>
+                    <group>
+                        <group string="Unit">
+                            <field name="certificate_id" />
+                            <field name="property_id" readonly="1" />
+                            <field name="buyer_id" readonly="1" />
+                            <field name="contractor_id" />
+                        </group>
+                        <group string="Defect">
+                            <field name="room" />
+                            <field name="category" />
+                            <field name="severity" />
+                            <field name="claim_type" />
+                        </group>
+                    </group>
+                    <group>
+                        <field name="report_date" />
+                        <field name="within_dlp" readonly="1" />
+                        <field name="rectification_deadline" />
+                        <field name="rectified_date" invisible="state not in ('rectified','closed')" />
+                    </group>
+                    <field name="description" widget="text" />
+                </sheet>
+                <chatter />
+            </form>
+        </field>
+    </record>
+    <record id="view_warranty_claim_list" model="ir.ui.view">
+        <field name="name">salaam.warranty.claim.list</field>
+        <field name="model">salaam.warranty.claim</field>
+        <field name="arch" type="xml">
+            <list string="Warranty Claims" decoration-danger="severity == 'critical' and state not in ['closed','rejected']" decoration-success="state == 'closed'">
+                <field name="name" />
+                <field name="property_id" />
+                <field name="buyer_id" />
+                <field name="title" />
+                <field name="category" />
+                <field name="severity" />
+                <field name="claim_type" />
+                <field name="report_date" />
+                <field name="within_dlp" />
+                <field name="rectification_deadline" />
+                <field name="state" />
+            </list>
+        </field>
+    </record>
+    <menuitem id="menu_handover_root" name="Handover" parent="salaam_construction_mgmt.menu_construction_root" sequence="40" />
+    <menuitem id="menu_snag_lists" name="Snag Lists" parent="menu_handover_root" action="action_snag_list" sequence="10" />
+    <menuitem id="menu_handover_certs" name="Handover Certificates" parent="menu_handover_root" action="action_handover_certificate" sequence="20" />
+    <menuitem id="menu_warranty_claims" name="Warranty Claims" parent="menu_handover_root" action="action_warranty_claim" sequence="30" />
+</odoo>

@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_kyc_watchlist_officer,kyc.watchlist.entry officer,model_kyc_watchlist_entry,bank_realestate_collab.group_bre_bank_officer,1,1,1,1
+access_kyc_watchlist_manager,kyc.watchlist.entry manager,model_kyc_watchlist_entry,bank_realestate_collab.group_bre_manager,1,1,1,1
+access_kyc_approved_officer,kyc.approved.entry officer,model_kyc_approved_entry,bank_realestate_collab.group_bre_bank_officer,1,1,1,1
+access_kyc_approved_manager,kyc.approved.entry manager,model_kyc_approved_entry,bank_realestate_collab.group_bre_manager,1,1,1,1
+access_kyc_sync_officer,kyc.watchlist.sync officer,model_kyc_watchlist_sync,bank_realestate_collab.group_bre_bank_officer,1,1,1,0
+access_kyc_sync_manager,kyc.watchlist.sync manager,model_kyc_watchlist_sync,bank_realestate_collab.group_bre_manager,1,1,1,1

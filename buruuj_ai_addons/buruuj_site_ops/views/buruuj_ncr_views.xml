@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_ncr_list" model="ir.ui.view">
+        <field name="name">buruuj.ncr.list</field>
+        <field name="model">buruuj.ncr</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="severity == 'critical'"
+                  decoration-warning="severity == 'major'"
+                  decoration-success="state == 'closed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="severity" widget="badge"/>
+                <field name="responsible_partner_id"/>
+                <field name="target_close_date"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_ncr_form" model="ir.ui.view">
+        <field name="name">buruuj.ncr.form</field>
+        <field name="model">buruuj.ncr</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_issue" string="Issue" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_start_action" string="Action Started"
+                            type="object" invisible="state != 'issued'"/>
+                    <button name="action_close" string="Close" type="object"
+                            class="oe_highlight" invisible="state != 'action_in_progress'"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            invisible="state in ('closed','rejected','draft')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3><field name="title"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                            <field name="raised_by"/>
+                            <field name="responsible_partner_id"/>
+                        </group>
+                        <group>
+                            <field name="severity"/>
+                            <field name="location"/>
+                            <field name="target_close_date"/>
+                            <field name="closed_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description"><field name="description"/></page>
+                        <page string="Root Cause"><field name="root_cause"/></page>
+                        <page string="Corrective Action"><field name="corrective_action"/></page>
+                        <page string="Preventive Action"><field name="preventive_action"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_ncr" model="ir.actions.act_window">
+        <field name="name">NCRs</field>
+        <field name="res_model">buruuj.ncr</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

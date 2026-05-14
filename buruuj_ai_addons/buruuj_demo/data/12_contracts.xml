@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="demo_contract_marina_main" model="buruuj.contract">
+            <field name="name">Al Marina Tower — Main Contract</field>
+            <field name="reference">MH-CON-2025-007</field>
+            <field name="type">client</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="counterparty_id" ref="demo_client_marina"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=6, days=15)).strftime('%Y-%m-%d')"/>
+            <field name="commencement_date" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="completion_date" eval="(DateTime.today() + relativedelta(months=12)).strftime('%Y-%m-%d')"/>
+            <field name="dlp_end_date" eval="(DateTime.today() + relativedelta(months=24)).strftime('%Y-%m-%d')"/>
+            <field name="contract_value">24750000.00</field>
+            <field name="performance_bond_amount">2475000.00</field>
+            <field name="performance_bond_expiry" eval="(DateTime.today() + relativedelta(months=14)).strftime('%Y-%m-%d')"/>
+            <field name="advance_bond_amount">2475000.00</field>
+            <field name="advance_bond_expiry" eval="(DateTime.today() + relativedelta(months=8)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_expiry" eval="(DateTime.today() + relativedelta(months=10)).strftime('%Y-%m-%d')"/>
+            <field name="state">active</field>
+        </record>
+
+        <record id="demo_contract_hc7_main" model="buruuj.contract">
+            <field name="name">Highway HC-7 Upgrade — Main Contract</field>
+            <field name="reference">MOPW-HC7-2025-014</field>
+            <field name="type">client</field>
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="counterparty_id" ref="demo_client_mopw"/>
+            <field name="commencement_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="completion_date" eval="(DateTime.today() + relativedelta(months=8)).strftime('%Y-%m-%d')"/>
+            <field name="contract_value">8200000.00</field>
+            <field name="performance_bond_amount">820000.00</field>
+            <field name="performance_bond_expiry" eval="(DateTime.today() + relativedelta(months=10)).strftime('%Y-%m-%d')"/>
+            <field name="state">active</field>
+        </record>
+
+        <record id="demo_claim_marina_eot" model="buruuj.claim">
+            <field name="name">EOT Claim — Marble Delivery Delay</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="contract_id" ref="demo_contract_marina_main"/>
+            <field name="type">eot</field>
+            <field name="direction">outgoing</field>
+            <field name="date" eval="(DateTime.today() - relativedelta(weeks=4)).strftime('%Y-%m-%d')"/>
+            <field name="claim_period_start" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="eot_days">21</field>
+            <field name="cost_amount">125000.00</field>
+            <field name="state">negotiating</field>
+            <field name="description"><![CDATA[<p>Delay in client-approved imported marble delivery extended the lobby finishing critical path by 21 days.</p>]]></field>
+            <field name="contractual_basis"><![CDATA[<p>Clause 8.4 — Extension of Time for delays caused by Employer or Engineer.</p>]]></field>
+        </record>
+
+    </data>
+</odoo>

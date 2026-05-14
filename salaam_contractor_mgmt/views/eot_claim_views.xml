@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_eot_form" model="ir.ui.view">
+    <field name="name">salaam.eot.claim.form</field>
+    <field name="model">salaam.eot.claim</field>
+    <field name="arch" type="xml">
+      <form string="EOT Claim">
+        <header>
+          <button name="action_assess" string="Start Assessment" type="object" class="btn-primary" invisible="state != 'submitted'"/>
+          <button name="action_grant" string="Grant EOT" type="object" class="btn-primary" invisible="state != 'under_assessment'"/>
+          <button name="action_partial" string="Partial Grant" type="object" invisible="state != 'under_assessment'"/>
+          <button name="action_reject" string="Reject" type="object" invisible="state != 'under_assessment'"/>
+          <field name="state" widget="statusbar" statusbar_visible="submitted,under_assessment,granted"/>
+        </header>
+        <div class="alert alert-warning" role="alert" invisible="not notice_given or notice_within_contract">
+          [!] Notice NOT given within the contractual period. Entitlement may be affected.
+        </div>
+        <sheet>
+          <div class="oe_title"><label for="name"/><h1><field name="name"/></h1></div>
+          <group>
+            <group string="Claim Details">
+              <field name="project_id"/><field name="contractor_party_id"/>
+              <field name="delay_event"/><field name="entitlement_basis"/>
+              <field name="site_instruction_id"/><field name="programme_id"/>
+              <field name="assessor_id"/>
+            </group>
+            <group string="Delay Dates">
+              <field name="delay_event_start"/><field name="delay_event_end"/>
+              <field name="submission_date"/>
+              <field name="notice_given"/><field name="notice_date" invisible="not notice_given"/>
+              <field name="notice_within_contract" readonly="1" invisible="not notice_given"/>
+            </group>
+          </group>
+          <group>
+            <group string="Time Quantum">
+              <field name="days_claimed"/><field name="days_granted"/>
+              <field name="days_rejected" readonly="1"/>
+              <field name="original_completion_date"/>
+              <field name="revised_completion_date" readonly="1"/>
+            </group>
+            <group string="Prolongation Cost">
+              <field name="has_prolongation_cost"/>
+              <field name="currency_id" invisible="1"/>
+              <field name="prolongation_cost_claimed" invisible="not has_prolongation_cost"/>
+              <field name="prolongation_cost_agreed" invisible="not has_prolongation_cost"/>
+            </group>
+          </group>
+          <notebook>
+            <page string="Narratives">
+              <field name="contractor_narrative" widget="text"/>
+              <field name="pm_assessment_notes" widget="text"/>
+              <field name="rejection_reason" widget="text" invisible="state != 'rejected'"/>
+            </page>
+          </notebook>
+        </sheet>
+        <chatter/>
+      </form>
+    </field>
+  </record>
+  <record id="view_eot_list" model="ir.ui.view">
+    <field name="name">salaam.eot.claim.list</field>
+    <field name="model">salaam.eot.claim</field>
+    <field name="arch" type="xml">
+      <list string="EOT Claims" decoration-success="state in ['granted','partial']" decoration-danger="state == 'rejected'">
+        <field name="name"/><field name="project_id"/><field name="contractor_id"/>
+        <field name="delay_event"/><field name="entitlement_basis"/>
+        <field name="days_claimed"/><field name="days_granted"/>
+        <field name="original_completion_date"/><field name="revised_completion_date"/>
+        <field name="notice_given"/><field name="notice_within_contract"/>
+        <field name="state"/>
+      </list>
+    </field>
+  </record>
+  <record id="action_eot_claim" model="ir.actions.act_window">
+    <field name="name">EOT Claims</field><field name="res_model">salaam.eot.claim</field>
+    <field name="view_mode">list,form</field>
+  </record>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_buruuj_dpr" name="Daily Progress Reports"
+              parent="buruuj_base.menu_buruuj_site"
+              action="action_buruuj_dpr" sequence="10"/>
+    <menuitem id="menu_buruuj_rfi" name="RFIs"
+              parent="buruuj_base.menu_buruuj_site"
+              action="action_buruuj_rfi" sequence="20"/>
+    <menuitem id="menu_buruuj_ncr" name="NCRs"
+              parent="buruuj_base.menu_buruuj_site"
+              action="action_buruuj_ncr" sequence="30"/>
+    <menuitem id="menu_buruuj_snag" name="Snag List"
+              parent="buruuj_base.menu_buruuj_site"
+              action="action_buruuj_snag" sequence="40"/>
+    <menuitem id="menu_buruuj_itp" name="Inspection Requests"
+              parent="buruuj_base.menu_buruuj_site"
+              action="action_buruuj_itp" sequence="50"/>
+</odoo>

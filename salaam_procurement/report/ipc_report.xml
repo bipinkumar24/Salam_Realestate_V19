@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_ipc">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Interim Payment Certificate #<t t-esc="o.certificate_number"/></h2>
+            <h3><t t-esc="o.name"/> — <t t-esc="o.contractor_id.name"/></h3>
+            <table class="table table-sm">
+              <tr><td><b>Project</b></td><td><t t-esc="o.project_id.name"/></td><td><b>Period</b></td><td><t t-esc="o.period_start"/> to <t t-esc="o.period_end"/></td></tr>
+              <tr><td><b>Contract Value</b></td><td><t t-esc="o.contract_value"/> <t t-esc="o.currency_id.symbol"/></td><td><b>% Complete</b></td><td><t t-esc="'%.1f' % o.pct_complete"/>%</td></tr>
+            </table>
+            <h4>Valuation Summary</h4>
+            <table class="table table-bordered">
+              <tr><td>Gross Valuation Certified (cumulative)</td><td><t t-esc="o.gross_valuation_certified"/> <t t-esc="o.currency_id.symbol"/></td></tr>
+              <tr><td>Less: Previously Certified</td><td>(<t t-esc="o.previous_certified_total"/> <t t-esc="o.currency_id.symbol"/>)</td></tr>
+              <tr><td>This Certificate — Gross</td><td><t t-esc="o.this_certificate_gross"/> <t t-esc="o.currency_id.symbol"/></td></tr>
+              <tr><td>Less: Retention (<t t-esc="o.retention_pct"/>%)</td><td>(<t t-esc="o.this_certificate_retention"/> <t t-esc="o.currency_id.symbol"/>)</td></tr>
+              <tr class="table-active"><td><b>NET AMOUNT DUE</b></td><td><b><t t-esc="o.net_amount_due"/> <t t-esc="o.currency_id.symbol"/></b></td></tr>
+              <tr><td>Cumulative Retention Held</td><td><t t-esc="o.retention_held"/> <t t-esc="o.currency_id.symbol"/></td></tr>
+            </table>
+            <p><b>Payment Due:</b> <t t-esc="o.payment_due_date"/> &#160; <b>Status:</b> <t t-esc="o.state"/></p>
+            <div style="margin-top:50px;display:flex;justify-content:space-between;">
+              <div>QS Reviewer: _______________________</div><div>Employer Rep: _______________________</div>
+            </div>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_ipc" model="ir.actions.report">
+    <field name="name">Interim Payment Certificate</field><field name="model">salaam.payment.certificate</field>
+    <field name="report_type">qweb-pdf</field><field name="report_name">salaam_procurement.report_ipc</field>
+    <field name="binding_model_id" ref="model_salaam_payment_certificate"/><field name="binding_type">report</field>
+  </record>
+</odoo>

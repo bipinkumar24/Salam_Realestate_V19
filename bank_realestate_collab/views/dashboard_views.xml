@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Real Estate Agent Dashboard -->
+    <record id="view_bre_agent_dashboard" model="ir.ui.view">
+        <field name="name">bre.agent.dashboard</field>
+        <field name="model">bre.customer.application</field>
+        <field name="arch" type="xml">
+            <graph string="Applications by Status" type="bar">
+                <field name="bank_status"/>
+                <field name="financing_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Application Pipeline Graph -->
+    <record id="view_application_graph" model="ir.ui.view">
+        <field name="name">bre.customer.application.graph</field>
+        <field name="model">bre.customer.application</field>
+        <field name="arch" type="xml">
+            <graph string="Applications Pipeline" type="bar" stacked="True">
+                <field name="stage_id" type="row"/>
+                <field name="bank_status" type="col"/>
+                <field name="financing_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Application Pivot View -->
+    <record id="view_application_pivot" model="ir.ui.view">
+        <field name="name">bre.customer.application.pivot</field>
+        <field name="model">bre.customer.application</field>
+        <field name="arch" type="xml">
+            <pivot string="Application Analysis" display_quantity="true">
+                <field name="agent_id" type="row"/>
+                <field name="bank_status" type="col"/>
+                <field name="financing_amount" type="measure"/>
+                <field name="approved_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Financing Request Graph -->
+    <record id="view_financing_request_graph" model="ir.ui.view">
+        <field name="name">bre.financing.request.graph</field>
+        <field name="model">bre.financing.request</field>
+        <field name="arch" type="xml">
+            <graph string="Financing Requests" type="pie">
+                <field name="status"/>
+                <field name="requested_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Financing Request Pivot -->
+    <record id="view_financing_request_pivot" model="ir.ui.view">
+        <field name="name">bre.financing.request.pivot</field>
+        <field name="model">bre.financing.request</field>
+        <field name="arch" type="xml">
+            <pivot string="Financing Analysis">
+                <field name="financing_type" type="row"/>
+                <field name="status" type="col"/>
+                <field name="requested_amount" type="measure"/>
+                <field name="approved_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Property Analysis Graph -->
+    <record id="view_property_graph" model="ir.ui.view">
+        <field name="name">property.details.bre.graph</field>
+        <field name="model">property.details</field>
+        <field name="arch" type="xml">
+            <graph string="Property Portfolio" type="bar">
+                <field name="type" type="row"/>
+                <field name="price" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Property Analysis Pivot -->
+    <record id="view_property_pivot" model="ir.ui.view">
+        <field name="name">property.details.bre.pivot</field>
+        <field name="model">property.details</field>
+        <field name="arch" type="xml">
+            <pivot string="Property Portfolio">
+                <field name="type" type="row"/>
+                <field name="stage" type="col"/>
+                <field name="price" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Dashboard Actions -->
+    <record id="action_agent_dashboard" model="ir.actions.act_window">
+        <field name="name">Agent Dashboard</field>
+        <field name="res_model">bre.customer.application</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('agent_id','=',uid)]</field>
+        <field name="context">{'search_default_my_apps': 1}</field>
+    </record>
+
+    <record id="action_bank_dashboard" model="ir.actions.act_window">
+        <field name="name">Bank Dashboard</field>
+        <field name="res_model">bre.financing.request</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="context">{'search_default_submitted': 1}</field>
+    </record>
+
+    <record id="action_property_analytics" model="ir.actions.act_window">
+        <field name="name">Property Analytics</field>
+        <field name="res_model">property.details</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+    <record id="action_application_analytics" model="ir.actions.act_window">
+        <field name="name">Application Analytics</field>
+        <field name="res_model">bre.customer.application</field>
+        <field name="view_mode">graph,pivot,list</field>
+    </record>
+
+</odoo>

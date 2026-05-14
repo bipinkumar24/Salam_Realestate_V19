@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mr_list" model="ir.ui.view">
+        <field name="name">buruuj.mr.list</field>
+        <field name="model">buruuj.material.requisition</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state in ('approved','po_raised','closed')"
+                  decoration-warning="state in ('submitted','in_rfq')"
+                  decoration-danger="state == 'rejected'"
+                  decoration-bf="priority in ('high','urgent')">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="phase_id" optional="show"/>
+                <field name="date"/>
+                <field name="required_by"/>
+                <field name="line_count" string="# Materials"/>
+                <field name="priority" widget="badge"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_mr_form" model="ir.ui.view">
+        <field name="name">buruuj.mr.form</field>
+        <field name="model">buruuj.material.requisition</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_pm_approve" string="PM Approve"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'submitted'"
+                            groups="buruuj_base.group_buruuj_pm"/>
+                    <button name="action_create_rfq" string="Create RFQ"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'approved'"/>
+                    <button name="action_close" string="Close"
+                            type="object"
+                            invisible="state not in ('po_raised','approved','in_rfq')"/>
+                    <button name="action_reject" string="Reject"
+                            type="object"
+                            invisible="state in ('rejected','cancelled','closed')"
+                            groups="buruuj_base.group_buruuj_pm"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ('rejected','cancelled','closed')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_rfqs" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="rfq_count" widget="statinfo"
+                                   string="RFQs"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="phase_id"/>
+                            <field name="requested_by"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="required_by"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Materials">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="material_id"/>
+                                    <field name="specification"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id"/>
+                                    <field name="estimated_unit_price"/>
+                                    <field name="estimated_total" sum="Total"/>
+                                    <field name="notes"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Purpose">
+                            <field name="purpose" placeholder="Why this material is needed..."/>
+                        </page>
+                        <page string="Rejection" invisible="state != 'rejected'">
+                            <field name="rejection_reason"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_mr" model="ir.actions.act_window">
+        <field name="name">Material Requisitions</field>
+        <field name="res_model">buruuj.material.requisition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_mr_pending" model="ir.actions.act_window">
+        <field name="name">Pending Approval</field>
+        <field name="res_model">buruuj.material.requisition</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','submitted')]</field>
+    </record>
+</odoo>

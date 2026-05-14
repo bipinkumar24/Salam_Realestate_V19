@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 # Copyright 2023-Today TechKhedut.
 # Part of TechKhedut. See LICENSE file for full copyright and licensing details.
+from PIL import Image as PILImage
 import base64
+import io
 from odoo import api, fields, models, tools, _
 from odoo.exceptions import ValidationError
 from odoo.addons.html_editor.tools import get_video_embed_code
@@ -385,12 +387,23 @@ class ProjectImagesLine(models.Model):
                                               compute="_compute_can_image_1024_be_zoomed",
                                               store=True)
 
+    # @api.depends("image", "image_1024")
+    # def _compute_can_image_1024_be_zoomed(self):
+    #     """Compute if image can be zoomed or not"""
+    #     for image in self:
+    #         image.can_image_1024_be_zoomed = image.image and tools.is_image_size_above(image.image,
+    #                                                                                    image.image_1024)
+
     @api.depends("image", "image_1024")
     def _compute_can_image_1024_be_zoomed(self):
         """Compute if image can be zoomed or not"""
         for image in self:
-            image.can_image_1024_be_zoomed = image.image and tools.is_image_size_above(image.image,
-                                                                                       image.image_1024)
+            if image.image and image.image_1024:
+                orig = PILImage.open(io.BytesIO(base64.b64decode(image.image))).size
+                resized = PILImage.open(io.BytesIO(base64.b64decode(image.image_1024))).size
+                image.can_image_1024_be_zoomed = orig[0] > resized[0] or orig[1] > resized[1]
+            else:
+                image.can_image_1024_be_zoomed = False
 
     @api.depends("video_url")
     def _compute_embed_code(self):

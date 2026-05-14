@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- ====== PROJECT 1: Al Marina Tower ====== -->
+        <record id="demo_project_marina" model="project.project">
+            <field name="name">Al Marina Tower</field>
+            <field name="partner_id" ref="demo_client_marina"/>
+            <field name="buruuj_project_code">PRJ/2025/0001</field>
+            <field name="buruuj_tender_id" ref="demo_tender_marina"/>
+            <field name="buruuj_consultant_id" ref="demo_consultant_skyline"/>
+            <field name="buruuj_contract_value">24750000.00</field>
+            <field name="buruuj_baseline_budget">22500000.00</field>
+            <field name="buruuj_planned_start" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_planned_end" eval="(DateTime.today() + relativedelta(months=12)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_actual_start" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_dlp_months">12</field>
+            <field name="buruuj_physical_progress">35.0</field>
+            <field name="buruuj_site_address">Marina District, Plot 7</field>
+            <field name="buruuj_site_lat">21.4858</field>
+            <field name="buruuj_site_lng">39.1925</field>
+            <field name="buruuj_geofence_radius">300</field>
+        </record>
+
+        <!-- Phases -->
+        <record id="demo_phase_marina_1" model="buruuj.phase">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="code">P1</field>
+            <field name="name">Substructure</field>
+            <field name="weight_percent">15</field>
+            <field name="progress">100</field>
+            <field name="state">completed</field>
+        </record>
+        <record id="demo_phase_marina_2" model="buruuj.phase">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="code">P2</field>
+            <field name="name">Superstructure</field>
+            <field name="weight_percent">35</field>
+            <field name="progress">60</field>
+            <field name="state">in_progress</field>
+        </record>
+        <record id="demo_phase_marina_3" model="buruuj.phase">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="code">P3</field>
+            <field name="name">MEP Rough-in</field>
+            <field name="weight_percent">20</field>
+            <field name="progress">25</field>
+            <field name="state">in_progress</field>
+        </record>
+        <record id="demo_phase_marina_4" model="buruuj.phase">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="code">P4</field>
+            <field name="name">Finishing</field>
+            <field name="weight_percent">25</field>
+            <field name="progress">0</field>
+            <field name="state">not_started</field>
+        </record>
+        <record id="demo_phase_marina_5" model="buruuj.phase">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="code">P5</field>
+            <field name="name">Testing &amp; Handover</field>
+            <field name="weight_percent">5</field>
+            <field name="progress">0</field>
+            <field name="state">not_started</field>
+        </record>
+
+        <!-- Milestones -->
+        <record id="demo_ms_marina_1" model="buruuj.milestone">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="name">Mobilization</field>
+            <field name="planned_date" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="actual_date" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="amount">2475000.00</field>
+            <field name="percent_of_contract">10</field>
+            <field name="state">paid</field>
+        </record>
+        <record id="demo_ms_marina_2" model="buruuj.milestone">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="name">Substructure Completion</field>
+            <field name="planned_date" eval="(DateTime.today() - relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="actual_date" eval="(DateTime.today() - relativedelta(months=2, days=20)).strftime('%Y-%m-%d')"/>
+            <field name="amount">3712500.00</field>
+            <field name="percent_of_contract">15</field>
+            <field name="state">billed</field>
+        </record>
+        <record id="demo_ms_marina_3" model="buruuj.milestone">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="name">Topping Out</field>
+            <field name="planned_date" eval="(DateTime.today() + relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="amount">7425000.00</field>
+            <field name="percent_of_contract">30</field>
+            <field name="state">pending</field>
+        </record>
+
+        <!-- Variation Order -->
+        <record id="demo_vo_marina_1" model="buruuj.variation">
+            <field name="title">Upgrade lobby finishes to imported marble</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="initiated_by">client</field>
+            <field name="cost_impact">485000.00</field>
+            <field name="time_impact_days">21</field>
+            <field name="amount">485000.00</field>
+            <field name="state">approved</field>
+            <field name="approval_ref">MH-VO-2025-001</field>
+            <field name="approval_date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <!-- Risks -->
+        <record id="demo_risk_marina_1" model="buruuj.risk">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="name">Imported marble delivery delay</field>
+            <field name="category">schedule</field>
+            <field name="likelihood">3</field>
+            <field name="impact">4</field>
+            <field name="mitigation">Order placed early; alternate local supplier identified.</field>
+            <field name="state">mitigated</field>
+        </record>
+        <record id="demo_risk_marina_2" model="buruuj.risk">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="name">Coastal weather affecting curtain wall installation</field>
+            <field name="category">weather</field>
+            <field name="likelihood">4</field>
+            <field name="impact">3</field>
+            <field name="mitigation">Schedule installation outside monsoon window.</field>
+            <field name="state">open</field>
+        </record>
+
+        <!-- ====== PROJECT 2: Highway HC-7 Upgrade ====== -->
+        <record id="demo_project_hc7" model="project.project">
+            <field name="name">Highway HC-7 Upgrade</field>
+            <field name="partner_id" ref="demo_client_mopw"/>
+            <field name="buruuj_project_code">PRJ/2025/0002</field>
+            <field name="buruuj_consultant_id" ref="demo_consultant_atlas"/>
+            <field name="buruuj_contract_value">8200000.00</field>
+            <field name="buruuj_baseline_budget">7500000.00</field>
+            <field name="buruuj_planned_start" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_planned_end" eval="(DateTime.today() + relativedelta(months=8)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_actual_start" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_dlp_months">12</field>
+            <field name="buruuj_physical_progress">42.0</field>
+            <field name="buruuj_site_address">Highway HC-7, Km 15-32</field>
+        </record>
+
+        <record id="demo_risk_hc7_1" model="buruuj.risk">
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="name">Asphalt price escalation</field>
+            <field name="category">cost</field>
+            <field name="likelihood">4</field>
+            <field name="impact">4</field>
+            <field name="mitigation">Lock-in supplier rate for 6 months executed.</field>
+            <field name="state">mitigated</field>
+        </record>
+
+        <!-- ====== PROJECT 3: Government Plaza Fitout ====== -->
+        <record id="demo_project_plaza" model="project.project">
+            <field name="name">Government Plaza Fitout</field>
+            <field name="partner_id" ref="demo_client_council"/>
+            <field name="buruuj_project_code">PRJ/2026/0003</field>
+            <field name="buruuj_contract_value">3100000.00</field>
+            <field name="buruuj_baseline_budget">2850000.00</field>
+            <field name="buruuj_planned_start" eval="(DateTime.today() - relativedelta(weeks=3)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_planned_end" eval="(DateTime.today() + relativedelta(months=7)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_actual_start" eval="(DateTime.today() - relativedelta(weeks=3)).strftime('%Y-%m-%d')"/>
+            <field name="buruuj_dlp_months">12</field>
+            <field name="buruuj_physical_progress">8.0</field>
+        </record>
+
+    </data>
+</odoo>

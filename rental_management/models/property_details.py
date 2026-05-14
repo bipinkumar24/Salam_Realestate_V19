@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import secrets
+from PIL import Image as PILImage
+import base64
+import io
 from odoo import api, fields, models, tools, _
 from odoo.addons.html_editor.tools import get_video_embed_code
 from odoo.exceptions import ValidationError
@@ -107,7 +110,30 @@ class PropertyDetails(models.Model):
     is_images = fields.Boolean(string="Images")
     is_floor_plan = fields.Boolean(string="Floor Plans")
     nearby_connectivity = fields.Boolean(string="Nearby Connectivities")
+    typology  = fields.Many2one('property.typology', string='Typology')
+    zone = fields.Many2one('property.zone', string='Zone')
+    lot = fields.Many2one('property.lot',     string='Lot')
+    block = fields.Many2one('property.block',    string='Block')
+    tf_no     = fields.Char(string='TF N#')
+    property_sequence_no = fields.Char(
+        string='Property ID',
+        compute='_compute_property_sequence_no',
+        store=True,
+        help='Auto-generated as: Typology - Zone - Lot - Block - TF N#',
+    )
 
+    @api.depends('typology', 'zone', 'lot', 'block', 'tf_no')
+    def _compute_property_sequence_no(self):
+        for rec in self:
+            parts = [
+                rec.typology.name  if rec.typology  else '',
+                rec.zone.name      if rec.zone      else '',
+                rec.lot.name      if rec.lot      else '',
+                rec.block.name     if rec.block     else '',
+                rec.tf_no          or '',
+            ]
+            # Only include non-empty parts; join with " - "
+            rec.property_sequence_no = ' - '.join(p for p in parts if p)
     # Area Measurement
     is_section_measurement = fields.Boolean(
         string="Is Section Area Measurement")
@@ -1322,12 +1348,22 @@ class FloorPlan(models.Model):
                                               compute="_compute_can_image_1024_be_zoomed",
                                               store=True)
 
+    # @api.depends("image", "image_1024")
+    # def _compute_can_image_1024_be_zoomed(self):
+    #     """Compute image can be zoomed or  not"""
+    #     for image in self:
+    #         image.can_image_1024_be_zoomed = image.image and tools.is_image_size_above(image.image,
+    #                                                                                    image.image_1024)
     @api.depends("image", "image_1024")
     def _compute_can_image_1024_be_zoomed(self):
-        """Compute image can be zoomed or  not"""
+        """Compute image can be zoomed or not"""
         for image in self:
-            image.can_image_1024_be_zoomed = image.image and tools.is_image_size_above(image.image,
-                                                                                       image.image_1024)
+            if image.image and image.image_1024:
+                orig = PILImage.open(io.BytesIO(base64.b64decode(image.image))).size
+                resized = PILImage.open(io.BytesIO(base64.b64decode(image.image_1024))).size
+                image.can_image_1024_be_zoomed = orig[0] > resized[0] or orig[1] > resized[1]
+            else:
+                image.can_image_1024_be_zoomed = False
 
     @api.depends("video_url")
     def _compute_embed_code(self):
@@ -1365,12 +1401,22 @@ class PropertyImages(models.Model):
                                               compute="_compute_can_image_1024_be_zoomed",
                                               store=True)
 
+    # @api.depends("image", "image_1024")
+    # def _compute_can_image_1024_be_zoomed(self):
+    #     """Compute image can be zoomed or not"""
+    #     for image in self:
+    #         image.can_image_1024_be_zoomed = image.image and tools.is_image_size_above(image.image,
+    #                                                                                    image.image_1024)
     @api.depends("image", "image_1024")
     def _compute_can_image_1024_be_zoomed(self):
         """Compute image can be zoomed or not"""
         for image in self:
-            image.can_image_1024_be_zoomed = image.image and tools.is_image_size_above(image.image,
-                                                                                       image.image_1024)
+            if image.image and image.image_1024:
+                orig = PILImage.open(io.BytesIO(base64.b64decode(image.image))).size
+                resized = PILImage.open(io.BytesIO(base64.b64decode(image.image_1024))).size
+                image.can_image_1024_be_zoomed = orig[0] > resized[0] or orig[1] > resized[1]
+            else:
+                image.can_image_1024_be_zoomed = False
 
     @api.depends("video_url")
     def _compute_embed_code(self):
@@ -1593,6 +1639,13 @@ class PropertySubType(models.Model):
                              ('industrial', 'Industrial')],
                             string="Type")
     sequence = fields.Integer()
+    is_apartment = fields.Boolean(
+        string='Is Apartment (Floor-based)',
+        default=False,
+        help='Tick for apartment subtypes. '
+             'When ticked, the Create Units wizard will require floor numbers. '
+             'Leave unticked for villas, bungalows, houses, etc. — '
+             'units will be created without floor numbers.')
 
     @api.constrains('name')
     def _check_name_is_unique(self):
@@ -1915,5 +1968,59 @@ class ParentProperty(models.Model):
             'view_mode': 'kanban,tree,form',
             'target': 'current'
         }
-
 # ------------------------------------------------------------------------------------------DEPRECATED MODEL END
+
+# ── Property Classification Models ────────────────────────────────────────────
+
+
+class PropertyTypology(models.Model):
+    """Property Typology"""
+    _name = 'property.typology'
+    _description = 'Property Typology'
+    _order = 'name'
+
+    name = fields.Char(string='Typology', required=True)
+    active = fields.Boolean(default=True)
+
+    _name_unique = models.Constraint(
+        ('unique(name)', 'Sector name must be unique!.'),
+    )
+
+class PropertyZone(models.Model):
+    """Property Zone"""
+    _name = 'property.zone'
+    _description = 'Property Zone'
+    _order = 'name'
+
+    name = fields.Char(string='Zone', required=True)
+    active = fields.Boolean(default=True)
+
+    _name_unique = models.Constraint(
+        ('unique(name)', 'Zone name must be unique!'),
+    )
+
+class PropertyLot(models.Model):
+    """Property Plot"""
+    _name = 'property.lot'
+    _description = 'Property Plot'
+    _order = 'name'
+
+    name = fields.Char(string='Lot', required=True)
+    active = fields.Boolean(default=True)
+
+    _name_unique = models.Constraint(
+        ('unique(name)', 'Lot name must be unique!'),
+    )
+
+class PropertyBlock(models.Model):
+    """Property Block"""
+    _name = 'property.block'
+    _description = 'Property Block'
+    _order = 'name'
+
+    name = fields.Char(string='Block', required=True)
+    active = fields.Boolean(default=True)
+
+    _name_unique = models.Constraint(
+        ('unique(name)', 'Block name must be unique'),
+    )

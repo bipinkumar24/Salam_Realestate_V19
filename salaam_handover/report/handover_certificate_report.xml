@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_handover_certificate">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>HANDOVER CERTIFICATE</h2>
+            <h3><t t-esc="o.name"/> — Unit: <t t-esc="o.property_id.name"/></h3>
+            <table class="table table-sm">
+              <tr><td><b>Buyer</b></td><td><t t-esc="o.buyer_id.name"/></td><td><b>Handover Date</b></td><td><t t-esc="o.handover_date"/></td></tr>
+              <tr><td><b>DLP Start</b></td><td><t t-esc="o.dlp_start_date"/></td><td><b>DLP End</b></td><td><t t-esc="o.dlp_end_date"/></td></tr>
+              <tr><td><b>Keys Released</b></td><td><t t-esc="'Yes' if o.keys_released else 'No'"/></td><td><b>Status</b></td><td><t t-esc="o.state"/></td></tr>
+            </table>
+            <h4>Meter Readings</h4><p><t t-esc="o.meter_readings"/></p>
+            <h4>Outstanding Matters</h4><p><t t-esc="o.snagging_notes"/></p>
+            <div style="margin-top:60px;display:flex;justify-content:space-between;">
+              <div>Developer Representative: _______________________</div>
+              <div>Buyer Signature: _______________________</div>
+            </div>
+            <p style="margin-top:8px;font-size:10px;color:#999;">Salaam Investment Bank · IAFAO · Handover Certificate · <t t-esc="o.name"/></p>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_handover_certificate" model="ir.actions.report">
+    <field name="name">Handover Certificate</field>
+    <field name="model">salaam.handover.certificate</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">salaam_handover.report_handover_certificate</field>
+    <field name="binding_model_id" ref="model_salaam_handover_certificate"/>
+    <field name="binding_type">report</field>
+  </record>
+</odoo>

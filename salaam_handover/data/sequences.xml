@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo><data noupdate="1">
+  <record id="seq_snag_list" model="ir.sequence"><field name="name">Snag List</field><field name="code">salaam.snag.list</field><field name="prefix">SNL/%(year)s/</field><field name="padding">4</field></record>
+  <record id="seq_handover_cert" model="ir.sequence"><field name="name">Handover Certificate</field><field name="code">salaam.handover.certificate</field><field name="prefix">HOC/%(year)s/</field><field name="padding">4</field></record>
+  <record id="seq_warranty_claim" model="ir.sequence"><field name="name">Warranty Claim</field><field name="code">salaam.warranty.claim</field><field name="prefix">WC/%(year)s/</field><field name="padding">4</field></record>
+</data></odoo>

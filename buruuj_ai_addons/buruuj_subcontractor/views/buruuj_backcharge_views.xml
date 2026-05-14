@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_backcharge_list" model="ir.ui.view">
+        <field name="name">buruuj.backcharge.list</field>
+        <field name="model">buruuj.backcharge</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="subcontract_id"/>
+                <field name="partner_id"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="category"/>
+                <field name="amount" sum="Total"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_backcharge_form" model="ir.ui.view">
+        <field name="name">buruuj.backcharge.form</field>
+        <field name="model">buruuj.backcharge</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_apply" string="Apply to IPC" type="object"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_dispute" string="Mark Disputed" type="object"
+                            invisible="state in ('applied','disputed')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="subcontract_id"/>
+                            <field name="partner_id"/>
+                            <field name="project_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="category"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <field name="description"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_backcharge" model="ir.actions.act_window">
+        <field name="name">Back-charges</field>
+        <field name="res_model">buruuj.backcharge</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

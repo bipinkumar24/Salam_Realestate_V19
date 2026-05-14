@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Clause Type Tags -->
+        <record id="clause_type_sale" model="dev.contract.clause.type">
+            <field name="name">Sale Contract</field>
+        </record>
+        <record id="clause_type_istisna" model="dev.contract.clause.type">
+            <field name="name">Istisna</field>
+        </record>
+        <record id="clause_type_ijara" model="dev.contract.clause.type">
+            <field name="name">Ijara</field>
+        </record>
+        <record id="clause_type_musharaka" model="dev.contract.clause.type">
+            <field name="name">Musharaka</field>
+        </record>
+        <record id="clause_type_subcontractor" model="dev.contract.clause.type">
+            <field name="name">Subcontractor</field>
+        </record>
+        <record id="clause_type_consultancy" model="dev.contract.clause.type">
+            <field name="name">Consultancy</field>
+        </record>
+        <record id="clause_type_all" model="dev.contract.clause.type">
+            <field name="name">All Contracts</field>
+        </record>
+
+        <!-- ── COMMON CLAUSES ── -->
+        <record id="clause_force_majeure" model="dev.contract.clause">
+            <field name="name">Force Majeure</field>
+            <field name="clause_code">CL-COM-001</field>
+            <field name="content">&lt;p&gt;Neither party shall be liable for any failure or delay in performing its obligations under this Agreement to the extent that such failure or delay is caused by a Force Majeure Event, including but not limited to: acts of God, war, armed conflict, geopolitical disruption (including Red Sea maritime corridor disruptions), pandemic, government action, or natural disaster. The party claiming Force Majeure shall notify the other party in writing within 7 days of the event occurring.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_all'))]"/>
+        </record>
+
+        <record id="clause_governing_law" model="dev.contract.clause">
+            <field name="name">Governing Law and Dispute Resolution</field>
+            <field name="clause_code">CL-COM-002</field>
+            <field name="content">&lt;p&gt;This Agreement shall be governed by and construed in accordance with the laws of the Republic of Djibouti. Any dispute arising from or in connection with this Agreement shall first be subject to good-faith negotiation for 30 days. If unresolved, disputes shall be referred to arbitration under the rules of the Djibouti Chamber of Commerce and Industry.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_all'))]"/>
+        </record>
+
+        <record id="clause_confidentiality" model="dev.contract.clause">
+            <field name="name">Confidentiality</field>
+            <field name="clause_code">CL-COM-003</field>
+            <field name="content">&lt;p&gt;Each party agrees to keep confidential all non-public information received from the other party in connection with this Agreement. This obligation shall survive the termination of this Agreement for a period of 5 years.&lt;/p&gt;</field>
+            <field name="is_mandatory">False</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_all'))]"/>
+        </record>
+
+        <!-- ── SHARIA COMPLIANCE CLAUSE ── -->
+        <record id="clause_sharia_compliance" model="dev.contract.clause">
+            <field name="name">Sharia Compliance Certification</field>
+            <field name="clause_code">CL-SHA-001</field>
+            <field name="sharia_applicable">True</field>
+            <field name="is_mandatory">True</field>
+            <field name="content">&lt;p&gt;This Agreement has been reviewed and approved by the Salaam Investment Bank Sharia Supervisory Board (SSB). All financial terms, profit-sharing arrangements, ownership transfer mechanisms, and penalty structures have been structured in compliance with Islamic jurisprudence (Fiqh al-Muamalat) and the applicable AAOIFI Sharia Standards. Any amendment to the financial terms of this Agreement shall require fresh SSB approval before taking effect.&lt;/p&gt;</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_istisna')), (4, ref('clause_type_ijara')), (4, ref('clause_type_musharaka'))]"/>
+        </record>
+
+        <record id="clause_late_payment_charity" model="dev.contract.clause">
+            <field name="name">Late Payment — Charity Donation Clause</field>
+            <field name="clause_code">CL-SHA-002</field>
+            <field name="sharia_applicable">True</field>
+            <field name="is_mandatory">True</field>
+            <field name="content">&lt;p&gt;In the event of late payment by the obligor, any penalty imposed shall be calculated at the agreed charity rate per annum on the overdue amount. Such penalty amounts shall not accrue to the benefit of Salaam Investment Bank but shall be donated entirely to charitable causes designated by the SSB. This structure is approved as Sharia-compliant in lieu of interest-bearing late payment charges.&lt;/p&gt;</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_sale')), (4, ref('clause_type_ijara')), (4, ref('clause_type_musharaka'))]"/>
+        </record>
+
+        <!-- ── SALE CONTRACT CLAUSES ── -->
+        <record id="clause_title_transfer" model="dev.contract.clause">
+            <field name="name">Title Transfer and Registration</field>
+            <field name="clause_code">CL-SAL-001</field>
+            <field name="content">&lt;p&gt;Legal title to the Property shall transfer to the Buyer upon full payment of the Purchase Price and satisfaction of all conditions precedent set out in this Agreement. The Seller shall cooperate with the Buyer in effecting the title transfer and registration with the relevant Djibouti land registry authority within 30 days of the final payment.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_sale'))]"/>
+        </record>
+
+        <record id="clause_property_warranty" model="dev.contract.clause">
+            <field name="name">Property Warranty</field>
+            <field name="clause_code">CL-SAL-002</field>
+            <field name="content">&lt;p&gt;The Seller warrants that: (a) it has good and marketable title to the Property free from encumbrances; (b) the Property complies with all applicable planning permissions and building regulations; (c) there are no pending legal proceedings affecting the Property. The structural warranty period shall be as specified in the contract particulars.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_sale'))]"/>
+        </record>
+
+        <!-- ── ISTISNA CLAUSES ── -->
+        <record id="clause_construction_spec" model="dev.contract.clause">
+            <field name="name">Construction Specifications and Drawings</field>
+            <field name="clause_code">CL-IST-001</field>
+            <field name="content">&lt;p&gt;The Contractor shall construct the Works strictly in accordance with the Technical Specification and Approved Drawings attached hereto. Any deviation from the approved specification shall require prior written approval from the Project Manager and, where the deviation affects the Sharia-compliance of the asset, from the SSB. Unapproved deviations shall be rectified at the Contractor's cost.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_istisna'))]"/>
+        </record>
+
+        <record id="clause_defect_liability" model="dev.contract.clause">
+            <field name="name">Defect Liability Period</field>
+            <field name="clause_code">CL-IST-002</field>
+            <field name="content">&lt;p&gt;Upon practical completion, the Defect Liability Period as specified in the contract particulars shall commence. During this period, the Contractor shall remedy at its own cost any defects, shrinkages, or other faults which appear and which are due to the Contractor's failure to comply with its obligations. Retention monies shall be released in two equal tranches: 50% at practical completion and 50% at expiry of the Defect Liability Period.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_istisna'))]"/>
+        </record>
+
+        <!-- ── IJARA CLAUSES ── -->
+        <record id="clause_ijara_maintenance" model="dev.contract.clause">
+            <field name="name">Maintenance Obligations</field>
+            <field name="clause_code">CL-IJR-001</field>
+            <field name="content">&lt;p&gt;Maintenance obligations shall be allocated as specified in the contract particulars. Where the Bank (Lessor) is responsible for major structural maintenance, the Lessee shall be responsible for day-to-day upkeep and minor repairs not exceeding USD 500 per incident. The Lessee shall notify the Lessor of any defects requiring major repair within 5 business days of discovery.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_ijara'))]"/>
+        </record>
+
+        <record id="clause_ijara_early_termination" model="dev.contract.clause">
+            <field name="name">Early Termination</field>
+            <field name="clause_code">CL-IJR-002</field>
+            <field name="content">&lt;p&gt;Either party may terminate this Ijara Agreement upon 60 days written notice to the other party, subject to payment of any outstanding rentals and, in the case of Lessee-initiated termination before the end of the agreed term, a compensation amount calculated on a pro-rata basis as agreed by the SSB to be Sharia-compliant.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_ijara'))]"/>
+        </record>
+
+        <!-- ── MUSHARAKA CLAUSES ── -->
+        <record id="clause_musharaka_management" model="dev.contract.clause">
+            <field name="name">Management and Decision-Making</field>
+            <field name="clause_code">CL-MSH-001</field>
+            <field name="content">&lt;p&gt;The management of the joint venture shall be as specified in the contract particulars. Major decisions — defined as those involving capital expenditure exceeding 10% of total project value, change of project scope, or disposal of project assets — shall require consent of both partners regardless of management party designation. Minor operational decisions may be made by the designated management party without prior consent.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_musharaka'))]"/>
+        </record>
+
+        <record id="clause_musharaka_annual_audit" model="dev.contract.clause">
+            <field name="name">Annual Sharia Supervisory Audit</field>
+            <field name="clause_code">CL-MSH-002</field>
+            <field name="sharia_applicable">True</field>
+            <field name="is_mandatory">True</field>
+            <field name="content">&lt;p&gt;An annual Sharia compliance audit shall be conducted by the Salaam SSB or an independent Sharia auditor approved by both parties. The audit shall review profit and loss distributions, redemption tranche payments, and overall conduct of the partnership to ensure continued compliance with Islamic principles. The cost of the annual audit shall be borne equally by both partners.&lt;/p&gt;</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_musharaka'))]"/>
+        </record>
+
+        <!-- ── SUBCONTRACTOR CLAUSES ── -->
+        <record id="clause_sub_variation" model="dev.contract.clause">
+            <field name="name">Variation Orders</field>
+            <field name="clause_code">CL-SUB-001</field>
+            <field name="content">&lt;p&gt;No variation to the Sub-Contract Works shall be valid unless authorised in writing by the Main Contractor's Project Manager prior to the commencement of such varied works. Verbal instructions shall not constitute authorisation. The Subcontractor shall submit a Variation Order request with cost and programme implications within 5 working days of being instructed.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_subcontractor'))]"/>
+        </record>
+
+        <record id="clause_sub_indemnity" model="dev.contract.clause">
+            <field name="name">Indemnification</field>
+            <field name="clause_code">CL-SUB-002</field>
+            <field name="content">&lt;p&gt;The Subcontractor shall indemnify, defend and hold harmless the Main Contractor and Salaam Investment Bank from and against any and all claims, losses, damages, costs (including legal fees) arising from: (a) the Subcontractor's negligence or wilful misconduct; (b) breach of this Agreement; (c) personal injury or property damage caused by the Subcontractor's personnel on site.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_subcontractor'))]"/>
+        </record>
+
+        <!-- ── CONSULTANCY CLAUSES ── -->
+        <record id="clause_con_ip" model="dev.contract.clause">
+            <field name="name">Intellectual Property</field>
+            <field name="clause_code">CL-CON-001</field>
+            <field name="content">&lt;p&gt;All reports, drawings, designs, data, specifications and other documents produced by the Consultant under this Agreement (the Deliverables) shall vest in the Client upon full payment of the applicable fees. The Consultant grants the Client a perpetual, royalty-free licence to use any pre-existing intellectual property of the Consultant incorporated in the Deliverables to the extent necessary for the Client's intended use of the Deliverables.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_consultancy'))]"/>
+        </record>
+
+        <record id="clause_con_pi_insurance" model="dev.contract.clause">
+            <field name="name">Professional Indemnity Insurance</field>
+            <field name="clause_code">CL-CON-002</field>
+            <field name="content">&lt;p&gt;The Consultant shall maintain Professional Indemnity insurance for the minimum cover value specified in the contract particulars throughout the duration of this Agreement and for a period of 6 years following its termination or expiry. Evidence of such insurance shall be provided to the Client within 5 business days of request.&lt;/p&gt;</field>
+            <field name="is_mandatory">True</field>
+            <field name="contract_types" eval="[(4, ref('clause_type_consultancy'))]"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="demo_eq_tc45" model="buruuj.equipment">
+            <field name="name">Tower Crane TC-45</field>
+            <field name="code">CRANE-001</field>
+            <field name="serial_no">TC-45-887234</field>
+            <field name="category">lifting</field>
+            <field name="make">Liebherr</field>
+            <field name="model">TC 45</field>
+            <field name="year">2022</field>
+            <field name="ownership">owned</field>
+            <field name="purchase_date" eval="(DateTime.today() - relativedelta(years=2)).strftime('%Y-%m-%d')"/>
+            <field name="purchase_value">580000.00</field>
+            <field name="internal_hire_rate_daily">450.00</field>
+            <field name="current_project_id" ref="demo_project_marina"/>
+            <field name="state">allocated</field>
+            <field name="operator_name">Hassan Ahmed</field>
+        </record>
+
+        <record id="demo_eq_excavator1" model="buruuj.equipment">
+            <field name="name">Excavator CAT 320</field>
+            <field name="code">EXC-002</field>
+            <field name="serial_no">CAT-320-993421</field>
+            <field name="category">earth_moving</field>
+            <field name="make">Caterpillar</field>
+            <field name="model">320</field>
+            <field name="year">2021</field>
+            <field name="ownership">owned</field>
+            <field name="purchase_value">285000.00</field>
+            <field name="internal_hire_rate_daily">320.00</field>
+            <field name="current_project_id" ref="demo_project_hc7"/>
+            <field name="state">allocated</field>
+        </record>
+
+        <record id="demo_eq_pump1" model="buruuj.equipment">
+            <field name="name">Concrete Pump 36m</field>
+            <field name="code">PUMP-003</field>
+            <field name="category">concrete</field>
+            <field name="make">Schwing</field>
+            <field name="model">S 36 X</field>
+            <field name="year">2023</field>
+            <field name="ownership">rented</field>
+            <field name="rental_partner_id" ref="demo_sub_concretemaster"/>
+            <field name="rental_rate_daily">680.00</field>
+            <field name="rental_off_hire_date" eval="(DateTime.today() + relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="internal_hire_rate_daily">750.00</field>
+            <field name="current_project_id" ref="demo_project_marina"/>
+            <field name="state">allocated</field>
+        </record>
+
+        <record id="demo_eq_paver" model="buruuj.equipment">
+            <field name="name">Asphalt Paver Vögele 1900</field>
+            <field name="code">PAV-004</field>
+            <field name="category">other</field>
+            <field name="make">Vögele</field>
+            <field name="model">Super 1900-3</field>
+            <field name="year">2020</field>
+            <field name="ownership">owned</field>
+            <field name="internal_hire_rate_daily">580.00</field>
+            <field name="current_project_id" ref="demo_project_hc7"/>
+            <field name="state">allocated</field>
+        </record>
+
+        <!-- Allocations -->
+        <record id="demo_alloc_tc45" model="buruuj.allocation">
+            <field name="equipment_id" ref="demo_eq_tc45"/>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="date_from" eval="(DateTime.today() - relativedelta(months=5)).strftime('%Y-%m-%d')"/>
+            <field name="daily_rate">450.00</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- Maintenance -->
+        <record id="demo_maint_tc45" model="buruuj.maintenance">
+            <field name="equipment_id" ref="demo_eq_tc45"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(weeks=3)).strftime('%Y-%m-%d')"/>
+            <field name="type">preventive</field>
+            <field name="description">Quarterly inspection: gearbox oil change, brake check, slewing motor service</field>
+            <field name="next_due_date" eval="(DateTime.today() + relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="cost">3200.00</field>
+            <field name="state">completed</field>
+        </record>
+
+        <!-- Fuel logs -->
+        <record id="demo_fuel_excavator" model="buruuj.fuel.log">
+            <field name="equipment_id" ref="demo_eq_excavator1"/>
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="quantity_liters">120</field>
+            <field name="unit_price">0.85</field>
+            <field name="odometer">2840</field>
+        </record>
+
+    </data>
+</odoo>

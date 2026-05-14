@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_budget_line_form" model="ir.ui.view">
+        <field name="name">salaam.budget.line.form</field>
+        <field name="model">salaam.budget.line</field>
+        <field name="arch" type="xml">
+            <form string="Budget Line">
+                <sheet>
+                    <group>
+                        <group string="Cost Item">
+                            <field name="project_id"/>
+                            <field name="project_id" invisible="1"/>
+                            <field name="istisna_contract_id" invisible="1"/>
+                            <field name="phase_id"
+                                   domain="[('project_id','=',project_id)]"/>
+                            <field name="category"/>
+                            <field name="name"/>
+                            <field name="subcontract_id"/>
+                        </group>
+                        <group string="Amounts">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="budgeted_amount"/>
+                            <field name="committed_amount" readonly="1"/>
+                            <field name="invoiced_amount" readonly="1"/>
+                            <field name="spent_amount"/>
+                            <field name="variance" readonly="1"/>
+                            <field name="pct_spent" widget="progressbar" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Linked Invoices / Bills">
+                        <field name="invoice_ids" widget="many2many_tags"/>
+                    </group>
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_budget_line_list" model="ir.ui.view">
+        <field name="name">salaam.budget.line.list</field>
+        <field name="model">salaam.budget.line</field>
+        <field name="arch" type="xml">
+            <list string="Budget Lines"
+                  decoration-danger="pct_spent &gt; 100"
+                  decoration-warning="pct_spent &gt; 80">
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="category"/>
+                <field name="name"/>
+                <field name="subcontract_id"/>
+                <field name="budgeted_amount" sum="Budget"/>
+                <field name="committed_amount" sum="Committed" readonly="1"/>
+                <field name="invoiced_amount" sum="Invoiced" readonly="1"/>
+                <field name="spent_amount" sum="Spent"/>
+                <field name="variance" sum="Variance" readonly="1"/>
+                <field name="pct_spent" readonly="1"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_budget_line" model="ir.actions.act_window">
+        <field name="name">Budget Tracker</field>
+        <field name="res_model">salaam.budget.line</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

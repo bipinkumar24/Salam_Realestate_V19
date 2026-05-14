@@ -489,7 +489,7 @@
                                                                     class="rounded-circle"
                                                                     style="width:5rem; height:5rem; object-fit: cover;"
                                                                     t-att-alt="Image"
-                                                                    t-att-src="kanban_image('property.amenities','image',record.id.raw_value)"/>
+                                                                    t-attf-src="/web/image/property.amenities/{{ record.id.raw_value }}/image"/>
                                                         </t>
                                                         <t t-else="">
                                                             <img
@@ -604,7 +604,7 @@
                                                     <div class="o_squared_image">
                                                         <img class="card-img-top"
                                                              style="height:223px;object-fit: cover;"
-                                                             t-att-src="kanban_image('floor.plan', 'image', record.id.raw_value)"
+                                                             t-att-src="/web/image/floor.plan/{{ record.id.raw_value }}/image"
                                                              t-att-alt="record.title.value"/>
                                                     </div>
                                                 </div>
@@ -670,7 +670,7 @@
                                                     <div class="o_squared_image">
                                                         <img class="card-img-top"
                                                              style="height:223px;object-fit: cover;"
-                                                             t-att-src="kanban_image('property.images', 'image', record.id.raw_value)"
+                                                             t-att-src="/web/image/property.images/{{ record.id.raw_value }}/image"
                                                              t-att-alt="record.title.value"/>
                                                     </div>
                                                 </div>
@@ -700,7 +700,7 @@
                                                                     <img class="rounded-circle"
                                                                          style="width: 6rem; height: 6rem; object-fit: cover;"
                                                                          t-att-alt="Image"
-                                                                         t-att-src="kanban_image('property.specification','image',record.id.raw_value)"/>
+                                                                         t-att-src="/web/image/property.specification/{{ record.id.raw_value }}/image"/>
                                                                 </t>
                                                                 <t t-else="">
                                                                     <img class="rounded-circle"
@@ -762,7 +762,7 @@
                                                         style="width: 343px; height: auto;border: 0px; border-bottom: none !important;">
                                                     <div style="text-align:center;">
                                                         <img alt="Avtar"
-                                                             t-att-src="kanban_image('property.connectivity.line','image',record.id.raw_value)"
+                                                             t-att-src="/web/image/property.connectivity.line/{{ record.id.raw_value }}/image"
                                                              style="width:50px;height:50px;"/>
                                                     </div>
                                                     <br/>
@@ -840,7 +840,7 @@
                                 <div class="text-center">
                                     <t t-if="record.image.raw_value">
                                         <img alt="Avtar"
-                                             t-att-src="kanban_image('property.details','image',record.id.raw_value)"
+                                             t-att-src="/web/image/property.details/{{ record.id.raw_value }}/image"    
                                              style="width:100%;height:16rem;object-fit: cover;"/>
                                     </t>
                                     <t t-else="">

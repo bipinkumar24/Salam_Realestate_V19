@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_variance_list" model="ir.ui.view">
+        <field name="name">buruuj.variance.list</field>
+        <field name="model">buruuj.variance</field>
+        <field name="arch" type="xml">
+            <list decoration-success="direction == 'saving'"
+                  decoration-danger="direction == 'overrun'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="cbs_id"/>
+                <field name="cause_id"/>
+                <field name="amount" sum="Net"/>
+                <field name="direction"/>
+                <field name="is_recoverable" widget="boolean_toggle"/>
+                <field name="recovery_status" widget="badge"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_variance_form" model="ir.ui.view">
+        <field name="name">buruuj.variance.form</field>
+        <field name="model">buruuj.variance</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_log" string="Log Variance"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_close" string="Close"
+                            type="object"
+                            invisible="state != 'logged'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Variance description..."/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="cbs_id"/>
+                            <field name="cause_id"/>
+                            <field name="is_recoverable" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="direction" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="What happened..."/>
+                        </page>
+                        <page string="Corrective Action">
+                            <field name="corrective_action" placeholder="What is being done..."/>
+                        </page>
+                        <page string="Recovery" invisible="not is_recoverable">
+                            <group>
+                                <group>
+                                    <field name="recovery_status"/>
+                                    <field name="recovery_amount"/>
+                                </group>
+                                <group>
+                                    <field name="recovery_ref"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_variance_search" model="ir.ui.view">
+        <field name="name">buruuj.variance.search</field>
+        <field name="model">buruuj.variance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="cause_id"/>
+                <filter string="Overruns" name="overrun"
+                        domain="[('direction','=','overrun')]"/>
+                <filter string="Savings" name="saving"
+                        domain="[('direction','=','saving')]"/>
+                <filter string="Recoverable" name="recov"
+                        domain="[('is_recoverable','=',True)]"/>
+                <filter string="Pending Recovery" name="pending"
+                        domain="[('recovery_status','in',['identified','submitted'])]"/>
+                <group>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Cause" name="g_cause"
+                            context="{'group_by': 'cause_id'}"/>
+                    <filter string="Recovery Status" name="g_recov"
+                            context="{'group_by': 'recovery_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_variance" model="ir.actions.act_window">
+        <field name="name">Variance Log</field>
+        <field name="res_model">buruuj.variance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

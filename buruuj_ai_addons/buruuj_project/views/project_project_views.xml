@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_project_form_buruuj" model="ir.ui.view">
+        <field name="name">project.project.form.buruuj</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Construction" name="buruuj_construction">
+                        <group>
+                            <group string="Identification">
+                                <field name="buruuj_project_code"/>
+                                <field name="buruuj_tender_id" readonly="1"/>
+                                <field name="buruuj_consultant_id"/>
+                            </group>
+                            <group string="Team">
+                                <field name="buruuj_pm_id"/>
+                                <field name="buruuj_qs_id"/>
+                                <field name="buruuj_site_engineer_id"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Contract &amp; Budget">
+                                <field name="buruuj_contract_value"/>
+                                <field name="buruuj_baseline_budget"/>
+                                <field name="buruuj_revised_budget"/>
+                                <field name="buruuj_actual_cost"/>
+                                <field name="buruuj_committed_cost"/>
+                            </group>
+                            <group string="Schedule">
+                                <field name="buruuj_planned_start"/>
+                                <field name="buruuj_planned_end"/>
+                                <field name="buruuj_actual_start"/>
+                                <field name="buruuj_actual_end"/>
+                                <field name="buruuj_dlp_months"/>
+                                <field name="buruuj_dlp_end"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Progress &amp; Health">
+                                <field name="buruuj_physical_progress" widget="progressbar"/>
+                                <field name="buruuj_financial_progress" widget="progressbar"/>
+                                <field name="buruuj_health" widget="badge"
+                                       decoration-success="buruuj_health == 'green'"
+                                       decoration-warning="buruuj_health == 'amber'"
+                                       decoration-danger="buruuj_health == 'red'"/>
+                            </group>
+                            <group string="Site Location">
+                                <field name="buruuj_site_address"/>
+                                <field name="buruuj_site_lat"/>
+                                <field name="buruuj_site_lng"/>
+                                <field name="buruuj_geofence_radius"/>
+                            </group>
+                        </group>
+                    </page>
+                    <page string="Phases">
+                        <field name="buruuj_phase_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="code"/>
+                                <field name="name"/>
+                                <field name="planned_start"/>
+                                <field name="planned_end"/>
+                                <field name="weight_percent"/>
+                                <field name="progress" widget="progressbar"/>
+                                <field name="state"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="WBS">
+                        <field name="buruuj_wbs_ids" context="{'default_project_id': id}"/>
+                    </page>
+                    <page string="Milestones">
+                        <field name="buruuj_milestone_ids">
+                            <list editable="bottom">
+                                <field name="sequence" widget="handle"/>
+                                <field name="name"/>
+                                <field name="planned_date"/>
+                                <field name="actual_date"/>
+                                <field name="percent_of_contract"/>
+                                <field name="amount" sum="Total"/>
+                                <field name="currency_id" column_invisible="1"/>
+                                <field name="state"/>
+                            </list>
+                        </field>
+                    </page>
+                    <page string="Variations">
+                        <field name="buruuj_variation_ids"/>
+                    </page>
+                    <page string="Risks">
+                        <field name="buruuj_risk_ids">
+                            <list>
+                                <field name="name"/>
+                                <field name="category"/>
+                                <field name="likelihood"/>
+                                <field name="impact"/>
+                                <field name="severity"/>
+                                <field name="owner_id"/>
+                                <field name="state"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_buruuj_project" model="ir.actions.act_window">
+        <field name="name">Construction Projects</field>
+        <field name="res_model">project.project</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('buruuj_project_code','!=',False)]</field>
+    </record>
+</odoo>

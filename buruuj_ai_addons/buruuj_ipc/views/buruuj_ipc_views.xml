@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_ipc_list" model="ir.ui.view">
+        <field name="name">buruuj.ipc.list</field>
+        <field name="model">buruuj.ipc</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state in ('finance_approved','paid')"
+                  decoration-danger="state=='rejected'">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="sequence_no"/>
+                <field name="project_id"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="work_done_amount" sum="Work Done"/>
+                <field name="net_amount" sum="Net"/>
+                <field name="total_payable" sum="Payable"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_buruuj_ipc_form" model="ir.ui.view">
+        <field name="name">buruuj.ipc.form</field>
+        <field name="model">buruuj.ipc</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_qs_approve" string="QS Approve" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"
+                            groups="buruuj_base.group_buruuj_qs"/>
+                    <button name="action_pm_approve" string="PM Approve" type="object"
+                            class="oe_highlight" invisible="state != 'qs_approved'"
+                            groups="buruuj_base.group_buruuj_pm"/>
+                    <button name="action_finance_approve" string="Finance Approve"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'pm_approved'"
+                            groups="buruuj_base.group_buruuj_director"/>
+                    <button name="action_mark_paid" string="Mark Paid" type="object"
+                            invisible="state != 'finance_approved'"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            invisible="state in ('paid','rejected','draft')"/>
+                    <button name="action_reset" string="Reset" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="sequence_no"/>
+                            <field name="project_id"/>
+                            <field name="partner_id"/>
+                            <field name="subcontract_id" invisible="type != 'subcontractor'"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="period_from"/>
+                            <field name="period_to"/>
+                            <field name="qs_id" readonly="1"/>
+                            <field name="pm_id" readonly="1"/>
+                            <field name="finance_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="item_no"/>
+                                    <field name="description"/>
+                                    <field name="uom_id"/>
+                                    <field name="contract_qty"/>
+                                    <field name="unit_rate"/>
+                                    <field name="previous_qty"/>
+                                    <field name="cumulative_qty"/>
+                                    <field name="period_qty"/>
+                                    <field name="amount" sum="Period"/>
+                                    <field name="cumulative_amount" sum="Cumulative"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Summary">
+                            <group>
+                                <group string="Work Done">
+                                    <field name="cumulative_amount" readonly="1"/>
+                                    <field name="previous_certified"/>
+                                    <field name="work_done_amount" readonly="1"/>
+                                    <field name="materials_on_site"/>
+                                    <field name="gross_amount" readonly="1"/>
+                                </group>
+                                <group string="Deductions">
+                                    <field name="retention_percent"/>
+                                    <field name="retention_amount" readonly="1"/>
+                                    <field name="advance_recovery_percent"/>
+                                    <field name="advance_recovery_amount" readonly="1"/>
+                                    <field name="backcharge_amount"/>
+                                    <field name="vat_amount"/>
+                                    <field name="net_amount" readonly="1" class="oe_subtotal_footer"/>
+                                    <field name="total_payable" readonly="1" class="oe_subtotal_footer"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Notes"><field name="notes"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_buruuj_ipc_client" model="ir.actions.act_window">
+        <field name="name">Client IPCs</field>
+        <field name="res_model">buruuj.ipc</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('type','=','client')]</field>
+        <field name="context">{'default_type': 'client'}</field>
+    </record>
+    <record id="action_buruuj_ipc_sub" model="ir.actions.act_window">
+        <field name="name">Subcontractor IPCs</field>
+        <field name="res_model">buruuj.ipc</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('type','=','subcontractor')]</field>
+        <field name="context">{'default_type': 'subcontractor'}</field>
+    </record>
+</odoo>

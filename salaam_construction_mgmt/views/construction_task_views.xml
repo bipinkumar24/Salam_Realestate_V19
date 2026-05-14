@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_construction_task_form" model="ir.ui.view">
+        <field name="name">salaam.construction.task.form</field>
+        <field name="model">salaam.construction.task</field>
+        <field name="arch" type="xml">
+            <form string="Construction Task">
+                <header>
+                    <button name="action_start" string="Start" type="object"
+                            class="btn-primary"
+                            invisible = "state not in ['todo']"/>
+                    <button name="action_done" string="Mark Done" type="object"
+                            class="btn-primary"
+                            invisible = "state not in ['in_progress','todo']"/>
+                    <button name="action_block" string="Block" type="object"
+                            invisible = "state != 'in_progress'"/>
+                    <button name="action_invoice" string="Mark Invoiced" type="object"
+                            invisible = "state != 'done'"/>
+                    <button name="action_create_odoo_task" string="↗ Sync to Odoo Project"
+                            type="object"
+                            invisible = "odoo_task_id != False"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="todo,in_progress,done,invoiced"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group string="Assignment">
+                            <field name="project_id"/>
+                            <field name="project_id" invisible="1"/>
+                            <field name="istisna_contract_id" invisible="1"/>
+                            <field name="phase_id"
+                                   domain="[('project_id','=',project_id)]"/>
+                            <field name="task_type"/>
+                            <field name="assigned_to_id"/>
+                            <field name="responsible_id"/>
+                        </group>
+                        <group string="Contract Links">
+                            <field name="subcontract_id"/>
+                            <field name="subcontract_milestone_id"/>
+                            <field name="odoo_task_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Dates">
+                            <field name="date_start_planned"/>
+                            <field name="date_end_planned"/>
+                            <field name="date_start_actual"/>
+                            <field name="date_end_actual"/>
+                        </group>
+                        <group string="Cost">
+                            <field name="currency_id" invisible="1"/>
+                            <field name="budget_cost"/>
+                            <field name="actual_cost"/>
+                            <field name="cost_variance" readonly="1"/>
+                            <field name="invoice_id"/>
+                        </group>
+                    </group>
+                    <group string="Progress">
+                        <field name="progress" widget="progressbar"/>
+                    </group>
+                    <separator string="Scope / Description"/>
+                    <field name="description"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_construction_task_list" model="ir.ui.view">
+        <field name="name">salaam.construction.task.list</field>
+        <field name="model">salaam.construction.task</field>
+        <field name="arch" type="xml">
+            <list string="Construction Tasks"
+                  decoration-success="state in ('done','invoiced')"
+                  decoration-warning="state=='blocked'"
+                  decoration-muted="state=='cancelled'">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="task_type"/>
+                <field name="assigned_to_id"/>
+                <field name="subcontract_id"/>
+                <field name="date_start_planned"/>
+                <field name="date_end_planned"/>
+                <field name="budget_cost" sum="Budget"/>
+                <field name="actual_cost" sum="Spent"/>
+                <field name="cost_variance" sum="Variance"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state" widget="badge"
+                       decoration-success="state in ('done','invoiced')"
+                       decoration-warning="state=='blocked'"
+                       decoration-danger="state=='cancelled'"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_construction_task_kanban" model="ir.ui.view">
+        <field name="name">salaam.construction.task.kanban</field>
+        <field name="model">salaam.construction.task</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="phase_id"/>
+                <field name="assigned_to_id"/>
+                <field name="state"/>
+                <field name="progress"/>
+                <field name="budget_cost"/>
+                <field name="currency_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <strong><field name="name"/></strong>
+                                <div><field name="phase_id"/></div>
+                                <div><field name="assigned_to_id"/></div>
+                                <div>
+                                    <field name="progress" widget="progressbar"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="action_construction_task" model="ir.actions.act_window">
+        <field name="name">Construction Tasks</field>
+        <field name="res_model">salaam.construction.task</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+</odoo>

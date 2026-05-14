@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="seq_dev_contract_sale" model="ir.sequence">
+            <field name="name">Sale Contract</field>
+            <field name="code">dev.contract.sale</field>
+            <field name="prefix">SCT-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_dev_contract_istisna" model="ir.sequence">
+            <field name="name">Istisna Contract</field>
+            <field name="code">dev.contract.istisna</field>
+            <field name="prefix">IST-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_dev_contract_ijara" model="ir.sequence">
+            <field name="name">Ijara Contract</field>
+            <field name="code">dev.contract.ijara</field>
+            <field name="prefix">IJR-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_dev_contract_musharaka" model="ir.sequence">
+            <field name="name">Musharaka Contract</field>
+            <field name="code">dev.contract.musharaka</field>
+            <field name="prefix">MSH-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_dev_contract_subcontractor" model="ir.sequence">
+            <field name="name">Subcontractor Agreement</field>
+            <field name="code">dev.contract.subcontractor</field>
+            <field name="prefix">SUB-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_dev_contract_consultancy" model="ir.sequence">
+            <field name="name">Consultancy Agreement</field>
+            <field name="code">dev.contract.consultancy</field>
+            <field name="prefix">CON-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_dev_contract_default" model="ir.sequence">
+            <field name="name">Developer Contract (Default)</field>
+            <field name="code">dev.contract.default</field>
+            <field name="prefix">CTR-%(year)s-</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

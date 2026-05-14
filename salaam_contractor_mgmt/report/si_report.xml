@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="report_si_report">
+    <t t-call="web.html_container">
+      <t t-foreach="docs" t-as="o">
+        <t t-call="web.external_layout">
+          <div class="page">
+            <h2>Site Instruction</h2>
+            <h3><t t-esc="o.name"/></h3>
+            <table class="table table-sm"><tr><td><b>Project</b></td><td><t t-esc="o.project_id.name"/></td><td><b>Type</b></td><td><t t-esc="o.instruction_type"/></td></tr>
+<tr><td><b>Issued To</b></td><td><t t-esc="o.contractor_id.name"/></td><td><b>Priority</b></td><td><t t-esc="o.priority"/></td></tr>
+<tr><td><b>Issue Date</b></td><td><t t-esc="o.issue_date"/></td><td><b>Deadline</b></td><td><t t-esc="o.compliance_deadline"/></td></tr>
+<tr><td><b>Cost Impact</b></td><td><t t-esc="'Yes' if o.has_cost_impact else 'No'"/> — <t t-esc="o.agreed_cost"/> <t t-esc="o.currency_id.symbol"/></td><td><b>Time Impact</b></td><td><t t-esc="o.estimated_delay_days"/> days</td></tr></table>
+<h4>Instruction</h4><div><t t-out="o.description"/></div>
+<h4>Scope of Works</h4><p><t t-esc="o.scope_of_works"/></p>
+<div style="margin-top:50px;display:flex;justify-content:space-between;"><div>Issued By: _______________________</div><div>Contractor Receipt: _______________________</div></div>
+            <p style="margin-top:16px;font-size:9px;color:#999;">Salaam Investment Bank · IAFAO · <t t-esc="o.name"/></p>
+          </div>
+        </t>
+      </t>
+    </t>
+  </template>
+  <record id="action_report_si_report" model="ir.actions.report">
+    <field name="name">Site Instruction</field><field name="model">salaam.site.instruction</field>
+    <field name="report_type">qweb-pdf</field>
+    <field name="report_name">salaam_contractor_mgmt.report_si_report</field>
+    <field name="binding_model_id" ref="model_salaam_site_instruction"/><field name="binding_type">report</field>
+  </record>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_variation_form_ai" model="ir.ui.view">
+        <field name="name">buruuj.variation.form.ai</field>
+        <field name="model">buruuj.variation</field>
+        <field name="inherit_id" ref="buruuj_project.view_buruuj_variation_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_ai_draft_vo" type="object"
+                        string="Draft from Request (AI)"
+                        class="btn-secondary" icon="fa-magic"
+                        invisible="state != 'draft' or not ai_source_request"/>
+            </xpath>
+
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="AI Drafting" name="ai_drafting">
+                        <group>
+                            <field name="ai_last_task_id" readonly="1"/>
+                        </group>
+                        <separator string="Source: Client Change Request"/>
+                        <field name="ai_source_request" nolabel="1"
+                               placeholder="Paste the client's email, memo, or notes describing the requested change..."/>
+
+                        <separator string="AI Cost &amp; Time Estimates" invisible="not ai_last_task_id"/>
+                        <group invisible="not ai_last_task_id">
+                            <group string="Cost Estimate">
+                                <field name="ai_cost_low" readonly="1"/>
+                                <field name="ai_cost_high" readonly="1"/>
+                                <field name="ai_cost_basis" readonly="1"/>
+                            </group>
+                            <group string="Time Estimate">
+                                <field name="ai_time_low" readonly="1"/>
+                                <field name="ai_time_high" readonly="1"/>
+                                <field name="ai_time_basis" readonly="1"/>
+                            </group>
+                        </group>
+
+                        <separator string="Suggested Questions to Clarify" invisible="not ai_contractual_questions"/>
+                        <field name="ai_contractual_questions" readonly="1" nolabel="1"
+                               invisible="not ai_contractual_questions"/>
+
+                        <div class="alert alert-info" role="alert" style="margin-top: 12px;">
+                            <strong>Reminder:</strong> AI estimates are magnitude indicators only.
+                            The QS must price the variation properly using actual rates and quantities
+                            before submitting to the client.
+                        </div>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

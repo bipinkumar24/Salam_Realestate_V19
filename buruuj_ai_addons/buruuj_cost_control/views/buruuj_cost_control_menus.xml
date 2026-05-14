@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_cost_root" name="Cost Control"
+              parent="buruuj_base.menu_buruuj_root" sequence="55"
+              groups="buruuj_base.group_buruuj_pm"/>
+
+    <menuitem id="menu_cost_cbs" name="Cost Breakdown (CBS)"
+              parent="menu_cost_root" action="action_cbs" sequence="10"/>
+    <menuitem id="menu_cost_overruns" name="Overruns Watchlist"
+              parent="menu_cost_root" action="action_cbs_overruns"
+              sequence="15"/>
+    <menuitem id="menu_cost_entries" name="Cost Entries"
+              parent="menu_cost_root" action="action_costentry" sequence="20"/>
+    <menuitem id="menu_cost_variance" name="Variance Log"
+              parent="menu_cost_root" action="action_variance" sequence="30"/>
+    <menuitem id="menu_cost_tp" name="Time-Phased Budget"
+              parent="menu_cost_root" action="action_tp" sequence="40"/>
+
+    <menuitem id="menu_cost_master" name="Master Data"
+              parent="menu_cost_root" sequence="90"
+              groups="buruuj_base.group_buruuj_manager"/>
+    <menuitem id="menu_cost_master_cat" name="Cost Categories"
+              parent="menu_cost_master" action="action_costcat" sequence="10"/>
+    <menuitem id="menu_cost_master_var" name="Variance Causes"
+              parent="menu_cost_master" action="action_varcause" sequence="20"/>
+</odoo>

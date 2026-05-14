@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="trade_helper" model="buruuj.labor.trade">
+            <field name="code">HLP</field>
+            <field name="name">Helper / Laborer</field>
+            <field name="skill_level">helper</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="trade_mason" model="buruuj.labor.trade">
+            <field name="code">MAS</field>
+            <field name="name">Mason</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="trade_steel_fixer" model="buruuj.labor.trade">
+            <field name="code">SFX</field>
+            <field name="name">Steel Fixer</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="trade_carpenter" model="buruuj.labor.trade">
+            <field name="code">CRP</field>
+            <field name="name">Carpenter / Shutter</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="trade_electrician" model="buruuj.labor.trade">
+            <field name="code">ELC</field>
+            <field name="name">Electrician</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="trade_plumber" model="buruuj.labor.trade">
+            <field name="code">PLB</field>
+            <field name="name">Plumber</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="trade_painter" model="buruuj.labor.trade">
+            <field name="code">PNT</field>
+            <field name="name">Painter</field>
+            <field name="skill_level">semi</field>
+            <field name="sequence">70</field>
+        </record>
+        <record id="trade_tiler" model="buruuj.labor.trade">
+            <field name="code">TLR</field>
+            <field name="name">Tiler</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">80</field>
+        </record>
+        <record id="trade_welder" model="buruuj.labor.trade">
+            <field name="code">WLD</field>
+            <field name="name">Welder</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">90</field>
+        </record>
+        <record id="trade_operator" model="buruuj.labor.trade">
+            <field name="code">OPR</field>
+            <field name="name">Equipment Operator</field>
+            <field name="skill_level">skilled</field>
+            <field name="sequence">100</field>
+        </record>
+        <record id="trade_driver" model="buruuj.labor.trade">
+            <field name="code">DRV</field>
+            <field name="name">Driver</field>
+            <field name="skill_level">semi</field>
+            <field name="sequence">110</field>
+        </record>
+        <record id="trade_foreman" model="buruuj.labor.trade">
+            <field name="code">FRM</field>
+            <field name="name">Foreman</field>
+            <field name="skill_level">foreman</field>
+            <field name="sequence">120</field>
+        </record>
+        <record id="trade_supervisor" model="buruuj.labor.trade">
+            <field name="code">SPV</field>
+            <field name="name">Site Supervisor</field>
+            <field name="skill_level">supervisor</field>
+            <field name="sequence">130</field>
+        </record>
+    </data>
+</odoo>

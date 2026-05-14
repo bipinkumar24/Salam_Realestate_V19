@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_buruuj_rate_qs,buruuj.rate.qs,model_buruuj_rate,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_rate_mgr,buruuj.rate.mgr,model_buruuj_rate,buruuj_base.group_buruuj_manager,1,1,1,1
+access_buruuj_tender_qs,buruuj.tender.qs,model_buruuj_tender,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_tender_pm,buruuj.tender.pm,model_buruuj_tender,buruuj_base.group_buruuj_pm,1,1,1,0
+access_buruuj_tender_mgr,buruuj.tender.mgr,model_buruuj_tender,buruuj_base.group_buruuj_manager,1,1,1,1
+access_buruuj_boq_qs,buruuj.boq.qs,model_buruuj_boq,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_boq_pm,buruuj.boq.pm,model_buruuj_boq,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_boq_section_qs,buruuj.boq.section.qs,model_buruuj_boq_section,buruuj_base.group_buruuj_qs,1,1,1,1
+access_buruuj_boq_line_qs,buruuj.boq.line.qs,model_buruuj_boq_line,buruuj_base.group_buruuj_qs,1,1,1,1
+access_buruuj_boq_import_qs,buruuj.boq.import.qs,model_buruuj_boq_import_wizard,buruuj_base.group_buruuj_qs,1,1,1,1
+access_buruuj_boq_import_pm,buruuj.boq.import.pm,model_buruuj_boq_import_wizard,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_boq_import_mgr,buruuj.boq.import.mgr,model_buruuj_boq_import_wizard,buruuj_base.group_buruuj_manager,1,1,1,1

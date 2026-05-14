@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════
+         CUSTOMER APPLICATION REPORT
+    ═══════════════════════════════════ -->
+    <template id="report_customer_application_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+
+                        <!-- Header Banner -->
+                        <div style="background: linear-gradient(135deg, #1a3c5e 0%, #2e6da4 100%);
+                                    padding: 24px 32px; margin-bottom: 24px; border-radius: 4px;">
+                            <h1 style="color: white; margin: 0; font-size: 22px; font-weight: 700;">
+                                Customer Financing Application
+                            </h1>
+                            <p style="color: #aed6f1; margin: 4px 0 0 0; font-size: 13px;">
+                                Ref: <t t-esc="doc.name"/> | Date: <t t-esc="doc.application_date"/>
+                            </p>
+                        </div>
+
+                        <!-- Status Badge -->
+                        <div style="margin-bottom: 16px;">
+                            <span t-attf-style="
+                                background-color: #{doc.bank_status == 'approved' and '#27ae60' or doc.bank_status == 'rejected' and '#e74c3c' or doc.bank_status == 'under_review' and '#f39c12' or '#7f8c8d'};
+                                color: white; padding: 5px 14px; border-radius: 20px;
+                                font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">
+                                <t t-esc="dict(doc._fields['bank_status'].selection).get(doc.bank_status)"/>
+                            </span>
+                        </div>
+
+                        <!-- Section: Personal Information -->
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="background: #2e6da4; color: white; padding: 8px 14px;
+                                       margin: 0 0 0 0; font-size: 13px; border-radius: 3px 3px 0 0;">
+                                1. CUSTOMER PERSONAL INFORMATION
+                            </h3>
+                            <table style="width:100%; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                                <tr>
+                                    <td style="padding:8px 12px; width:25%; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Full Name</td>
+                                    <td style="padding:8px 12px; width:25%; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.partner_id.name or doc.customer_name"/></td>
+                                    <td style="padding:8px 12px; width:25%; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Name (Arabic)</td>
+                                    <td style="padding:8px 12px; width:25%; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.customer_name_ar or '—'"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Date of Birth</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.date_of_birth"/></td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Age</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.age"/> years</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Gender</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="dict(doc._fields['gender'].selection).get(doc.gender)"/></td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Nationality</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.nationality_id.name"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">ID Type</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="dict(doc._fields['id_type'].selection).get(doc.id_type)"/></td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">ID Number</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.id_number"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Email</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.email"/></td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Mobile</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.mobile"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Marital Status</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="dict(doc._fields['marital_status'].selection).get(doc.marital_status, '—')"/></td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Dependents</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.dependents_count"/></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Section: Financial Information -->
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="background: #2e6da4; color: white; padding: 8px 14px;
+                                       margin: 0 0 0 0; font-size: 13px; border-radius: 3px 3px 0 0;">
+                                2. FINANCIAL INFORMATION
+                            </h3>
+                            <table style="width:100%; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                                <tr>
+                                    <td style="padding:8px 12px; width:25%; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Employment Status</td>
+                                    <td style="padding:8px 12px; width:25%; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="dict(doc._fields['employment_status'].selection).get(doc.employment_status)"/></td>
+                                    <td style="padding:8px 12px; width:25%; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Employer</td>
+                                    <td style="padding:8px 12px; width:25%; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.employer_name or '—'"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Monthly Income</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.monthly_income)"/>
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Other Income</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.other_income)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Total Monthly Income</td>
+                                    <td style="padding:8px 12px; font-size:11px; font-weight:700; color:#27ae60; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.total_monthly_income)"/>
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Monthly Obligations</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.monthly_obligations)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Debt Burden Ratio</td>
+                                    <td style="padding:8px 12px; font-size:11px; font-weight:700; border:1px solid #bdc3c7;"
+                                        t-attf-style="color: #{doc.debt_burden_ratio > 50 and '#e74c3c' or doc.debt_burden_ratio > 35 and '#f39c12' or '#27ae60'}">
+                                        <t t-esc="'{:.1f}'.format(doc.debt_burden_ratio)"/>%
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Credit Score</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.credit_score or '—'"/></td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Section: Property & Financing -->
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="background: #2e6da4; color: white; padding: 8px 14px;
+                                       margin: 0 0 0 0; font-size: 13px; border-radius: 3px 3px 0 0;">
+                                3. PROPERTY &amp; FINANCING DETAILS
+                            </h3>
+                            <table style="width:100%; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                                <tr>
+                                    <td style="padding:8px 12px; width:25%; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Property</td>
+                                    <td style="padding:8px 12px; width:75%; font-size:11px; border:1px solid #bdc3c7;" colspan="3">
+                                        [<t t-esc="doc.property_id.property_seq or ''"/>] <t t-esc="doc.property_id.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Property Price</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.property_price)"/>
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Down Payment</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.down_payment)"/>
+                                        (<t t-esc="'{:.1f}'.format(doc.down_payment_pct)"/>%)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Financing Type</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="dict(doc._fields['financing_type'].selection).get(doc.financing_type)"/>
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Financing Amount</td>
+                                    <td style="padding:8px 12px; font-size:11px; font-weight:700; color:#2e6da4; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.financing_amount)"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Tenure Requested</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.tenure_months"/> months
+                                        (<t t-esc="'{:.1f}'.format(doc.tenure_months / 12)"/> years)
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Sharia Compliant</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-if="doc.is_sharia_compliant_request">✔ Yes</t>
+                                        <t t-else="">✘ No</t>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <!-- Section: Bank Decision (if applicable) -->
+                        <t t-if="doc.bank_status in ('approved', 'rejected')">
+                            <div style="margin-bottom: 20px;">
+                                <h3 t-attf-style="background: #{doc.bank_status == 'approved' and '#27ae60' or '#e74c3c'};
+                                           color: white; padding: 8px 14px;
+                                           margin: 0 0 0 0; font-size: 13px; border-radius: 3px 3px 0 0;">
+                                    4. BANK DECISION
+                                </h3>
+                                <table style="width:100%; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                                    <t t-if="doc.bank_status == 'approved'">
+                                        <tr>
+                                            <td style="padding:8px 12px; width:25%; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Approved Amount</td>
+                                            <td style="padding:8px 12px; font-size:11px; font-weight:700; color:#27ae60; border:1px solid #bdc3c7;">
+                                                <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.approved_amount)"/>
+                                            </td>
+                                            <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Approved Tenure</td>
+                                            <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.approved_tenure"/> months</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Approved Rate</td>
+                                            <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="'{:.2f}'.format(doc.approved_rate)"/>%</td>
+                                            <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Bank Officer</td>
+                                            <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.bank_officer_id.name"/></td>
+                                        </tr>
+                                        <t t-if="doc.conditions">
+                                            <tr>
+                                                <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Conditions</td>
+                                                <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;" colspan="3"><t t-esc="doc.conditions"/></td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-if="doc.bank_status == 'rejected'">
+                                        <tr>
+                                            <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Rejection Reason</td>
+                                            <td style="padding:8px 12px; font-size:11px; color:#e74c3c; border:1px solid #bdc3c7;" colspan="3"><t t-esc="doc.rejection_reason"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Decision Date</td>
+                                            <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;" colspan="3"><t t-esc="doc.decision_date"/></td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                        </t>
+
+                        <!-- Documents Summary -->
+                        <t t-if="doc.document_ids">
+                            <div style="margin-bottom: 20px;">
+                                <h3 style="background: #2e6da4; color: white; padding: 8px 14px;
+                                           margin: 0 0 0 0; font-size: 13px; border-radius: 3px 3px 0 0;">
+                                    5. DOCUMENTS CHECKLIST
+                                </h3>
+                                <table style="width:100%; border-collapse: collapse; border: 1px solid #bdc3c7;">
+                                    <tr style="background:#ecf0f1;">
+                                        <th style="padding:7px 10px; font-size:11px; text-align:left; border:1px solid #bdc3c7;">#</th>
+                                        <th style="padding:7px 10px; font-size:11px; text-align:left; border:1px solid #bdc3c7;">Document</th>
+                                        <th style="padding:7px 10px; font-size:11px; text-align:left; border:1px solid #bdc3c7;">Category</th>
+                                        <th style="padding:7px 10px; font-size:11px; text-align:left; border:1px solid #bdc3c7;">Required</th>
+                                        <th style="padding:7px 10px; font-size:11px; text-align:left; border:1px solid #bdc3c7;">Status</th>
+                                    </tr>
+                                    <t t-foreach="doc.document_ids" t-as="d">
+                                        <tr>
+                                            <td style="padding:6px 10px; font-size:10px; border:1px solid #bdc3c7;"><t t-esc="d_index + 1"/></td>
+                                            <td style="padding:6px 10px; font-size:10px; border:1px solid #bdc3c7;"><t t-esc="d.name"/></td>
+                                            <td style="padding:6px 10px; font-size:10px; border:1px solid #bdc3c7;"><t t-esc="dict(d._fields['document_category'].selection).get(d.document_category)"/></td>
+                                            <td style="padding:6px 10px; font-size:10px; border:1px solid #bdc3c7;">
+                                                <t t-if="d.is_mandatory">✔ Yes</t><t t-else="">Optional</t>
+                                            </td>
+                                            <td style="padding:6px 10px; font-size:10px; font-weight:600; border:1px solid #bdc3c7;"
+                                                t-attf-style="color: #{d.verification_status == 'verified' and '#27ae60' or d.verification_status in ('rejected','expired') and '#e74c3c' or '#f39c12'}">
+                                                <t t-esc="dict(d._fields['verification_status'].selection).get(d.verification_status)"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                        </t>
+
+                        <!-- Signature Block -->
+                        <div style="margin-top: 32px; display: flex; gap: 40px;">
+                            <div style="flex: 1; border-top: 1px solid #7f8c8d; padding-top: 8px; text-align: center;">
+                                <p style="font-size: 11px; color: #7f8c8d; margin: 0;">
+                                    Real Estate Agent<br/>
+                                    <strong><t t-esc="doc.agent_id.name"/></strong>
+                                </p>
+                            </div>
+                            <div style="flex: 1; border-top: 1px solid #7f8c8d; padding-top: 8px; text-align: center;">
+                                <p style="font-size: 11px; color: #7f8c8d; margin: 0;">
+                                    Bank Officer<br/>
+                                    <strong><t t-esc="doc.bank_officer_id.name or '________________________'"/></strong>
+                                </p>
+                            </div>
+                            <div style="flex: 1; border-top: 1px solid #7f8c8d; padding-top: 8px; text-align: center;">
+                                <p style="font-size: 11px; color: #7f8c8d; margin: 0;">
+                                    Customer Signature<br/>
+                                    <strong>________________________</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 24px; text-align: center; border-top: 1px solid #bdc3c7; padding-top: 12px;">
+                            <p style="font-size: 9px; color: #95a5a6; margin: 0;">
+                                This document is generated by the Integrated Bank &amp; Real Estate Collaboration Platform.
+                                Generated on <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d %B %Y %H:%M')"/>
+                            </p>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ═══════════════════════════════════
+         FINANCING REQUEST REPORT
+    ═══════════════════════════════════ -->
+    <template id="report_financing_request_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div style="background: linear-gradient(135deg, #1a3c5e 0%, #2e6da4 100%);
+                                    padding: 24px 32px; margin-bottom: 24px; border-radius: 4px;">
+                            <h1 style="color: white; margin: 0; font-size: 22px;">Financing Request</h1>
+                            <p style="color: #aed6f1; margin: 4px 0 0 0; font-size: 13px;">
+                                Ref: <t t-esc="doc.name"/> |
+                                Type: <t t-esc="dict(doc._fields['financing_type'].selection).get(doc.financing_type)"/>
+                            </p>
+                        </div>
+
+                        <group>
+                            <table style="width:100%; border-collapse: collapse; border: 1px solid #bdc3c7; margin-bottom: 20px;">
+                                <tr style="background:#1a3c5e; color:white;">
+                                    <th style="padding:8px 12px; font-size:12px; text-align:left;" colspan="4">REQUEST DETAILS</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; width:25%; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Customer</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.customer_name"/></td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Property Ref</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.property_ref"/></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Requested Amount</td>
+                                    <td style="padding:8px 12px; font-size:11px; font-weight:700; color:#2e6da4; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.requested_amount)"/>
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Tenure</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="doc.requested_tenure"/> months</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Monthly Income</td>
+                                    <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                        <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.monthly_income)"/>
+                                    </td>
+                                    <td style="padding:8px 12px; background:#ecf0f1; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Debt Burden Ratio</td>
+                                    <td style="padding:8px 12px; font-size:11px; font-weight:700; border:1px solid #bdc3c7;"
+                                        t-attf-style="color: #{doc.debt_burden_ratio > 50 and '#e74c3c' or '#27ae60'}">
+                                        <t t-esc="'{:.1f}'.format(doc.debt_burden_ratio)"/>%
+                                    </td>
+                                </tr>
+                                <t t-if="doc.status == 'approved'">
+                                    <tr style="background:#d5f5e3;">
+                                        <td style="padding:8px 12px; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">✔ Approved Amount</td>
+                                        <td style="padding:8px 12px; font-size:11px; font-weight:700; color:#27ae60; border:1px solid #bdc3c7;">
+                                            <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.approved_amount)"/>
+                                        </td>
+                                        <td style="padding:8px 12px; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Monthly Installment</td>
+                                        <td style="padding:8px 12px; font-size:11px; font-weight:700; border:1px solid #bdc3c7;">
+                                            <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.monthly_installment)"/>
+                                        </td>
+                                    </tr>
+                                    <tr style="background:#d5f5e3;">
+                                        <td style="padding:8px 12px; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Profit Rate</td>
+                                        <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;"><t t-esc="'{:.2f}'.format(doc.profit_rate)"/>% p.a.</td>
+                                        <td style="padding:8px 12px; font-weight:600; font-size:11px; border:1px solid #bdc3c7;">Total Cost</td>
+                                        <td style="padding:8px 12px; font-size:11px; border:1px solid #bdc3c7;">
+                                            <t t-esc="doc.currency_id.symbol"/> <t t-esc="'{:,.2f}'.format(doc.total_cost)"/>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </table>
+                        </group>
+
+                        <t t-if="doc.conditions">
+                            <p style="font-size:11px;"><strong>Conditions:</strong> <t t-esc="doc.conditions"/></p>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

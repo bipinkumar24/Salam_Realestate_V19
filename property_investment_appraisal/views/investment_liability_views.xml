@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_investment_liability_list" model="ir.ui.view">
+        <field name="name">property.investment.liability.list</field>
+        <field name="model">property.investment.liability</field>
+        <field name="arch" type="xml">
+            <list string="Liabilities">
+                <field name="application_id"/>
+                <field name="creditor_name"/>
+                <field name="monthly_payment"/>
+                <field name="months_remaining"/>
+                <field name="outstanding_balance"/>
+                <field name="notes"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

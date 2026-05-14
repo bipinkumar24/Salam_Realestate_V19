@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- ═══ SALAAM PROJECT — List View ═══ -->
+  <record id="view_salaam_project_tree" model="ir.ui.view">
+    <field name="name">salaam.project.list</field>
+    <field name="model">salaam.project</field>
+    <field name="arch" type="xml">
+      <list string="Projects">
+        <field name="name"/>
+        <field name="code"/>
+        <field name="sub_project_count" string="Sub Projects"/>
+        <field name="property_count" string="Units"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- ═══ SALAAM PROJECT — Form View ═══ -->
+  <record id="view_salaam_project_form" model="ir.ui.view">
+    <field name="name">salaam.project.form</field>
+    <field name="model">salaam.project</field>
+    <field name="arch" type="xml">
+      <form string="Development / Project">
+        <sheet>
+          <div class="oe_title">
+            <label for="name"/>
+            <h1><field name="name"/></h1>
+          </div>
+          <group>
+            <group>
+              <field name="code"/>
+            </group>
+            <group>
+              <field name="active"/>
+            </group>
+          </group>
+          <field name="description" placeholder="Description..."/>
+          <notebook>
+            <page string="Sub Projects">
+              <field name="sub_project_ids">
+                <list editable="bottom">
+                  <field name="name"/>
+                  <field name="code"/>
+                  <field name="active"/>
+                  <field name="property_count" string="Units" readonly="1"/>
+                </list>
+              </field>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <!-- ═══ SALAAM PROJECT — Action ═══ -->
+  <record id="action_salaam_project" model="ir.actions.act_window">
+    <field name="name">Developments / Projects</field>
+    <field name="res_model">salaam.project</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <!-- ═══ SALAAM SUB PROJECT — List View ═══ -->
+  <record id="view_salaam_sub_project_tree" model="ir.ui.view">
+    <field name="name">salaam.sub.project.list</field>
+    <field name="model">salaam.sub.project</field>
+    <field name="arch" type="xml">
+      <list string="Sub Projects">
+        <field name="project_id"/>
+        <field name="name"/>
+        <field name="code"/>
+        <field name="property_count" string="Units"/>
+      </list>
+    </field>
+  </record>
+
+  <!-- ═══ SALAAM SUB PROJECT — Action ═══ -->
+  <record id="action_salaam_sub_project" model="ir.actions.act_window">
+    <field name="name">Sub Projects</field>
+    <field name="res_model">salaam.sub.project</field>
+    <field name="view_mode">list,form</field>
+  </record>
+
+  <!-- ═══ PROPERTY DETAILS — Inherit: add project fields ═══ -->
+  <record id="view_property_details_project_inherit" model="ir.ui.view">
+    <field name="name">property.details.salaam.project.inherit</field>
+    <field name="model">property.details</field>
+    <field name="inherit_id" ref="salaam_reservation.view_property_details_base_fallback"/>
+    <field name="priority">22</field>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='price']" position="after">
+        <field name="salaam_project_id"/>
+        <field name="salaam_sub_project_id" invisible="not salaam_project_id"/>
+      </xpath>
+    </field>
+  </record>
+
+  <!-- ═══ MENUS — Configuration ═══ -->
+  <menuitem id="menu_reservation_config"
+            name="Configuration"
+            parent="menu_reservation_root"
+            sequence="90"/>
+
+  <menuitem id="menu_salaam_projects"
+            name="Developments / Projects"
+            parent="menu_reservation_config"
+            action="action_salaam_project"
+            sequence="10"/>
+
+  <menuitem id="menu_salaam_sub_projects"
+            name="Sub Projects"
+            parent="menu_reservation_config"
+            action="action_salaam_sub_project"
+            sequence="20"/>
+
+</odoo>

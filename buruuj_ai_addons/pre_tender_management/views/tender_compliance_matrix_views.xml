@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_matrix_form" model="ir.ui.view">
+        <field name="name">tender.compliance.matrix.form</field>
+        <field name="model">tender.compliance.matrix</field>
+        <field name="arch" type="xml">
+            <form string="Compliance Matrix">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="line_count"/>
+                            <field name="compliant_count"/>
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Requirements" name="lines">
+                            <field name="line_ids">
+                                <list editable="bottom" decoration-success="status == 'compliant'" decoration-danger="status == 'non_compliant' or is_showstopper" decoration-muted="status == 'not_applicable'">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="requirement"/>
+                                    <field name="source_clause"/>
+                                    <field name="response_owner_id"/>
+                                    <field name="status"/>
+                                    <field name="is_showstopper"/>
+                                </list>
+                                <form>
+                                    <group>
+                                        <group>
+                                            <field name="requirement"/>
+                                            <field name="source_clause"/>
+                                            <field name="response_owner_id"/>
+                                        </group>
+                                        <group>
+                                            <field name="status"/>
+                                            <field name="is_showstopper"/>
+                                        </group>
+                                    </group>
+                                    <group>
+                                        <field name="response_text" nolabel="1" placeholder="Our response / approach to this requirement…"/>
+                                    </group>
+                                    <group string="Evidence">
+                                        <field name="evidence_attachment_ids" nolabel="1" widget="many2many_binary"/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_matrix" model="ir.actions.act_window">
+        <field name="name">Compliance Matrices</field>
+        <field name="res_model">tender.compliance.matrix</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_tender_matrix_list" model="ir.ui.view">
+        <field name="name">tender.compliance.matrix.list</field>
+        <field name="model">tender.compliance.matrix</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <field name="line_count"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>
