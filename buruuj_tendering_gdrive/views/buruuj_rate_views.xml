@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_rate_list_gdrive" model="ir.ui.view">
+        <field name="name">buruuj.rate.list.gdrive</field>
+        <field name="model">buruuj.rate</field>
+        <field name="inherit_id" ref="buruuj_tendering.view_buruuj_rate_list"/>
+        <field name="arch" type="xml">
+            <list position="inside">
+                <header>
+                    <button name="action_bulk_activate" type="object"
+                            string="Activate Selected" display="selection"
+                            groups="buruuj_base.group_buruuj_qs"/>
+                    <button name="action_bulk_deactivate" type="object"
+                            string="Deactivate Selected" display="selection"
+                            groups="buruuj_base.group_buruuj_qs"/>
+                    <button name="action_gdrive_push" type="object"
+                            string="Push to Drive" display="always"
+                            groups="buruuj_base.group_buruuj_manager"/>
+                    <button name="action_gdrive_pull" type="object"
+                            string="Pull from Drive" display="always"
+                            groups="buruuj_base.group_buruuj_manager"/>
+                    <button name="%(action_buruuj_rate_claude_generate)d" type="action"
+                            string="Generate with Claude" display="always"
+                            groups="buruuj_base.group_buruuj_manager"/>
+                    <button name="%(action_buruuj_gdrive_setup)d" type="action"
+                            string="Drive Setup" display="always"
+                            groups="buruuj_base.group_buruuj_manager"/>
+                </header>
+            </list>
+            <xpath expr="//field[@name='active']" position="replace">
+                <field name="active" widget="boolean_toggle" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_buruuj_rate_search_gdrive" model="ir.ui.view">
+        <field name="name">buruuj.rate.search.gdrive</field>
+        <field name="model">buruuj.rate</field>
+        <field name="inherit_id" ref="buruuj_tendering.view_buruuj_rate_search"/>
+        <field name="arch" type="xml">
+            <search position="inside">
+                <separator/>
+                <filter string="Inactive (Drafts)" name="inactive_only"
+                        domain="[('active', '=', False)]"/>
+                <filter string="Claude Drafts" name="claude_drafts"
+                        domain="[('notes', 'like', '[Claude draft]')]"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>

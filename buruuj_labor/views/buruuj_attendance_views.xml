@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_att_list" model="ir.ui.view">
+        <field name="name">buruuj.attendance.list</field>
+        <field name="model">buruuj.attendance</field>
+        <field name="arch" type="xml">
+            <list editable="bottom"
+                  decoration-success="status == 'present'"
+                  decoration-warning="status in ('on_leave','sick')"
+                  decoration-muted="status == 'no_work'"
+                  decoration-danger="status == 'absent'">
+                <field name="date"/>
+                <field name="worker_id"/>
+                <field name="worker_code" optional="hide"/>
+                <field name="trade_id"/>
+                <field name="project_id"/>
+                <field name="phase_id" optional="show"/>
+                <field name="subcontract_id" optional="hide"/>
+                <field name="status" widget="badge"/>
+                <field name="check_in"/>
+                <field name="check_out"/>
+                <field name="hours_worked" sum="Hours"/>
+                <field name="overtime_hours" optional="show" sum="OT"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_att_form" model="ir.ui.view">
+        <field name="name">buruuj.attendance.form</field>
+        <field name="model">buruuj.attendance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="worker_id"/>
+                            <field name="project_id"/>
+                            <field name="phase_id"/>
+                            <field name="subcontract_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="status"/>
+                            <field name="check_in"/>
+                            <field name="check_out"/>
+                            <field name="hours_worked"/>
+                            <field name="overtime_hours"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_att_search" model="ir.ui.view">
+        <field name="name">buruuj.attendance.search</field>
+        <field name="model">buruuj.attendance</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="worker_id"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="date"/>
+                <filter string="Today" name="today"
+                        domain="[('date','=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="week"
+                        domain="[('date','&gt;=', (context_today() - relativedelta(days=7)).strftime('%Y-%m-%d'))]"/>
+                <filter string="Present" name="present"
+                        domain="[('status','=','present')]"/>
+                <filter string="Absent" name="absent"
+                        domain="[('status','=','absent')]"/>
+                <group>
+                    <filter string="Date" name="g_date"
+                            context="{'group_by': 'date'}"/>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Trade" name="g_trade"
+                            context="{'group_by': 'trade_id'}"/>
+                    <filter string="Status" name="g_status"
+                            context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_att" model="ir.actions.act_window">
+        <field name="name">Attendance</field>
+        <field name="res_model">buruuj.attendance</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_today': 1}</field>
+    </record>
+</odoo>

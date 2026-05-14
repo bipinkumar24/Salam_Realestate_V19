@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tool_issuance_list" model="ir.ui.view">
+        <field name="name">buruuj.tool.issuance.list</field>
+        <field name="model">buruuj.tool.issuance</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'returned'"
+                  decoration-warning="state == 'overdue'"
+                  decoration-danger="state == 'lost'">
+                <field name="name"/>
+                <field name="tool_id"/>
+                <field name="employee_id"/>
+                <field name="project_id"/>
+                <field name="issue_date"/>
+                <field name="expected_return"/>
+                <field name="actual_return"/>
+                <field name="condition_out"/>
+                <field name="condition_in"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tool_issuance_form" model="ir.ui.view">
+        <field name="name">buruuj.tool.issuance.form</field>
+        <field name="model">buruuj.tool.issuance</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_return" string="Mark Returned"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'issued'"/>
+                    <button name="action_mark_lost" string="Mark Lost"
+                            type="object"
+                            invisible="state != 'issued'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="tool_id"/>
+                            <field name="employee_id"/>
+                            <field name="project_id"/>
+                        </group>
+                        <group>
+                            <field name="issue_date"/>
+                            <field name="expected_return"/>
+                            <field name="actual_return" readonly="1"/>
+                            <field name="issued_by"/>
+                            <field name="received_by" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Out">
+                            <field name="condition_out"/>
+                        </group>
+                        <group string="In">
+                            <field name="condition_in"
+                                   invisible="state == 'issued'"/>
+                            <field name="condition_in"
+                                   readonly="state == 'issued'"
+                                   invisible="state != 'issued'"
+                                   required="state != 'issued'"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tool_issuance" model="ir.actions.act_window">
+        <field name="name">Tool Issuances</field>
+        <field name="res_model">buruuj.tool.issuance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_tool_issuance_open" model="ir.actions.act_window">
+        <field name="name">Open Issuances</field>
+        <field name="res_model">buruuj.tool.issuance</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','=','issued')]</field>
+    </record>
+</odoo>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="demo_wo_concrete_l1" model="buruuj.workorder">
+            <field name="title">Pour Floor Slab — Level 1</field>
+            <field name="subcontract_id" ref="demo_sc_marina_concrete"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() - relativedelta(months=3, days=15)).strftime('%Y-%m-%d')"/>
+            <field name="location">Tower core, Level 1</field>
+            <field name="amount">285000.00</field>
+            <field name="progress">100</field>
+            <field name="state">signed_off</field>
+            <field name="description"><![CDATA[<p>Cast 480 m³ of C30 concrete for Level 1 slab. Includes formwork, reinforcement, pour, and 28-day curing.</p>]]></field>
+        </record>
+
+        <record id="demo_wo_concrete_l5" model="buruuj.workorder">
+            <field name="title">Pour Floor Slab — Level 5</field>
+            <field name="subcontract_id" ref="demo_sc_marina_concrete"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(weeks=2)).strftime('%Y-%m-%d')"/>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(weeks=2)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(weeks=2)).strftime('%Y-%m-%d')"/>
+            <field name="location">Tower core, Level 5</field>
+            <field name="amount">298000.00</field>
+            <field name="progress">65</field>
+            <field name="state">in_progress</field>
+            <field name="description"><![CDATA[<p>Cast Level 5 floor slab including columns and walls below.</p>]]></field>
+        </record>
+
+        <record id="demo_wo_elec_basement" model="buruuj.workorder">
+            <field name="title">Electrical Rough-in — Basement &amp; L1</field>
+            <field name="subcontract_id" ref="demo_sc_marina_mep"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(weeks=1)).strftime('%Y-%m-%d')"/>
+            <field name="location">Basement and Level 1</field>
+            <field name="amount">175000.00</field>
+            <field name="progress">85</field>
+            <field name="state">in_progress</field>
+        </record>
+
+        <record id="demo_wo_asphalt_km15" model="buruuj.workorder">
+            <field name="title">Base Course Paving Km 15-22</field>
+            <field name="subcontract_id" ref="demo_sc_hc7_asphalt"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=2)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() - relativedelta(weeks=1)).strftime('%Y-%m-%d')"/>
+            <field name="location">Km 15 to Km 22</field>
+            <field name="amount">420000.00</field>
+            <field name="progress">100</field>
+            <field name="state">signed_off</field>
+        </record>
+
+    </data>
+</odoo>

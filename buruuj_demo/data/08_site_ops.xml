@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- DPR: today on Marina -->
+        <record id="demo_dpr_marina_today" model="buruuj.dpr">
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="date" eval="DateTime.today().strftime('%Y-%m-%d')"/>
+            <field name="weather">clear</field>
+            <field name="temperature">32.0</field>
+            <field name="humidity">65.0</field>
+            <field name="rain_hours">0</field>
+            <field name="state">submitted</field>
+            <field name="work_executed"><![CDATA[<ul>
+<li>L5 slab formwork: 70% complete</li>
+<li>L4 column finishing: 85% complete</li>
+<li>Basement waterproofing: testing in progress</li>
+</ul>]]></field>
+            <field name="visitors">Consultant inspection 10:00–12:00</field>
+        </record>
+
+        <record id="demo_dpr_mp_1" model="buruuj.dpr.manpower">
+            <field name="dpr_id" ref="demo_dpr_marina_today"/>
+            <field name="trade_id" ref="buruuj_base.trade_civil"/>
+            <field name="subcontractor_id" ref="demo_sub_concretemaster"/>
+            <field name="count">42</field>
+            <field name="hours">8</field>
+        </record>
+        <record id="demo_dpr_mp_2" model="buruuj.dpr.manpower">
+            <field name="dpr_id" ref="demo_dpr_marina_today"/>
+            <field name="trade_id" ref="buruuj_base.trade_elec"/>
+            <field name="subcontractor_id" ref="demo_sub_electropower"/>
+            <field name="count">18</field>
+            <field name="hours">8</field>
+        </record>
+        <record id="demo_dpr_eq_1" model="buruuj.dpr.equipment">
+            <field name="dpr_id" ref="demo_dpr_marina_today"/>
+            <field name="equipment_type">Tower Crane TC-45</field>
+            <field name="count">1</field>
+            <field name="hours_used">9</field>
+            <field name="operator">Hassan A.</field>
+        </record>
+        <record id="demo_dpr_eq_2" model="buruuj.dpr.equipment">
+            <field name="dpr_id" ref="demo_dpr_marina_today"/>
+            <field name="equipment_type">Concrete Pump 36m</field>
+            <field name="count">1</field>
+            <field name="hours_used">5</field>
+        </record>
+
+        <!-- DPR: yesterday on HC-7 -->
+        <record id="demo_dpr_hc7_yesterday" model="buruuj.dpr">
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="weather">cloudy</field>
+            <field name="temperature">28.0</field>
+            <field name="state">approved</field>
+            <field name="work_executed"><![CDATA[<p>Asphalt wearing course Km 22.5–24.0 completed (1500m run).</p>]]></field>
+        </record>
+
+        <!-- RFI -->
+        <record id="demo_rfi_marina_1" model="buruuj.rfi">
+            <field name="title">Clarification on facade fixing detail at L7 setback</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=8)).strftime('%Y-%m-%d')"/>
+            <field name="sent_to" ref="demo_consultant_skyline"/>
+            <field name="discipline">arch</field>
+            <field name="priority">high</field>
+            <field name="drawing_ref">A-203 Rev 4</field>
+            <field name="response_due" eval="(DateTime.today() - relativedelta(days=1)).strftime('%Y-%m-%d')"/>
+            <field name="state">sent</field>
+            <field name="description"><![CDATA[<p>Drawing A-203 Rev 4 shows two conflicting fixing patterns at the L7 setback. Please clarify which detail governs.</p>]]></field>
+        </record>
+
+        <!-- NCR -->
+        <record id="demo_ncr_marina_1" model="buruuj.ncr">
+            <field name="title">Honeycombing observed in L3 column C-12</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="responsible_partner_id" ref="demo_sub_concretemaster"/>
+            <field name="severity">major</field>
+            <field name="location">Level 3, Column C-12</field>
+            <field name="target_close_date" eval="(DateTime.today() + relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="state">action_in_progress</field>
+            <field name="description"><![CDATA[<p>Significant honeycombing visible on north face of column C-12 at L3. Affects approx. 0.3m² of surface.</p>]]></field>
+            <field name="root_cause"><![CDATA[<p>Inadequate vibration during pour due to vibrator failure mid-pour.</p>]]></field>
+            <field name="corrective_action"><![CDATA[<p>Chip out affected area, apply repair mortar after consultant approval. Visible test cores to confirm structural integrity.</p>]]></field>
+        </record>
+
+        <!-- Snag items -->
+        <record id="demo_snag_1" model="buruuj.snag">
+            <field name="name">Wall paint touch-up needed in show flat</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="location">L1 show flat, master bedroom</field>
+            <field name="discipline">finish</field>
+            <field name="priority">normal</field>
+            <field name="responsible_id" ref="demo_sub_finishpro"/>
+            <field name="target_date" eval="(DateTime.today() + relativedelta(days=7)).strftime('%Y-%m-%d')"/>
+            <field name="state">open</field>
+        </record>
+        <record id="demo_snag_2" model="buruuj.snag">
+            <field name="name">GI conduit not fixed properly in basement parking</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="location">Basement P2, zone B</field>
+            <field name="discipline">mep</field>
+            <field name="priority">high</field>
+            <field name="responsible_id" ref="demo_sub_electropower"/>
+            <field name="target_date" eval="(DateTime.today() + relativedelta(days=3)).strftime('%Y-%m-%d')"/>
+            <field name="state">in_progress</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_clarification_list" model="ir.ui.view">
+        <field name="name">tender.clarification.list</field>
+        <field name="model">tender.clarification</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'responded'" decoration-danger="state == 'overdue'">
+                <field name="opportunity_id"/>
+                <field name="direction"/>
+                <field name="question"/>
+                <field name="asked_date"/>
+                <field name="response_deadline"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_clarification_form" model="ir.ui.view">
+        <field name="name">tender.clarification.form</field>
+        <field name="model">tender.clarification</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="opportunity_id"/>
+                            <field name="direction"/>
+                            <field name="addendum_reference"/>
+                        </group>
+                        <group>
+                            <field name="asked_by_id"/>
+                            <field name="asked_date"/>
+                            <field name="response_deadline"/>
+                            <field name="response_date"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="question" nolabel="1" placeholder="The clarification question…"/>
+                    </group>
+                    <group string="Response">
+                        <field name="response" nolabel="1" placeholder="Response received / sent…"/>
+                    </group>
+                    <group string="Attachments">
+                        <field name="attachment_ids" nolabel="1" widget="many2many_binary"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_clarification" model="ir.actions.act_window">
+        <field name="name">Clarifications</field>
+        <field name="res_model">tender.clarification</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,62 @@
+/* Buruuj Portal styling — navy/gold accents on top of standard portal */
+
+.buruuj-portal-card {
+    border: 1px solid #DDDDDD;
+    border-left: 4px solid #C9A227;
+    border-radius: 4px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    background: #FFFFFF;
+}
+
+.buruuj-portal-card h4 {
+    color: #0B2545;
+    margin-top: 0;
+}
+
+.buruuj-portal-summary {
+    background: #EAF1F8;
+    border-radius: 4px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.buruuj-status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+.buruuj-status-draft { background: #888; }
+.buruuj-status-active { background: #1B7F3A; }
+.buruuj-status-pending { background: #B8860B; }
+.buruuj-status-rejected { background: #B00020; }
+.buruuj-status-approved { background: #1B7F3A; }
+
+.buruuj-action-bar {
+    background: #F4F7FA;
+    padding: 16px;
+    margin-top: 16px;
+    border-radius: 4px;
+}
+
+.buruuj-section-title {
+    color: #0B2545;
+    border-bottom: 2px solid #C9A227;
+    padding-bottom: 4px;
+    margin-bottom: 16px;
+    margin-top: 24px;
+}
+
+.buruuj-readonly-row {
+    padding: 6px 0;
+    border-bottom: 1px solid #EFEFEF;
+}
+.buruuj-readonly-label {
+    font-weight: 600;
+    color: #555;
+    display: inline-block;
+    width: 200px;
+}

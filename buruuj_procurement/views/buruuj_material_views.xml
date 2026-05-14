@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_material_list" model="ir.ui.view">
+        <field name="name">buruuj.material.list</field>
+        <field name="model">buruuj.material</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="uom_id"/>
+                <field name="last_purchase_price"/>
+                <field name="minimum_stock" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_material_form" model="ir.ui.view">
+        <field name="name">buruuj.material.form</field>
+        <field name="model">buruuj.material</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Material name..."/></h1>
+                        <h3><field name="code" placeholder="Code..."/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id"/>
+                            <field name="uom_id"/>
+                            <field name="last_purchase_price"/>
+                            <field name="minimum_stock"/>
+                            <field name="active"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="preferred_vendor_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <field name="specification" placeholder="Standard specification (grade, size, finish)..."/>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_material_search" model="ir.ui.view">
+        <field name="name">buruuj.material.search</field>
+        <field name="model">buruuj.material</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <group>
+                    <filter string="Category" name="g_cat" context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_material" model="ir.actions.act_window">
+        <field name="name">Material Master</field>
+        <field name="res_model">buruuj.material</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_material_category_list" model="ir.ui.view">
+        <field name="name">buruuj.material.category.list</field>
+        <field name="model">buruuj.material.category</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="parent_id"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_material_category" model="ir.actions.act_window">
+        <field name="name">Material Categories</field>
+        <field name="res_model">buruuj.material.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_prod_list" model="ir.ui.view">
+        <field name="name">buruuj.productivity.list</field>
+        <field name="model">buruuj.productivity</field>
+        <field name="arch" type="xml">
+            <list decoration-success="variance_pct &gt; 0"
+                  decoration-warning="variance_pct &lt; 0 and variance_pct &gt;= -10"
+                  decoration-danger="variance_pct &lt; -10">
+                <field name="date"/>
+                <field name="project_id"/>
+                <field name="phase_id" optional="show"/>
+                <field name="cbs_id" optional="hide"/>
+                <field name="activity"/>
+                <field name="crew_name"/>
+                <field name="crew_size"/>
+                <field name="hours_consumed" sum="Hrs"/>
+                <field name="output_quantity" sum="Output"/>
+                <field name="output_uom"/>
+                <field name="productivity"/>
+                <field name="benchmark_productivity" optional="show"/>
+                <field name="variance_pct" widget="percentage"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_prod_form" model="ir.ui.view">
+        <field name="name">buruuj.productivity.form</field>
+        <field name="model">buruuj.productivity</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="phase_id"/>
+                            <field name="cbs_id"/>
+                            <field name="activity"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="crew_name"/>
+                            <field name="crew_size"/>
+                            <field name="foreman_id"/>
+                        </group>
+                    </group>
+                    <group string="Inputs &amp; Outputs">
+                        <group>
+                            <field name="hours_consumed"/>
+                            <field name="output_quantity"/>
+                            <field name="output_uom"/>
+                        </group>
+                        <group>
+                            <field name="productivity" readonly="1"/>
+                            <field name="inverse_productivity" readonly="1"/>
+                            <field name="benchmark_productivity"/>
+                            <field name="variance_pct" widget="percentage"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_prod" model="ir.actions.act_window">
+        <field name="name">Productivity</field>
+        <field name="res_model">buruuj.productivity</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

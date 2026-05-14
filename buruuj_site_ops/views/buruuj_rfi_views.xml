@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_rfi_list" model="ir.ui.view">
+        <field name="name">buruuj.rfi.list</field>
+        <field name="model">buruuj.rfi</field>
+        <field name="arch" type="xml">
+            <list decoration-warning="state == 'sent'" decoration-success="state == 'closed'"
+                  decoration-danger="days_open &gt; 14 and state != 'closed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="discipline"/>
+                <field name="priority" widget="badge"/>
+                <field name="sent_to"/>
+                <field name="response_due"/>
+                <field name="days_open"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_rfi_form" model="ir.ui.view">
+        <field name="name">buruuj.rfi.form</field>
+        <field name="model">buruuj.rfi</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_send" string="Send" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_respond" string="Mark Responded" type="object"
+                            class="oe_highlight" invisible="state != 'sent'"/>
+                    <button name="action_close" string="Close" type="object"
+                            invisible="state != 'responded'"/>
+                    <button name="action_reset" string="Reset" type="object"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3><field name="title"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                            <field name="raised_by"/>
+                            <field name="sent_to"/>
+                        </group>
+                        <group>
+                            <field name="discipline"/>
+                            <field name="priority"/>
+                            <field name="drawing_ref"/>
+                            <field name="spec_ref"/>
+                            <field name="response_due"/>
+                            <field name="days_open"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Question"><field name="description"/></page>
+                        <page string="Proposed Solution"><field name="proposed_solution"/></page>
+                        <page string="Response">
+                            <group>
+                                <field name="response_date"/>
+                                <field name="response_by"/>
+                            </group>
+                            <field name="response"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_rfi" model="ir.actions.act_window">
+        <field name="name">RFIs</field>
+        <field name="res_model">buruuj.rfi</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

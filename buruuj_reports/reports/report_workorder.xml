@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_workorder_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <style>
+                            .buruuj-title { color: #0B2545; }
+                            .buruuj-accent { color: #C9A227; }
+                            .buruuj-bar { border-top: 4px solid #C9A227; margin: 8px 0; }
+                            .buruuj-section {
+                                background: #C9A227; color: white;
+                                padding: 4px 8px; margin: 12px 0 6px 0;
+                                font-weight: bold; font-size: 10pt;
+                            }
+                            .buruuj-box {
+                                border: 1px solid #ccc; padding: 8px;
+                                background: #f9f9f9;
+                            }
+                            table.kv td { padding: 4px 6px; font-size: 9.5pt; }
+                            table.kv td.label {
+                                font-weight: bold; width: 30%; color: #0B2545;
+                            }
+                            .stamp {
+                                border: 2px dashed #0B2545;
+                                padding: 12px; text-align: center;
+                                width: 200px; height: 80px;
+                                margin: 20px auto; color: #0B2545;
+                            }
+                            .signature-box {
+                                border-top: 1px solid #333;
+                                padding-top: 6px; margin-top: 50px;
+                                font-size: 9pt;
+                            }
+                        </style>
+
+                        <!-- HEADER -->
+                        <div class="row mb-3">
+                            <div class="col-7">
+                                <h2 class="buruuj-title mb-0">WORK ORDER</h2>
+                                <h5 class="buruuj-accent" t-field="o.title"/>
+                            </div>
+                            <div class="col-5 text-end">
+                                <div><strong>WO No.:</strong> <span t-field="o.name"/></div>
+                                <div><strong>Date:</strong> <span t-field="o.date"/></div>
+                                <div><strong>Status:</strong> <span t-field="o.state"/></div>
+                            </div>
+                        </div>
+                        <div class="buruuj-bar"/>
+
+                        <!-- ISSUED TO -->
+                        <div class="buruuj-section">ISSUED TO</div>
+                        <div class="row">
+                            <div class="col-7">
+                                <div class="buruuj-box">
+                                    <strong class="buruuj-title">
+                                        <span t-field="o.partner_id.name"/>
+                                    </strong><br/>
+                                    <span t-field="o.partner_id.street"/><br/>
+                                    <span t-field="o.partner_id.phone"/>
+                                </div>
+                            </div>
+                            <div class="col-5">
+                                <div class="buruuj-box">
+                                    <strong>Under Subcontract:</strong><br/>
+                                    <span t-field="o.subcontract_id.name"/><br/>
+                                    <small t-field="o.subcontract_id.title"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DETAILS -->
+                        <div class="buruuj-section">WORK ORDER DETAILS</div>
+                        <table class="kv" style="width: 100%; border-collapse: collapse;">
+                            <tr>
+                                <td class="label">Project</td>
+                                <td colspan="3"><span t-field="o.project_id.name"/>
+                                    (<span t-field="o.project_id.buruuj_project_code"/>)</td>
+                            </tr>
+                            <tr>
+                                <td class="label">Work Location</td>
+                                <td colspan="3"><span t-field="o.location"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label">Start Date</td>
+                                <td><span t-field="o.start_date"/></td>
+                                <td class="label">Completion Date</td>
+                                <td><span t-field="o.end_date"/></td>
+                            </tr>
+                            <tr>
+                                <td class="label">WO Value</td>
+                                <td colspan="3">
+                                    <strong>
+                                        <span t-field="o.amount"
+                                              t-options="{'widget': 'monetary',
+                                                          'display_currency': o.currency_id}"/>
+                                    </strong>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- DESCRIPTION -->
+                        <div class="buruuj-section">SCOPE OF WORK</div>
+                        <div t-field="o.description"/>
+
+                        <!-- INSTRUCTIONS -->
+                        <div class="buruuj-section">INSTRUCTIONS TO SUBCONTRACTOR</div>
+                        <ol style="font-size: 9.5pt; line-height: 1.5;">
+                            <li>Execute the works in accordance with the parent Subcontract
+                                Agreement and project specifications.</li>
+                            <li>Coordinate with the Site Engineer before commencing works.</li>
+                            <li>Notify the Project Manager immediately of any obstruction,
+                                discrepancy, or change in site conditions.</li>
+                            <li>Comply with the project HSE plan and use all required PPE.</li>
+                            <li>Submit progress photos and daily reports as required.</li>
+                            <li>This Work Order shall be closed only after digital sign-off
+                                by Buruuj's authorized representative.</li>
+                        </ol>
+
+                        <!-- SIGNATURES -->
+                        <div class="row mt-4">
+                            <div class="col-6 text-center">
+                                <div class="signature-box">
+                                    <strong>Issued By (Buruuj)</strong><br/>
+                                    Project Manager / Site Engineer<br/><br/>
+                                    Name: ____________________________<br/><br/>
+                                    Sign &amp; Date: ____________________
+                                </div>
+                            </div>
+                            <div class="col-6 text-center">
+                                <div class="signature-box">
+                                    <strong>Acknowledged By</strong><br/>
+                                    <span t-field="o.partner_id.name"/><br/><br/>
+                                    Name: ____________________________<br/><br/>
+                                    Sign &amp; Date: ____________________
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- DIGITAL SIGN-OFF -->
+                        <div t-if="o.state == 'signed_off'" class="stamp mt-4">
+                            <strong>SIGNED OFF</strong><br/>
+                            By: <span t-field="o.signed_off_by.name"/><br/>
+                            On: <span t-field="o.sign_off_date"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

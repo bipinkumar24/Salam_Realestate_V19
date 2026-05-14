@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_eq_se,buruuj.equipment.se,model_buruuj_equipment,buruuj_base.group_buruuj_site_engineer,1,1,0,0
+access_eq_pm,buruuj.equipment.pm,model_buruuj_equipment,buruuj_base.group_buruuj_pm,1,1,1,1
+access_eq_mgr,buruuj.equipment.mgr,model_buruuj_equipment,buruuj_base.group_buruuj_manager,1,1,1,1
+access_alloc_se,buruuj.allocation.se,model_buruuj_allocation,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_alloc_pm,buruuj.allocation.pm,model_buruuj_allocation,buruuj_base.group_buruuj_pm,1,1,1,1
+access_fuel_se,buruuj.fuel.se,model_buruuj_fuel_log,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_fuel_pm,buruuj.fuel.pm,model_buruuj_fuel_log,buruuj_base.group_buruuj_pm,1,1,1,1
+access_maint_se,buruuj.maint.se,model_buruuj_maintenance,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_maint_pm,buruuj.maint.pm,model_buruuj_maintenance,buruuj_base.group_buruuj_pm,1,1,1,1

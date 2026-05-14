@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_buruuj_toolbox" name="Toolbox Talks"
+              parent="buruuj_base.menu_buruuj_hse_root"
+              action="action_buruuj_toolbox" sequence="10"/>
+    <menuitem id="menu_buruuj_ptw" name="Permits to Work"
+              parent="buruuj_base.menu_buruuj_hse_root"
+              action="action_buruuj_ptw" sequence="20"/>
+    <menuitem id="menu_buruuj_incident" name="Incidents"
+              parent="buruuj_base.menu_buruuj_hse_root"
+              action="action_buruuj_incident" sequence="30"/>
+    <menuitem id="menu_buruuj_ppe" name="PPE Issuance"
+              parent="buruuj_base.menu_buruuj_hse_root"
+              action="action_buruuj_ppe" sequence="40"/>
+</odoo>

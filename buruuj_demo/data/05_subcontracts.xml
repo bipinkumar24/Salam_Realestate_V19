@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="demo_sc_marina_concrete" model="buruuj.subcontract">
+            <field name="title">Concrete Works — Substructure &amp; Superstructure</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="partner_id" ref="demo_sub_concretemaster"/>
+            <field name="trade_id" ref="buruuj_base.trade_civil"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="dlp_months">12</field>
+            <field name="contract_value">3850000.00</field>
+            <field name="advance_percent">20</field>
+            <field name="retention_percent">10</field>
+            <field name="payment_terms">progress</field>
+            <field name="ld_percent_per_day">0.05</field>
+            <field name="ld_cap_percent">10</field>
+            <field name="performance_bond_amount">385000.00</field>
+            <field name="performance_bond_expiry" eval="(DateTime.today() + relativedelta(months=18)).strftime('%Y-%m-%d')"/>
+            <field name="insurance_expiry" eval="(DateTime.today() + relativedelta(months=10)).strftime('%Y-%m-%d')"/>
+            <field name="state">in_progress</field>
+            <field name="scope_of_work"><![CDATA[<p>Supply, fabricate, and install all concrete works including:</p>
+<ul><li>Foundation raft, pile caps, and grade beams</li>
+<li>RC columns, walls, and slabs up to roof level</li>
+<li>Stair cores and lift shafts</li>
+<li>All formwork, reinforcement, pouring, and curing</li></ul>]]></field>
+        </record>
+
+        <record id="demo_sc_marina_mep" model="buruuj.subcontract">
+            <field name="title">Electrical Installation — Full Tower</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="partner_id" ref="demo_sub_electropower"/>
+            <field name="trade_id" ref="buruuj_base.trade_elec"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(months=10)).strftime('%Y-%m-%d')"/>
+            <field name="dlp_months">12</field>
+            <field name="contract_value">2240000.00</field>
+            <field name="advance_percent">15</field>
+            <field name="retention_percent">10</field>
+            <field name="payment_terms">progress</field>
+            <field name="ld_percent_per_day">0.05</field>
+            <field name="performance_bond_amount">224000.00</field>
+            <field name="performance_bond_expiry" eval="(DateTime.today() + relativedelta(months=22)).strftime('%Y-%m-%d')"/>
+            <field name="state">in_progress</field>
+            <field name="scope_of_work"><![CDATA[<p>Complete electrical installation including LV distribution, lighting, power outlets, fire alarm wiring, and emergency systems.</p>]]></field>
+        </record>
+
+        <record id="demo_sc_hc7_asphalt" model="buruuj.subcontract">
+            <field name="title">Asphalt Paving — Highway HC-7</field>
+            <field name="project_id" ref="demo_project_hc7"/>
+            <field name="partner_id" ref="demo_sub_concretemaster"/>
+            <field name="trade_id" ref="buruuj_base.trade_civil"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="start_date" eval="(DateTime.today() - relativedelta(months=3)).strftime('%Y-%m-%d')"/>
+            <field name="end_date" eval="(DateTime.today() + relativedelta(months=6)).strftime('%Y-%m-%d')"/>
+            <field name="dlp_months">12</field>
+            <field name="contract_value">1850000.00</field>
+            <field name="advance_percent">20</field>
+            <field name="retention_percent">10</field>
+            <field name="payment_terms">progress</field>
+            <field name="state">in_progress</field>
+            <field name="scope_of_work"><![CDATA[<p>Asphalt base course, binder course, and wearing course for 17km of highway, including line marking and signage.</p>]]></field>
+        </record>
+
+    </data>
+</odoo>

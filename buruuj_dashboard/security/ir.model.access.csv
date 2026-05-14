@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_dashboard_pm,dashboard.pm,model_buruuj_dashboard,buruuj_base.group_buruuj_pm,1,1,1,1
+access_dashboard_dir,dashboard.dir,model_buruuj_dashboard,buruuj_base.group_buruuj_director,1,1,1,1

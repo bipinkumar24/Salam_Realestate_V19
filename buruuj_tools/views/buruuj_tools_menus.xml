@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_tools_root" name="Tools"
+              parent="buruuj_base.menu_buruuj_root" sequence="65"
+              groups="buruuj_base.group_buruuj_storekeeper"/>
+
+    <menuitem id="menu_tools_register" name="Tool Register"
+              parent="menu_tools_root" action="action_tool" sequence="10"/>
+    <menuitem id="menu_tools_issuance_open" name="Open Issuances"
+              parent="menu_tools_root" action="action_tool_issuance_open"
+              sequence="15"/>
+    <menuitem id="menu_tools_issuance" name="All Issuances"
+              parent="menu_tools_root" action="action_tool_issuance" sequence="20"/>
+    <menuitem id="menu_tools_transfer" name="Transfers"
+              parent="menu_tools_root" action="action_tool_transfer" sequence="30"/>
+    <menuitem id="menu_tools_calibration" name="Calibrations"
+              parent="menu_tools_root" action="action_tool_calibration"
+              sequence="40"/>
+    <menuitem id="menu_tools_loss" name="Loss / Damage"
+              parent="menu_tools_root" action="action_tool_loss" sequence="50"/>
+    <menuitem id="menu_tools_category" name="Categories"
+              parent="menu_tools_root" action="action_tool_category"
+              sequence="90"
+              groups="buruuj_base.group_buruuj_manager"/>
+</odoo>

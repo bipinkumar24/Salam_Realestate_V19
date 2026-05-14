@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_ipc_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <style>
+                            .buruuj-title { color: #0B2545; }
+                            .buruuj-accent { color: #C9A227; }
+                            .buruuj-bar { border-top: 4px solid #C9A227; margin: 8px 0; }
+                            .buruuj-bar-thin { border-top: 1px solid #0B2545; margin: 4px 0; }
+                            .buruuj-box {
+                                border: 1px solid #0B2545; padding: 8px;
+                                background: #f4f7fa; border-radius: 3px;
+                            }
+                            table.buruuj-lines th {
+                                background: #0B2545; color: white;
+                                padding: 6px 4px; font-size: 9pt;
+                            }
+                            table.buruuj-lines td {
+                                padding: 4px; font-size: 9pt;
+                                border-bottom: 1px solid #ddd;
+                            }
+                            .buruuj-summary td { padding: 4px 8px; }
+                            .buruuj-summary tr.total {
+                                font-weight: bold; background: #0B2545; color: white;
+                            }
+                            .signature-box {
+                                border-top: 1px solid #333;
+                                padding-top: 6px; margin-top: 40px;
+                                font-size: 9pt;
+                            }
+                        </style>
+
+                        <!-- HEADER -->
+                        <div class="row mb-3">
+                            <div class="col-7">
+                                <h2 class="buruuj-title mb-0">
+                                    INTERIM PAYMENT CERTIFICATE
+                                </h2>
+                                <h4 class="buruuj-accent mb-0">
+                                    <span t-if="o.type == 'client'">Client IPC</span>
+                                    <span t-if="o.type == 'subcontractor'">Subcontractor IPC</span>
+                                </h4>
+                            </div>
+                            <div class="col-5 text-end">
+                                <div><strong>IPC No.:</strong> <span t-field="o.name"/></div>
+                                <div><strong>Sequence:</strong> <span t-field="o.sequence_no"/></div>
+                                <div><strong>Date:</strong> <span t-field="o.date"/></div>
+                            </div>
+                        </div>
+                        <div class="buruuj-bar"/>
+
+                        <!-- PROJECT & PARTY -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <div class="buruuj-box">
+                                    <strong class="buruuj-title">Project</strong>
+                                    <div t-field="o.project_id.name"/>
+                                    <div>
+                                        Code:
+                                        <span t-field="o.project_id.buruuj_project_code"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="buruuj-box">
+                                    <strong class="buruuj-title">
+                                        <span t-if="o.type == 'client'">Client</span>
+                                        <span t-if="o.type == 'subcontractor'">Subcontractor</span>
+                                    </strong>
+                                    <div t-field="o.partner_id.name"/>
+                                    <div t-field="o.partner_id.street"/>
+                                    <div t-if="o.subcontract_id">
+                                        Subcontract:
+                                        <span t-field="o.subcontract_id.name"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PERIOD -->
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <strong>Period From:</strong>
+                                <span t-field="o.period_from"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Period To:</strong>
+                                <span t-field="o.period_to"/>
+                            </div>
+                        </div>
+
+                        <!-- LINE ITEMS -->
+                        <h5 class="buruuj-title mt-3">Work Done</h5>
+                        <table class="buruuj-lines" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="width: 8%;">Item</th>
+                                    <th style="width: 32%;">Description</th>
+                                    <th style="width: 7%;">UoM</th>
+                                    <th class="text-end" style="width: 10%;">Contract Qty</th>
+                                    <th class="text-end" style="width: 10%;">Rate</th>
+                                    <th class="text-end" style="width: 10%;">Cum. Qty</th>
+                                    <th class="text-end" style="width: 11%;">This Period</th>
+                                    <th class="text-end" style="width: 12%;">Cumulative</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="o.line_ids" t-as="line">
+                                    <td><span t-field="line.item_no"/></td>
+                                    <td><span t-field="line.description"/></td>
+                                    <td><span t-field="line.uom_id.name"/></td>
+                                    <td class="text-end"><span t-field="line.contract_qty"/></td>
+                                    <td class="text-end">
+                                        <span t-field="line.unit_rate"
+                                              t-options="{'widget': 'monetary',
+                                                          'display_currency': o.currency_id}"/>
+                                    </td>
+                                    <td class="text-end"><span t-field="line.cumulative_qty"/></td>
+                                    <td class="text-end">
+                                        <span t-field="line.amount"
+                                              t-options="{'widget': 'monetary',
+                                                          'display_currency': o.currency_id}"/>
+                                    </td>
+                                    <td class="text-end">
+                                        <span t-field="line.cumulative_amount"
+                                              t-options="{'widget': 'monetary',
+                                                          'display_currency': o.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- SUMMARY -->
+                        <div class="row mt-4">
+                            <div class="col-7"></div>
+                            <div class="col-5">
+                                <table class="buruuj-summary"
+                                       style="width: 100%; border-collapse: collapse;">
+                                    <tr>
+                                        <td>Cumulative Work Done</td>
+                                        <td class="text-end">
+                                            <span t-field="o.cumulative_amount"
+                                                  t-options="{'widget': 'monetary',
+                                                              'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Less: Previously Certified</td>
+                                        <td class="text-end">
+                                            (<span t-field="o.previous_certified"
+                                                   t-options="{'widget': 'monetary',
+                                                               'display_currency': o.currency_id}"/>)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Work Done This Period</strong></td>
+                                        <td class="text-end"><strong>
+                                            <span t-field="o.work_done_amount"
+                                                  t-options="{'widget': 'monetary',
+                                                              'display_currency': o.currency_id}"/>
+                                        </strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Add: Materials on Site</td>
+                                        <td class="text-end">
+                                            <span t-field="o.materials_on_site"
+                                                  t-options="{'widget': 'monetary',
+                                                              'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gross Amount</td>
+                                        <td class="text-end">
+                                            <span t-field="o.gross_amount"
+                                                  t-options="{'widget': 'monetary',
+                                                              'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Less: Retention
+                                            (<span t-field="o.retention_percent"/>%)</td>
+                                        <td class="text-end">
+                                            (<span t-field="o.retention_amount"
+                                                   t-options="{'widget': 'monetary',
+                                                               'display_currency': o.currency_id}"/>)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Less: Advance Recovery
+                                            (<span t-field="o.advance_recovery_percent"/>%)</td>
+                                        <td class="text-end">
+                                            (<span t-field="o.advance_recovery_amount"
+                                                   t-options="{'widget': 'monetary',
+                                                               'display_currency': o.currency_id}"/>)
+                                        </td>
+                                    </tr>
+                                    <tr t-if="o.backcharge_amount">
+                                        <td>Less: Back-charges</td>
+                                        <td class="text-end">
+                                            (<span t-field="o.backcharge_amount"
+                                                   t-options="{'widget': 'monetary',
+                                                               'display_currency': o.currency_id}"/>)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Net Amount</td>
+                                        <td class="text-end">
+                                            <span t-field="o.net_amount"
+                                                  t-options="{'widget': 'monetary',
+                                                              'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Add: VAT</td>
+                                        <td class="text-end">
+                                            <span t-field="o.vat_amount"
+                                                  t-options="{'widget': 'monetary',
+                                                              'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="total">
+                                        <td>TOTAL PAYABLE</td>
+                                        <td class="text-end">
+                                            <span t-field="o.total_payable"
+                                                  t-options="{'widget': 'monetary',
+                                                              'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- NOTES -->
+                        <div t-if="o.notes" class="mt-3">
+                            <strong class="buruuj-title">Notes</strong>
+                            <div t-field="o.notes"/>
+                        </div>
+
+                        <!-- SIGNATURES -->
+                        <div class="row mt-5">
+                            <div class="col-3 text-center">
+                                <div class="signature-box">
+                                    <strong>Quantity Surveyor</strong><br/>
+                                    <span t-field="o.qs_id.name"/>
+                                </div>
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="signature-box">
+                                    <strong>Project Manager</strong><br/>
+                                    <span t-field="o.pm_id.name"/>
+                                </div>
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="signature-box">
+                                    <strong>Finance</strong><br/>
+                                    <span t-field="o.finance_id.name"/>
+                                </div>
+                            </div>
+                            <div class="col-3 text-center">
+                                <div class="signature-box">
+                                    <strong>
+                                        <span t-if="o.type == 'client'">Client / Engineer</span>
+                                        <span t-if="o.type == 'subcontractor'">Subcontractor</span>
+                                    </strong><br/>
+                                    <span t-field="o.partner_id.name"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="buruuj-bar-thin mt-4"/>
+                        <div class="text-center" style="font-size: 8pt; color: #777;">
+                            This certificate is computer-generated and valid without signature
+                            when authenticated through the Buruuj Construction ERP.
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

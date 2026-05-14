@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_itp_list" model="ir.ui.view">
+        <field name="name">buruuj.itp.list</field>
+        <field name="model">buruuj.itp</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="activity"/>
+                <field name="inspected_by"/>
+                <field name="result"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_itp_form" model="ir.ui.view">
+        <field name="name">buruuj.itp.form</field>
+        <field name="model">buruuj.itp</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_request" string="Request Inspection"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_inspect" string="Mark Inspected"
+                            type="object" invisible="state != 'requested'"/>
+                    <button name="action_approve" string="Approve / Sign Off"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'inspected'"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            invisible="state in ('approved','rejected','draft')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_id"/>
+                            <field name="activity"/>
+                            <field name="location"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="requested_by"/>
+                            <field name="inspected_by"/>
+                            <field name="inspection_date"/>
+                            <field name="result"/>
+                            <field name="signed_off_by" readonly="1"/>
+                            <field name="sign_off_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Checklist">
+                            <field name="checklist_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="expected"/>
+                                    <field name="actual"/>
+                                    <field name="result"/>
+                                    <field name="notes"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_itp" model="ir.actions.act_window">
+        <field name="name">Inspection Requests</field>
+        <field name="res_model">buruuj.itp</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

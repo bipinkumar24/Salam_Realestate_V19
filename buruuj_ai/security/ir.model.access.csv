@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_buruuj_ai_task_user,buruuj.ai.task.user,model_buruuj_ai_task,buruuj_base.group_buruuj_qs,1,0,0,0
+access_buruuj_ai_task_pm,buruuj.ai.task.pm,model_buruuj_ai_task,buruuj_base.group_buruuj_pm,1,1,0,0
+access_buruuj_ai_task_mgr,buruuj.ai.task.mgr,model_buruuj_ai_task,buruuj_base.group_buruuj_manager,1,1,1,1
+access_buruuj_portfolio_digest_pm,buruuj.portfolio.digest.pm,model_buruuj_portfolio_digest,buruuj_base.group_buruuj_pm,1,0,0,0
+access_buruuj_portfolio_digest_dir,buruuj.portfolio.digest.dir,model_buruuj_portfolio_digest,buruuj_base.group_buruuj_director,1,1,0,0
+access_buruuj_portfolio_digest_mgr,buruuj.portfolio.digest.mgr,model_buruuj_portfolio_digest,buruuj_base.group_buruuj_manager,1,1,1,1

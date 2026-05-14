@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_buruuj" model="ir.ui.view">
+        <field name="name">res.partner.form.buruuj</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Construction Profile" name="buruuj_profile">
+                    <group>
+                        <group string="Classification">
+                            <field name="is_subcontractor"/>
+                            <field name="is_consultant"/>
+                            <field name="is_client"/>
+                        </group>
+                        <group string="Performance">
+                            <field name="performance_score" widget="float" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Licenses">
+                            <field name="trade_license_no"/>
+                            <field name="trade_license_expiry"/>
+                            <field name="tax_card_no"/>
+                            <field name="chamber_of_commerce_no"/>
+                        </group>
+                        <group string="Insurance">
+                            <field name="insurance_expiry"/>
+                            <field name="workmen_comp_expiry"/>
+                        </group>
+                    </group>
+                    <group string="Trades / Specializations" invisible="not is_subcontractor">
+                        <field name="trade_ids" widget="many2many_tags" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

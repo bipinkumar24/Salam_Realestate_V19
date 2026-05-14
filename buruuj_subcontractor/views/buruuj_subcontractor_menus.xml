@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_buruuj_subcontractor_partners" model="ir.actions.act_window">
+        <field name="name">Subcontractors</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('is_subcontractor','=',True)]</field>
+        <field name="context">{'default_is_subcontractor': True, 'default_supplier_rank': 1}</field>
+    </record>
+
+    <menuitem id="menu_buruuj_subcontractor_master" name="Subcontractor Master"
+              parent="buruuj_base.menu_buruuj_subcontractors"
+              action="action_buruuj_subcontractor_partners" sequence="10"/>
+    <menuitem id="menu_buruuj_subcontract_list" name="Subcontracts"
+              parent="buruuj_base.menu_buruuj_subcontractors"
+              action="action_buruuj_subcontract" sequence="20"/>
+    <menuitem id="menu_buruuj_workorder" name="Work Orders"
+              parent="buruuj_base.menu_buruuj_subcontractors"
+              action="action_buruuj_workorder" sequence="30"/>
+    <menuitem id="menu_buruuj_scorecard" name="Scorecards"
+              parent="buruuj_base.menu_buruuj_subcontractors"
+              action="action_buruuj_scorecard" sequence="40"/>
+    <menuitem id="menu_buruuj_backcharge" name="Back-charges"
+              parent="buruuj_base.menu_buruuj_subcontractors"
+              action="action_buruuj_backcharge" sequence="50"/>
+</odoo>

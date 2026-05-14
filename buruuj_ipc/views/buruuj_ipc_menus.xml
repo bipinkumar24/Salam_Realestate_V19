@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_buruuj_ipc_client" name="Client IPCs"
+              parent="buruuj_base.menu_buruuj_billing"
+              action="action_buruuj_ipc_client" sequence="10"/>
+    <menuitem id="menu_buruuj_ipc_sub" name="Subcontractor IPCs"
+              parent="buruuj_base.menu_buruuj_billing"
+              action="action_buruuj_ipc_sub" sequence="20"/>
+</odoo>

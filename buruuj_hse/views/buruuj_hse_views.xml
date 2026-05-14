@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Toolbox Talks -->
+    <record id="view_buruuj_toolbox_list" model="ir.ui.view">
+        <field name="name">buruuj.toolbox.list</field>
+        <field name="model">buruuj.toolbox.talk</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="topic"/>
+                <field name="conducted_by"/>
+                <field name="attendee_count"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_toolbox_form" model="ir.ui.view">
+        <field name="name">buruuj.toolbox.form</field>
+        <field name="model">buruuj.toolbox.talk</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_done" string="Mark Conducted" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="topic"/>
+                            <field name="conducted_by"/>
+                            <field name="attendee_count"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                    <field name="attachment_ids" widget="many2many_binary"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_toolbox" model="ir.actions.act_window">
+        <field name="name">Toolbox Talks</field>
+        <field name="res_model">buruuj.toolbox.talk</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- PTW -->
+    <record id="view_buruuj_ptw_list" model="ir.ui.view">
+        <field name="name">buruuj.ptw.list</field>
+        <field name="model">buruuj.ptw</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'active'" decoration-info="state == 'approved'">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="type"/>
+                <field name="contractor_id"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_ptw_form" model="ir.ui.view">
+        <field name="name">buruuj.ptw.form</field>
+        <field name="model">buruuj.ptw</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_request" string="Submit Request" type="object"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_approve" string="HSE Approve" type="object"
+                            class="oe_highlight" invisible="state != 'requested'"
+                            groups="buruuj_base.group_buruuj_hse"/>
+                    <button name="action_activate" string="Activate" type="object"
+                            invisible="state != 'approved'"/>
+                    <button name="action_close" string="Close" type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            invisible="state in ('approved','active','closed','rejected','draft')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="type"/>
+                            <field name="location"/>
+                            <field name="contractor_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
+                            <field name="requested_by"/>
+                            <field name="approved_by" readonly="1"/>
+                            <field name="approved_date" readonly="1"/>
+                            <field name="ppe_required"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Work Description"><field name="work_description"/></page>
+                        <page string="Hazards"><field name="hazards"/></page>
+                        <page string="Controls"><field name="controls"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_ptw" model="ir.actions.act_window">
+        <field name="name">Permits to Work</field>
+        <field name="res_model">buruuj.ptw</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Incidents -->
+    <record id="view_buruuj_incident_list" model="ir.ui.view">
+        <field name="name">buruuj.hse.incident.list</field>
+        <field name="model">buruuj.hse.incident</field>
+        <field name="arch" type="xml">
+            <list decoration-danger="severity in ('high','critical')"
+                  decoration-warning="severity == 'medium'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="project_id"/>
+                <field name="date"/>
+                <field name="type"/>
+                <field name="severity" widget="badge"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_incident_form" model="ir.ui.view">
+        <field name="name">buruuj.hse.incident.form</field>
+        <field name="model">buruuj.hse.incident</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_investigate" string="Start Investigation"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_pending_action" string="Action Pending"
+                            type="object" invisible="state != 'investigating'"/>
+                    <button name="action_close" string="Close" type="object"
+                            class="oe_highlight" invisible="state != 'action_pending'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                        <h3><field name="title"/></h3>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="date"/>
+                            <field name="location"/>
+                            <field name="reported_by"/>
+                            <field name="investigated_by"/>
+                        </group>
+                        <group>
+                            <field name="type"/>
+                            <field name="severity"/>
+                            <field name="target_close_date"/>
+                            <field name="closed_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="persons_involved"/>
+                    <notebook>
+                        <page string="Description"><field name="description"/></page>
+                        <page string="Immediate Action"><field name="immediate_action"/></page>
+                        <page string="Root Cause"><field name="root_cause"/></page>
+                        <page string="Corrective Action"><field name="corrective_action"/></page>
+                        <page string="Preventive Action"><field name="preventive_action"/></page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_incident" model="ir.actions.act_window">
+        <field name="name">HSE Incidents</field>
+        <field name="res_model">buruuj.hse.incident</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- PPE -->
+    <record id="view_buruuj_ppe_list" model="ir.ui.view">
+        <field name="name">buruuj.ppe.list</field>
+        <field name="model">buruuj.ppe.issuance</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="date"/>
+                <field name="employee_id"/>
+                <field name="employee_name"/>
+                <field name="project_id"/>
+                <field name="item"/>
+                <field name="quantity"/>
+                <field name="cost"/>
+                <field name="issued_by"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_buruuj_ppe" model="ir.actions.act_window">
+        <field name="name">PPE Issuance</field>
+        <field name="res_model">buruuj.ppe.issuance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

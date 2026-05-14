@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rreq_se,rreq.se,model_buruuj_rental_requisition,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_rreq_pm,rreq.pm,model_buruuj_rental_requisition,buruuj_base.group_buruuj_pm,1,1,1,1
+access_rcontract_se,rcontract.se,model_buruuj_rental_contract,buruuj_base.group_buruuj_site_engineer,1,0,0,0
+access_rcontract_pm,rcontract.pm,model_buruuj_rental_contract,buruuj_base.group_buruuj_pm,1,1,1,0
+access_rcontract_dir,rcontract.dir,model_buruuj_rental_contract,buruuj_base.group_buruuj_director,1,1,1,1
+access_rts_se,rts.se,model_buruuj_rental_timesheet,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_rts_pm,rts.pm,model_buruuj_rental_timesheet,buruuj_base.group_buruuj_pm,1,1,1,1
+access_rinv_pm,rinv.pm,model_buruuj_rental_invoice,buruuj_base.group_buruuj_pm,1,1,1,0
+access_rinv_dir,rinv.dir,model_buruuj_rental_invoice,buruuj_base.group_buruuj_director,1,1,1,1

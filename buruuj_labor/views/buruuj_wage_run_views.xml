@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_wr_list" model="ir.ui.view">
+        <field name="name">buruuj.wage.run.list</field>
+        <field name="model">buruuj.wage.run</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'paid'"
+                  decoration-info="state == 'approved'"
+                  decoration-warning="state == 'calculated'">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="period_label"/>
+                <field name="line_count" string="# Workers"/>
+                <field name="gross_wages" sum="Gross"/>
+                <field name="total_allowances" sum="Allowances"/>
+                <field name="total_deductions" sum="Deductions"/>
+                <field name="net_wages" sum="Net"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_wr_form" model="ir.ui.view">
+        <field name="name">buruuj.wage.run.form</field>
+        <field name="model">buruuj.wage.run</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_calculate" string="Calculate Wages"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" string="Approve"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'calculated'"
+                            groups="buruuj_base.group_buruuj_director"/>
+                    <button name="action_mark_paid" string="Mark Paid"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'approved'"
+                            groups="buruuj_base.group_buruuj_director"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object"
+                            invisible="state in ('paid','cancelled')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_lines" type="object"
+                                class="oe_stat_button" icon="fa-list">
+                            <field name="line_count" widget="statinfo"
+                                   string="Lines"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="period_start"/>
+                            <field name="period_end"/>
+                            <field name="period_label" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="gross_wages"/>
+                            <field name="total_allowances"/>
+                            <field name="total_deductions"/>
+                            <field name="net_wages"/>
+                            <field name="cost_entry_id" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Wage Lines">
+                            <field name="line_ids">
+                                <list>
+                                    <field name="worker_id"/>
+                                    <field name="trade_id"/>
+                                    <field name="employment_type"/>
+                                    <field name="regular_hours"/>
+                                    <field name="overtime_hours"/>
+                                    <field name="regular_cost" sum="Reg Cost"/>
+                                    <field name="overtime_cost" sum="OT Cost"/>
+                                    <field name="gross" sum="Gross"/>
+                                    <field name="total_allowances" sum="Allow"/>
+                                    <field name="total_deductions" sum="Deduct"/>
+                                    <field name="net" sum="Net"/>
+                                    <field name="paid_to_subcontractor"
+                                           optional="show"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="worker_id"/>
+                                                <field name="trade_id" readonly="1"/>
+                                                <field name="employment_type"
+                                                       readonly="1"/>
+                                                <field name="paid_to_subcontractor"
+                                                       readonly="1"/>
+                                            </group>
+                                            <group>
+                                                <field name="regular_hours"/>
+                                                <field name="overtime_hours"/>
+                                                <field name="regular_cost"/>
+                                                <field name="overtime_cost"/>
+                                                <field name="gross" readonly="1"/>
+                                            </group>
+                                        </group>
+                                        <field name="allowance_ids">
+                                            <list editable="bottom">
+                                                <field name="type_id"/>
+                                                <field name="direction"/>
+                                                <field name="amount"/>
+                                                <field name="notes"/>
+                                                <field name="currency_id"
+                                                       column_invisible="1"/>
+                                            </list>
+                                        </field>
+                                        <group>
+                                            <field name="total_allowances"
+                                                   readonly="1"/>
+                                            <field name="total_deductions"
+                                                   readonly="1"/>
+                                            <field name="net" readonly="1"/>
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_wr" model="ir.actions.act_window">
+        <field name="name">Wage Runs</field>
+        <field name="res_model">buruuj.wage.run</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

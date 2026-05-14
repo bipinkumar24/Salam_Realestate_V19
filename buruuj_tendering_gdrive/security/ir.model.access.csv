@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_buruuj_gdrive_setup_mgr,buruuj.gdrive.setup.mgr,model_buruuj_gdrive_setup,buruuj_base.group_buruuj_manager,1,1,1,1
+access_buruuj_rate_claude_gen_mgr,buruuj.rate.claude.generate.mgr,model_buruuj_rate_claude_generate,buruuj_base.group_buruuj_manager,1,1,1,1

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="cat_power_tool" model="buruuj.tool.category">
+            <field name="code">POWER</field>
+            <field name="name">Power Tools</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="cat_hand_tool" model="buruuj.tool.category">
+            <field name="code">HAND</field>
+            <field name="name">Hand Tools</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="cat_instrument" model="buruuj.tool.category">
+            <field name="code">INST</field>
+            <field name="name">Instruments &amp; Survey Equipment</field>
+            <field name="sequence">30</field>
+            <field name="requires_calibration" eval="True"/>
+        </record>
+        <record id="cat_scaffold" model="buruuj.tool.category">
+            <field name="code">SCAF</field>
+            <field name="name">Scaffolding &amp; Access</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="cat_formwork" model="buruuj.tool.category">
+            <field name="code">FORM</field>
+            <field name="name">Formwork &amp; Shoring</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="cat_safety" model="buruuj.tool.category">
+            <field name="code">SAFE</field>
+            <field name="name">Safety Equipment</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="cat_consumable" model="buruuj.tool.category">
+            <field name="code">CONS</field>
+            <field name="name">Consumables (drill bits, blades)</field>
+            <field name="sequence">70</field>
+            <field name="is_consumable" eval="True"/>
+        </record>
+    </data>
+</odoo>

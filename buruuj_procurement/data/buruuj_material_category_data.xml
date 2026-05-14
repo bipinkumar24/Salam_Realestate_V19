@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="cat_concrete" model="buruuj.material.category">
+            <field name="code">CON</field>
+            <field name="name">Concrete &amp; Cement Products</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="cat_rebar" model="buruuj.material.category">
+            <field name="code">REB</field>
+            <field name="name">Reinforcement Steel</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="cat_blocks" model="buruuj.material.category">
+            <field name="code">BLK</field>
+            <field name="name">Blocks &amp; Masonry</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="cat_aggregates" model="buruuj.material.category">
+            <field name="code">AGG</field>
+            <field name="name">Aggregates &amp; Sand</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="cat_finishes" model="buruuj.material.category">
+            <field name="code">FIN</field>
+            <field name="name">Finishes (Tiles, Marble, Paint)</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="cat_mep" model="buruuj.material.category">
+            <field name="code">MEP</field>
+            <field name="name">MEP Materials</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="cat_doors" model="buruuj.material.category">
+            <field name="code">DOR</field>
+            <field name="name">Doors, Windows, Glazing</field>
+            <field name="sequence">70</field>
+        </record>
+        <record id="cat_steel" model="buruuj.material.category">
+            <field name="code">STL</field>
+            <field name="name">Structural Steel</field>
+            <field name="sequence">80</field>
+        </record>
+        <record id="cat_consum" model="buruuj.material.category">
+            <field name="code">CSM</field>
+            <field name="name">Consumables &amp; Sundries</field>
+            <field name="sequence">90</field>
+        </record>
+    </data>
+</odoo>

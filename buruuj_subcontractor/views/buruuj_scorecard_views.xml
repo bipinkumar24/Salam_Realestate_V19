@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_buruuj_scorecard_list" model="ir.ui.view">
+        <field name="name">buruuj.scorecard.list</field>
+        <field name="model">buruuj.scorecard</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="partner_id"/>
+                <field name="project_id"/>
+                <field name="period"/>
+                <field name="date"/>
+                <field name="quality_score"/>
+                <field name="schedule_score"/>
+                <field name="safety_score"/>
+                <field name="payment_compliance_score"/>
+                <field name="overall_score" sum="Avg"/>
+                <field name="evaluator_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_buruuj_scorecard_form" model="ir.ui.view">
+        <field name="name">buruuj.scorecard.form</field>
+        <field name="model">buruuj.scorecard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="project_id"/>
+                            <field name="subcontract_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="period"/>
+                            <field name="evaluator_id"/>
+                            <field name="overall_score"/>
+                        </group>
+                    </group>
+                    <group string="Scores (0-5)">
+                        <group>
+                            <field name="quality_score"/>
+                            <field name="schedule_score"/>
+                        </group>
+                        <group>
+                            <field name="safety_score"/>
+                            <field name="payment_compliance_score"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_buruuj_scorecard" model="ir.actions.act_window">
+        <field name="name">Scorecards</field>
+        <field name="res_model">buruuj.scorecard</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

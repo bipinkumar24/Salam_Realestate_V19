@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_portfolio_digest_list" model="ir.ui.view">
+        <field name="name">buruuj.portfolio.digest.list</field>
+        <field name="model">buruuj.portfolio.digest</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+                <field name="name"/>
+                <field name="project_count"/>
+                <field name="ai_task_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_buruuj_portfolio_digest_form" model="ir.ui.view">
+        <field name="name">buruuj.portfolio.digest.form</field>
+        <field name="model">buruuj.portfolio.digest</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>Weekly Portfolio Briefing</h1>
+                        <h3>
+                            <field name="date" readonly="1"/>
+                            <span> · </span>
+                            <field name="project_count" readonly="1"/> active projects
+                        </h3>
+                    </div>
+
+                    <separator string="Executive Summary"/>
+                    <field name="executive_summary" readonly="1" nolabel="1"/>
+
+                    <separator string="Top Concerns"/>
+                    <field name="top_concerns_html" readonly="1" nolabel="1"/>
+
+                    <separator string="Good News"/>
+                    <field name="good_news_html" readonly="1" nolabel="1"/>
+
+                    <separator string="Suggested Questions for PM Review"/>
+                    <field name="questions_html" readonly="1" nolabel="1"/>
+
+                    <group>
+                        <field name="ai_task_id" readonly="1"/>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_buruuj_portfolio_digest" model="ir.actions.act_window">
+        <field name="name">Portfolio Digests</field>
+        <field name="res_model">buruuj.portfolio.digest</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_buruuj_portfolio_digest" name="Portfolio Digests"
+              parent="menu_buruuj_ai_root"
+              action="action_buruuj_portfolio_digest" sequence="20"/>
+
+</odoo>

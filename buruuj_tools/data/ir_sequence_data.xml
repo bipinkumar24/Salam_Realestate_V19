@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_buruuj_tool" model="ir.sequence">
+            <field name="name">Tool Code</field>
+            <field name="code">buruuj.tool</field>
+            <field name="prefix">TL/</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="seq_buruuj_tool_issuance" model="ir.sequence">
+            <field name="name">Tool Issuance</field>
+            <field name="code">buruuj.tool.issuance</field>
+            <field name="prefix">ISS/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+        <record id="seq_buruuj_tool_transfer" model="ir.sequence">
+            <field name="name">Tool Transfer</field>
+            <field name="code">buruuj.tool.transfer</field>
+            <field name="prefix">TFR/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

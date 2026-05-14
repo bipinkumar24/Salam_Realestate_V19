@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="alw_overtime" model="buruuj.allowance.type">
+            <field name="code">OT</field>
+            <field name="name">Overtime Allowance</field>
+            <field name="direction">addition</field>
+            <field name="is_taxable" eval="True"/>
+            <field name="sequence">10</field>
+        </record>
+        <record id="alw_transport" model="buruuj.allowance.type">
+            <field name="code">TRN</field>
+            <field name="name">Transport Allowance</field>
+            <field name="direction">addition</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="alw_accommodation" model="buruuj.allowance.type">
+            <field name="code">ACM</field>
+            <field name="name">Accommodation Allowance</field>
+            <field name="direction">addition</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="alw_food" model="buruuj.allowance.type">
+            <field name="code">FOOD</field>
+            <field name="name">Food / Per Diem</field>
+            <field name="direction">addition</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="alw_bonus" model="buruuj.allowance.type">
+            <field name="code">BON</field>
+            <field name="name">Performance Bonus</field>
+            <field name="direction">addition</field>
+            <field name="is_taxable" eval="True"/>
+            <field name="sequence">50</field>
+        </record>
+        <record id="ded_advance" model="buruuj.allowance.type">
+            <field name="code">ADV</field>
+            <field name="name">Salary Advance Recovery</field>
+            <field name="direction">deduction</field>
+            <field name="sequence">100</field>
+        </record>
+        <record id="ded_loan" model="buruuj.allowance.type">
+            <field name="code">LOAN</field>
+            <field name="name">Loan Repayment</field>
+            <field name="direction">deduction</field>
+            <field name="sequence">110</field>
+        </record>
+        <record id="ded_fine" model="buruuj.allowance.type">
+            <field name="code">FINE</field>
+            <field name="name">HSE / Disciplinary Fine</field>
+            <field name="direction">deduction</field>
+            <field name="sequence">120</field>
+        </record>
+        <record id="ded_damage" model="buruuj.allowance.type">
+            <field name="code">DMG</field>
+            <field name="name">Tool / Equipment Damage</field>
+            <field name="direction">deduction</field>
+            <field name="sequence">130</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_certificate_list" model="ir.ui.view">
+        <field name="name">tender.compliance.certificate.list</field>
+        <field name="model">tender.compliance.certificate</field>
+        <field name="arch" type="xml">
+            <list string="Certificates" decoration-danger="state == 'expired'" decoration-warning="state == 'expiring'">
+                <field name="name"/>
+                <field name="certificate_type"/>
+                <field name="issuer"/>
+                <field name="reference_number"/>
+                <field name="valid_from"/>
+                <field name="valid_to"/>
+                <field name="state" widget="badge"/>
+                <field name="company_id" groups="base.group_multi_company" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_certificate_form" model="ir.ui.view">
+        <field name="name">tender.compliance.certificate.form</field>
+        <field name="model">tender.compliance.certificate</field>
+        <field name="arch" type="xml">
+            <form string="Certificate">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="e.g. ISO 9001:2015"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="certificate_type"/>
+                            <field name="issuer"/>
+                            <field name="reference_number"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="valid_from"/>
+                            <field name="valid_to"/>
+                            <field name="alert_lead_time_days"/>
+                            <field name="state" widget="badge"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Attachments" name="attachments">
+                            <field name="attachment_ids" widget="many2many_binary"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Renewal notes, contacts, fees…"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tender_certificate_search" model="ir.ui.view">
+        <field name="name">tender.compliance.certificate.search</field>
+        <field name="model">tender.compliance.certificate</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="reference_number"/>
+                <field name="issuer"/>
+                <filter string="Valid" name="valid" domain="[('state', '=', 'valid')]"/>
+                <filter string="Expiring Soon" name="expiring" domain="[('state', '=', 'expiring')]"/>
+                <filter string="Expired" name="expired" domain="[('state', '=', 'expired')]"/>
+                <group>
+                    <filter string="Type" name="group_type" context="{'group_by': 'certificate_type'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_tender_certificate" model="ir.actions.act_window">
+        <field name="name">Certificates</field>
+        <field name="res_model">tender.compliance.certificate</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

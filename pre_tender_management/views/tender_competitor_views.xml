@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_tender_competitor_list" model="ir.ui.view">
+        <field name="name">tender.competitor.list</field>
+        <field name="model">tender.competitor</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="sector_ids" widget="many2many_tags"/>
+                <field name="country_ids" widget="many2many_tags" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_competitor_form" model="ir.ui.view">
+        <field name="name">tender.competitor.form</field>
+        <field name="model">tender.competitor</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="sector_ids" widget="many2many_tags"/>
+                            <field name="country_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Strengths &amp; Weaknesses" name="sw">
+                            <group>
+                                <field name="strengths" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="weaknesses" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Win Themes &amp; Pricing" name="themes">
+                            <group>
+                                <field name="typical_win_themes" nolabel="1"/>
+                            </group>
+                            <group>
+                                <field name="typical_pricing" nolabel="1"/>
+                            </group>
+                        </page>
+                        <page string="Past Awards" name="awards">
+                            <field name="past_award_ids">
+                                <list editable="bottom">
+                                    <field name="project_name"/>
+                                    <field name="client_id"/>
+                                    <field name="award_date"/>
+                                    <field name="award_value" widget="monetary"/>
+                                    <field name="currency_id" column_invisible="True"/>
+                                    <field name="source"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="SWOT" name="swot">
+                            <field name="swot_id"/>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_competitor" model="ir.actions.act_window">
+        <field name="name">Competitors</field>
+        <field name="res_model">tender.competitor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_tender_swot_list" model="ir.ui.view">
+        <field name="name">tender.swot.list</field>
+        <field name="model">tender.swot</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="opportunity_id"/>
+                <field name="competitor_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tender_swot_form" model="ir.ui.view">
+        <field name="name">tender.swot.form</field>
+        <field name="model">tender.swot</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="opportunity_id"/>
+                        <field name="competitor_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Strengths"><field name="strengths" nolabel="1"/></page>
+                        <page string="Weaknesses"><field name="weaknesses" nolabel="1"/></page>
+                        <page string="Opportunities"><field name="opportunities" nolabel="1"/></page>
+                        <page string="Threats"><field name="threats" nolabel="1"/></page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tender_swot" model="ir.actions.act_window">
+        <field name="name">SWOT Analyses</field>
+        <field name="res_model">tender.swot</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_tender_opportunity_competitor_list" model="ir.ui.view">
+        <field name="name">tender.opportunity.competitor.list</field>
+        <field name="model">tender.opportunity.competitor</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" decoration-danger="threat_level == 'critical'" decoration-warning="threat_level == 'high'">
+                <field name="opportunity_id"/>
+                <field name="competitor_id"/>
+                <field name="estimated_pwin"/>
+                <field name="threat_level" widget="badge"/>
+                <field name="is_incumbent"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_tender_opportunity_competitor" model="ir.actions.act_window">
+        <field name="name">Competitive Landscape</field>
+        <field name="res_model">tender.opportunity.competitor</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

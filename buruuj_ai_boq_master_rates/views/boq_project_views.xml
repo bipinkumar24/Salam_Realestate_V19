@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_server_master_rate_check" model="ir.actions.server">
+        <field name="name">Re-price from Master Rates</field>
+        <field name="model_id" ref="ai_boq_reader_v191.model_ai_boq_project"/>
+        <field name="binding_model_id" ref="ai_boq_reader_v191.model_ai_boq_project"/>
+        <field name="binding_view_types">form,list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_master_rate_check()</field>
+    </record>
+
+</odoo>

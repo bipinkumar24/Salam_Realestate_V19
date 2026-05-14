@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rreq_list" model="ir.ui.view">
+        <field name="name">buruuj.rental.requisition.list</field>
+        <field name="model">buruuj.rental.requisition</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state == 'contracted'"
+                  decoration-warning="state in ('submitted','quoting')"
+                  decoration-danger="state == 'rejected'"
+                  decoration-bf="priority in ('high','urgent')">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="equipment_type"/>
+                <field name="capacity_required"/>
+                <field name="quantity"/>
+                <field name="required_from"/>
+                <field name="required_to"/>
+                <field name="duration_days"/>
+                <field name="priority" widget="badge"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rreq_form" model="ir.ui.view">
+        <field name="name">buruuj.rental.requisition.form</field>
+        <field name="model">buruuj.rental.requisition</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_submit" string="Submit to Procurement"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_start_quoting" string="Start Quoting"
+                            type="object"
+                            invisible="state != 'submitted'"/>
+                    <button name="action_reject" string="Reject" type="object"
+                            invisible="state in ('contracted','rejected','cancelled')"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('contracted','rejected','cancelled')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_contracts" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="contract_count" widget="statinfo"
+                                   string="Contracts"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="requested_by"/>
+                            <field name="date"/>
+                            <field name="priority"/>
+                        </group>
+                        <group>
+                            <field name="required_from"/>
+                            <field name="required_to"/>
+                            <field name="duration_days"/>
+                            <field name="estimated_cost"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="equipment_type"/>
+                        <field name="capacity_required"/>
+                        <field name="quantity"/>
+                    </group>
+                    <field name="work_description"
+                           placeholder="What work will this equipment do? Where on site?"/>
+                    <field name="rejection_reason"
+                           invisible="state != 'rejected'"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rreq" model="ir.actions.act_window">
+        <field name="name">Rental Requisitions</field>
+        <field name="res_model">buruuj.rental.requisition</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

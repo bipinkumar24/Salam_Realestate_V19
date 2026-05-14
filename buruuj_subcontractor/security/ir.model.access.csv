@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_buruuj_subcontract_qs,buruuj.subcontract.qs,model_buruuj_subcontract,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_subcontract_pm,buruuj.subcontract.pm,model_buruuj_subcontract,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_subcontract_line_qs,buruuj.subcontract.line.qs,model_buruuj_subcontract_line,buruuj_base.group_buruuj_qs,1,1,1,1
+access_buruuj_workorder_se,buruuj.workorder.se,model_buruuj_workorder,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_buruuj_workorder_pm,buruuj.workorder.pm,model_buruuj_workorder,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_scorecard_pm,buruuj.scorecard.pm,model_buruuj_scorecard,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_scorecard_dir,buruuj.scorecard.dir,model_buruuj_scorecard,buruuj_base.group_buruuj_director,1,1,0,0
+access_buruuj_backcharge_qs,buruuj.backcharge.qs,model_buruuj_backcharge,buruuj_base.group_buruuj_qs,1,1,1,0
+access_buruuj_backcharge_pm,buruuj.backcharge.pm,model_buruuj_backcharge,buruuj_base.group_buruuj_pm,1,1,1,1

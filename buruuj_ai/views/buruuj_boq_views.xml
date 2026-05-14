@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_buruuj_boq_form_ai" model="ir.ui.view">
+        <field name="name">buruuj.boq.form.ai</field>
+        <field name="model">buruuj.boq</field>
+        <field name="inherit_id" ref="buruuj_tendering.view_buruuj_boq_form"/>
+        <field name="arch" type="xml">
+            <!-- Add AI button at the top of the header -->
+            <xpath expr="//header" position="inside">
+                <button name="action_ai_draft_boq" type="object"
+                        string="Draft from Drawings (AI)"
+                        class="btn-secondary" icon="fa-magic"
+                        invisible="state != 'draft' or not ai_source_pdf"
+                        confirm="This will create new BOQ sections and lines based on the AI's interpretation of the uploaded drawings. Existing lines will not be replaced. Continue?"/>
+            </xpath>
+
+            <!-- Add an AI tab to the notebook -->
+            <xpath expr="//notebook" position="inside">
+                <page string="AI Drafting" name="ai_drafting">
+                    <group>
+                        <group>
+                            <field name="ai_source_pdf" filename="ai_source_pdf_name"/>
+                            <field name="ai_source_pdf_name" invisible="1"/>
+                            <field name="ai_last_task_id" readonly="1"/>
+                        </group>
+                    </group>
+                    <separator string="Assumptions Made by AI"/>
+                    <field name="ai_assumptions" readonly="1" nolabel="1"/>
+                    <separator string="Missing Info / Suggested RFIs"/>
+                    <field name="ai_missing_info" readonly="1" nolabel="1"/>
+                    <div class="alert alert-info" role="alert" style="margin-top: 12px;">
+                        <strong>Reminder:</strong> AI-drafted BOQs are starting points only.
+                        Quantities are estimates from drawings; rates may need verification;
+                        always review and price properly before submission.
+                    </div>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <record id="module_category_pre_tender" model="ir.module.category">
+            <field name="name">Pre-Tender Management</field>
+            <field name="description">Pre-tender lifecycle access</field>
+            <field name="sequence">25</field>
+        </record>
+
+        <record id="res_groups_privilege_pre_tender" model="res.groups.privilege">
+            <field name="name">Pre-Tender Management</field>
+            <field name="sequence">10</field>
+            <field name="category_id" ref="module_category_pre_tender"/>
+        </record>
+
+        <record id="group_tender_user" model="res.groups">
+            <field name="name">User</field>
+            <field name="sequence">10</field>
+            <field name="privilege_id" ref="res_groups_privilege_pre_tender"/>
+            <field name="comment">Bid team member: read/write on assigned opportunities.</field>
+        </record>
+
+        <record id="group_tender_manager" model="res.groups">
+            <field name="name">Bid Manager</field>
+            <field name="sequence">20</field>
+            <field name="privilege_id" ref="res_groups_privilege_pre_tender"/>
+            <field name="implied_ids" eval="[(4, ref('group_tender_user'))]"/>
+            <field name="comment">All operations within company scope.</field>
+        </record>
+
+        <record id="group_tender_approver" model="res.groups">
+            <field name="name">Bid Committee / Approver</field>
+            <field name="sequence">30</field>
+            <field name="privilege_id" ref="res_groups_privilege_pre_tender"/>
+            <field name="implied_ids" eval="[(4, ref('group_tender_user'))]"/>
+            <field name="comment">Approve bid/no-bid decisions; read-all.</field>
+        </record>
+
+        <record id="group_tender_admin" model="res.groups">
+            <field name="name">Administrator</field>
+            <field name="sequence">40</field>
+            <field name="privilege_id" ref="res_groups_privilege_pre_tender"/>
+            <field name="implied_ids" eval="[(4, ref('group_tender_manager')), (4, ref('group_tender_approver'))]"/>
+            <field name="comment">Configuration and master data.</field>
+        </record>
+
+        <record id="rule_certificate_company" model="ir.rule">
+            <field name="name">Certificate: multi-company</field>
+            <field name="model_id" ref="model_tender_compliance_certificate"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="rule_compliance_matrix_company" model="ir.rule">
+            <field name="name">Compliance Matrix: multi-company</field>
+            <field name="model_id" ref="model_tender_compliance_matrix"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="rule_bid_decision_company" model="ir.rule">
+            <field name="name">Bid Decision: multi-company</field>
+            <field name="model_id" ref="model_tender_bid_decision"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+            <field name="global" eval="True"/>
+        </record>
+
+        <record id="rule_bid_decision_approver_readall" model="ir.rule">
+            <field name="name">Bid Decision: approver reads all</field>
+            <field name="model_id" ref="model_tender_bid_decision"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_tender_approver'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="False"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

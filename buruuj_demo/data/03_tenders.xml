@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Won tender — will be linked to a project -->
+        <record id="demo_tender_marina" model="buruuj.tender">
+            <field name="title">Al Marina Tower — Residential High-rise</field>
+            <field name="client_id" ref="demo_client_marina"/>
+            <field name="consultant_id" ref="demo_consultant_skyline"/>
+            <field name="project_type">building</field>
+            <field name="location">Marina District, Plot 7</field>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(months=8)).strftime('%Y-%m-%d')"/>
+            <field name="submission_deadline" eval="(DateTime.today() - relativedelta(months=7)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="duration_months">18</field>
+            <field name="estimated_value">25000000.00</field>
+            <field name="awarded_value">24750000.00</field>
+            <field name="overhead_percent">8</field>
+            <field name="profit_percent">10</field>
+            <field name="contingency_percent">2</field>
+            <field name="state">won</field>
+            <field name="win_loss_reason">Won on technical score; competitive pricing helped.</field>
+        </record>
+
+        <!-- In submission -->
+        <record id="demo_tender_hospital" model="buruuj.tender">
+            <field name="title">Regional Hospital — North Wing Extension</field>
+            <field name="client_id" ref="demo_client_mopw"/>
+            <field name="consultant_id" ref="demo_consultant_atlas"/>
+            <field name="project_type">building</field>
+            <field name="location">North District</field>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(weeks=3)).strftime('%Y-%m-%d')"/>
+            <field name="submission_deadline" eval="(DateTime.today() + relativedelta(weeks=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+            <field name="duration_months">14</field>
+            <field name="estimated_value">12000000.00</field>
+            <field name="state">estimating</field>
+        </record>
+
+        <!-- Lost tender (for win/loss analysis) -->
+        <record id="demo_tender_school" model="buruuj.tender">
+            <field name="title">Primary School Block C</field>
+            <field name="client_id" ref="demo_client_council"/>
+            <field name="project_type">building</field>
+            <field name="duration_months">10</field>
+            <field name="estimated_value">4500000.00</field>
+            <field name="state">lost</field>
+            <field name="win_loss_reason">Lost on price by ~6%. Lessons: reduce overhead in similar bids.</field>
+        </record>
+
+    </data>
+</odoo>

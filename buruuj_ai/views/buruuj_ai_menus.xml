@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_buruuj_ai_root" name="AI Assistant"
+              parent="buruuj_base.menu_buruuj_config"
+              sequence="50"
+              groups="buruuj_base.group_buruuj_pm"/>
+
+    <menuitem id="menu_buruuj_ai_tasks" name="AI Task Log"
+              parent="menu_buruuj_ai_root"
+              action="action_buruuj_ai_task" sequence="10"/>
+
+</odoo>

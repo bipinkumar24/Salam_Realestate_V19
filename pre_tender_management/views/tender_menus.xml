@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_tender_root"
+              name="Pre-Tender"
+              sequence="55"/>
+
+    <!-- Pipeline -->
+    <menuitem id="menu_tender_opportunities"
+              name="Tenders"
+              parent="menu_tender_root"
+              action="action_tender_opportunity"
+              sequence="10"/>
+
+    <!-- Tier 1 -->
+    <menuitem id="menu_tender_tier1_root"
+              name="Tier 1 — Critical"
+              parent="menu_tender_root"
+              sequence="20"/>
+
+    <menuitem id="menu_tender_decisions"
+              name="Bid / No-Bid"
+              parent="menu_tender_tier1_root"
+              action="action_tender_bid_decision"
+              sequence="10"/>
+
+    <menuitem id="menu_tender_compliance_matrices"
+              name="Compliance Matrices"
+              parent="menu_tender_tier1_root"
+              action="action_tender_matrix"
+              sequence="20"/>
+
+    <menuitem id="menu_tender_certificates"
+              name="Certificates"
+              parent="menu_tender_tier1_root"
+              action="action_tender_certificate"
+              sequence="30"/>
+
+    <menuitem id="menu_tender_site_surveys"
+              name="Site Surveys"
+              parent="menu_tender_tier1_root"
+              action="action_tender_site_survey"
+              sequence="40"/>
+
+    <menuitem id="menu_tender_bid_bonds"
+              name="Bid Bonds / EMD"
+              parent="menu_tender_tier1_root"
+              action="action_tender_bid_bond"
+              sequence="50"/>
+
+    <!-- Tier 2 -->
+    <menuitem id="menu_tender_tier2_root"
+              name="Tier 2 — High Importance"
+              parent="menu_tender_root"
+              sequence="30"/>
+
+    <menuitem id="menu_tender_capture_plans"
+              name="Capture Plans"
+              parent="menu_tender_tier2_root"
+              action="action_tender_capture_plan"
+              sequence="10"/>
+
+    <menuitem id="menu_tender_risks"
+              name="Risk Register"
+              parent="menu_tender_tier2_root"
+              action="action_tender_risk"
+              sequence="20"/>
+
+    <menuitem id="menu_tender_bid_team"
+              name="Bid Teams"
+              parent="menu_tender_tier2_root"
+              action="action_tender_bid_team"
+              sequence="30"/>
+
+    <menuitem id="menu_tender_partner_agreements"
+              name="Partner Agreements"
+              parent="menu_tender_tier2_root"
+              action="action_tender_partner_agreement"
+              sequence="40"/>
+
+    <menuitem id="menu_tender_budget_quotes"
+              name="Budget Quotes"
+              parent="menu_tender_tier2_root"
+              action="action_tender_budget_quote"
+              sequence="50"/>
+
+    <menuitem id="menu_tender_stakeholders"
+              name="Stakeholders"
+              parent="menu_tender_tier2_root"
+              action="action_tender_stakeholder"
+              sequence="60"/>
+
+    <menuitem id="menu_tender_clarifications"
+              name="Clarifications"
+              parent="menu_tender_tier2_root"
+              action="action_tender_clarification"
+              sequence="70"/>
+
+    <menuitem id="menu_tender_prebid_meetings"
+              name="Pre-Bid Meetings"
+              parent="menu_tender_tier2_root"
+              action="action_tender_prebid_meeting"
+              sequence="80"/>
+
+    <!-- Tier 3 -->
+    <menuitem id="menu_tender_tier3_root"
+              name="Tier 3 — Supporting"
+              parent="menu_tender_root"
+              sequence="40"/>
+
+    <menuitem id="menu_tender_competitors"
+              name="Competitors"
+              parent="menu_tender_tier3_root"
+              action="action_tender_competitor"
+              sequence="10"/>
+
+    <menuitem id="menu_tender_swot"
+              name="SWOT Analyses"
+              parent="menu_tender_tier3_root"
+              action="action_tender_swot"
+              sequence="20"/>
+
+    <menuitem id="menu_tender_kickoff_gates"
+              name="Review Gates"
+              parent="menu_tender_tier3_root"
+              action="action_tender_kickoff_gate"
+              sequence="30"/>
+
+    <menuitem id="menu_tender_alert_subscriptions"
+              name="Lead Alerts"
+              parent="menu_tender_tier3_root"
+              action="action_tender_alert_subscription"
+              sequence="40"/>
+
+    <!-- Configuration -->
+    <menuitem id="menu_tender_config"
+              name="Configuration"
+              parent="menu_tender_root"
+              sequence="90"
+              groups="pre_tender_management.group_tender_admin"/>
+
+</odoo>

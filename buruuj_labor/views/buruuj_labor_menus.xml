@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_labor_root" name="Labor"
+              parent="buruuj_base.menu_buruuj_root" sequence="58"
+              groups="buruuj_base.group_buruuj_site_engineer"/>
+
+    <menuitem id="menu_labor_workers" name="Workforce"
+              parent="menu_labor_root" action="action_worker" sequence="10"/>
+    <menuitem id="menu_labor_attendance" name="Attendance"
+              parent="menu_labor_root" action="action_att" sequence="20"/>
+    <menuitem id="menu_labor_ts" name="Timesheets"
+              parent="menu_labor_root" action="action_ts" sequence="30"/>
+    <menuitem id="menu_labor_ts_pending" name="To Approve"
+              parent="menu_labor_root" action="action_ts_pending"
+              sequence="35"
+              groups="buruuj_base.group_buruuj_pm"/>
+    <menuitem id="menu_labor_prod" name="Productivity"
+              parent="menu_labor_root" action="action_prod" sequence="40"/>
+    <menuitem id="menu_labor_wage" name="Wage Runs"
+              parent="menu_labor_root" action="action_wr" sequence="50"
+              groups="buruuj_base.group_buruuj_qs"/>
+
+    <menuitem id="menu_labor_master" name="Master Data"
+              parent="menu_labor_root" sequence="90"
+              groups="buruuj_base.group_buruuj_manager"/>
+    <menuitem id="menu_labor_master_trade" name="Labor Trades"
+              parent="menu_labor_master" action="action_labor_trade"
+              sequence="10"/>
+    <menuitem id="menu_labor_master_alw" name="Allowance Types"
+              parent="menu_labor_master" action="action_alw_type"
+              sequence="20"/>
+</odoo>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rcontract_list" model="ir.ui.view">
+        <field name="name">buruuj.rental.contract.list</field>
+        <field name="model">buruuj.rental.contract</field>
+        <field name="arch" type="xml">
+            <list decoration-success="state in ('active','off_hired','closed')"
+                  decoration-warning="state == 'off_hire_pending'"
+                  decoration-info="state in ('draft','approved')">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="vendor_id"/>
+                <field name="equipment_description"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="actual_off_hire_date"/>
+                <field name="rate_basis"/>
+                <field name="base_rate"/>
+                <field name="estimated_cost" sum="Estimated"/>
+                <field name="invoiced_amount" sum="Invoiced"/>
+                <field name="state" widget="badge"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_rcontract_form" model="ir.ui.view">
+        <field name="name">buruuj.rental.contract.form</field>
+        <field name="model">buruuj.rental.contract</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_approve" string="Approve" type="object"
+                            class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_activate" string="Activate (On Site)"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'approved'"/>
+                    <button name="action_request_off_hire"
+                            string="Request Off-Hire" type="object"
+                            invisible="state != 'active'"/>
+                    <button name="action_off_hire" string="Confirm Off-Hire"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'off_hire_pending'"/>
+                    <button name="action_close" string="Close Contract"
+                            type="object"
+                            invisible="state != 'off_hired'"/>
+                    <button name="action_cancel" string="Cancel" type="object"
+                            invisible="state in ('off_hired','closed','cancelled')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_timesheets" type="object"
+                                class="oe_stat_button" icon="fa-clock-o">
+                            <field name="timesheet_count" widget="statinfo"
+                                   string="Days Logged"/>
+                        </button>
+                        <button name="action_view_invoices" type="object"
+                                class="oe_stat_button" icon="fa-money">
+                            <field name="invoice_count" widget="statinfo"
+                                   string="Invoices"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="vendor_id"/>
+                            <field name="requisition_id"/>
+                            <field name="equipment_id"/>
+                            <field name="equipment_description"/>
+                            <field name="serial_no"/>
+                        </group>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="actual_off_hire_date"/>
+                            <field name="minimum_hire_period"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Rates">
+                            <group>
+                                <group>
+                                    <field name="rate_basis"/>
+                                    <field name="base_rate"/>
+                                    <field name="idle_rate"/>
+                                    <field name="overtime_rate"/>
+                                </group>
+                                <group>
+                                    <field name="mobilization_cost"/>
+                                    <field name="demobilization_cost"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Operator &amp; Fuel">
+                            <group>
+                                <group>
+                                    <field name="operator_included"/>
+                                    <field name="operator_name"
+                                           invisible="not operator_included"/>
+                                    <field name="operator_liability"/>
+                                </group>
+                                <group>
+                                    <field name="fuel_terms"/>
+                                    <field name="fuel_allowance"
+                                           invisible="fuel_terms != 'daily_allowance'"/>
+                                    <field name="insurance_by"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Performance Summary">
+                            <group>
+                                <group>
+                                    <field name="total_days_on_site"/>
+                                    <field name="total_working_hours"/>
+                                    <field name="total_idle_hours"/>
+                                </group>
+                                <group>
+                                    <field name="estimated_cost"/>
+                                    <field name="invoiced_amount"/>
+                                    <field name="disputed_amount"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Documents">
+                            <field name="contract_attachment"
+                                   filename="contract_filename"/>
+                            <field name="contract_filename" invisible="1"/>
+                            <field name="notes" placeholder="Notes, special terms, contacts..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_rcontract" model="ir.actions.act_window">
+        <field name="name">Rental Contracts</field>
+        <field name="res_model">buruuj.rental.contract</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_rcontract_active" model="ir.actions.act_window">
+        <field name="name">Active Rentals</field>
+        <field name="res_model">buruuj.rental.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state','in',('active','off_hire_pending'))]</field>
+    </record>
+</odoo>

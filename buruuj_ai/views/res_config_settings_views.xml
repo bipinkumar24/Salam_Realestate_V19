@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_buruuj_ai" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.buruuj.ai</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="buruuj_base.res_config_settings_view_form_buruuj"/>
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='buruuj_base']" position="inside">
+                <block title="AI Assistant" name="buruuj_ai">
+                    <setting id="buruuj_ai_key" string="Anthropic API Key"
+                             help="Your Anthropic API key. Get one from https://console.anthropic.com.">
+                        <field name="buruuj_ai_anthropic_api_key" password="True"/>
+                    </setting>
+                    <setting id="buruuj_ai_model_setting" string="Default Claude Model">
+                        <field name="buruuj_ai_model"/>
+                    </setting>
+                    <setting id="buruuj_ai_budget" string="Monthly Budget (USD)"
+                             help="Soft cap on monthly AI spend. Used for monitoring only.">
+                        <field name="buruuj_ai_monthly_budget_usd"/>
+                    </setting>
+                    <setting id="buruuj_ai_boq_toggle" string="Enable BOQ Drafting from Drawings">
+                        <field name="buruuj_ai_enable_boq_draft"/>
+                    </setting>
+                    <setting id="buruuj_ai_ncr_toggle" string="Enable NCR Drafting from Photos">
+                        <field name="buruuj_ai_enable_ncr_draft"/>
+                    </setting>
+                    <setting id="buruuj_ai_sub_toggle" string="Enable Subcontractor Recommendations">
+                        <field name="buruuj_ai_enable_sub_recommend"/>
+                    </setting>
+                    <setting id="buruuj_ai_vo_toggle" string="Enable VO Drafting">
+                        <field name="buruuj_ai_enable_vo_draft"/>
+                    </setting>
+                    <setting id="buruuj_ai_cron_license" string="Daily License Expiry Scan"
+                             help="Each morning, scan subcontractor licenses, insurance, and workmen's comp for expiry within the warning window. Posts alerts on the partner record and creates an activity for the project PM.">
+                        <field name="buruuj_ai_cron_license_scan_enabled"/>
+                        <div invisible="not buruuj_ai_cron_license_scan_enabled" class="mt8">
+                            <label for="buruuj_ai_license_warning_days" string="Warning window (days)"/>
+                            <field name="buruuj_ai_license_warning_days" class="oe_inline" style="width: 80px;"/>
+                        </div>
+                    </setting>
+                    <setting id="buruuj_ai_cron_contract" string="Daily Contract Key Dates Scan"
+                             help="Scan active contracts for upcoming bond, insurance, completion, and DLP dates. Alert PMs.">
+                        <field name="buruuj_ai_cron_contract_scan_enabled"/>
+                        <div invisible="not buruuj_ai_cron_contract_scan_enabled" class="mt8">
+                            <label for="buruuj_ai_contract_warning_days" string="Warning window (days)"/>
+                            <field name="buruuj_ai_contract_warning_days" class="oe_inline" style="width: 80px;"/>
+                        </div>
+                    </setting>
+                    <setting id="buruuj_ai_cron_rfi" string="Daily Overdue RFI Scan"
+                             help="Find RFIs past their response_due date. Activity reminder to the engineer who raised them.">
+                        <field name="buruuj_ai_cron_rfi_scan_enabled"/>
+                    </setting>
+                    <setting id="buruuj_ai_cron_portfolio" string="Weekly Portfolio Risk Scan (AI)"
+                             help="Every Monday morning, AI analyses the entire portfolio and produces a Director-level briefing. Uses Claude for the narrative.">
+                        <field name="buruuj_ai_cron_portfolio_scan_enabled"/>
+                    </setting>
+                    <setting id="buruuj_ai_cron_scorecard" string="Weekly Scorecard Reminder"
+                             help="Reminds PMs to score subcontractors on active subcontracts that don't yet have a current-quarter scorecard.">
+                        <field name="buruuj_ai_cron_scorecard_reminder_enabled"/>
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

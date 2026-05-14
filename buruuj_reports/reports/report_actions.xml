@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- IPC Report Action -->
+    <record id="action_report_buruuj_ipc" model="ir.actions.report">
+        <field name="name">IPC Certificate</field>
+        <field name="model">buruuj.ipc</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">buruuj_reports.report_ipc_document</field>
+        <field name="report_file">buruuj_reports.report_ipc_document</field>
+        <field name="binding_model_id" ref="buruuj_ipc.model_buruuj_ipc"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_buruuj_a4"/>
+        <field name="print_report_name">'IPC - %s' % (object.name or 'New')</field>
+    </record>
+
+    <!-- Subcontract Report Action -->
+    <record id="action_report_buruuj_subcontract" model="ir.actions.report">
+        <field name="name">Subcontract Agreement</field>
+        <field name="model">buruuj.subcontract</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">buruuj_reports.report_subcontract_document</field>
+        <field name="report_file">buruuj_reports.report_subcontract_document</field>
+        <field name="binding_model_id" ref="buruuj_subcontractor.model_buruuj_subcontract"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_buruuj_a4"/>
+        <field name="print_report_name">'Subcontract - %s' % (object.name or 'New')</field>
+    </record>
+
+    <!-- Work Order Report Action -->
+    <record id="action_report_buruuj_workorder" model="ir.actions.report">
+        <field name="name">Work Order</field>
+        <field name="model">buruuj.workorder</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">buruuj_reports.report_workorder_document</field>
+        <field name="report_file">buruuj_reports.report_workorder_document</field>
+        <field name="binding_model_id" ref="buruuj_subcontractor.model_buruuj_workorder"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_buruuj_a4"/>
+        <field name="print_report_name">'WO - %s' % (object.name or 'New')</field>
+    </record>
+
+</odoo>

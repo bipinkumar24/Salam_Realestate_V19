@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_costentry_list" model="ir.ui.view">
+        <field name="name">buruuj.cost.entry.list</field>
+        <field name="model">buruuj.cost.entry</field>
+        <field name="arch" type="xml">
+            <list decoration-info="entry_type == 'committed'"
+                  decoration-success="entry_type == 'actual'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="cbs_id"/>
+                <field name="category_id"/>
+                <field name="entry_type" widget="badge"/>
+                <field name="amount" sum="Total"/>
+                <field name="source_ref"/>
+                <field name="is_auto_generated" widget="boolean_toggle"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_costentry_form" model="ir.ui.view">
+        <field name="name">buruuj.cost.entry.form</field>
+        <field name="model">buruuj.cost.entry</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_source" type="object"
+                                class="oe_stat_button" icon="fa-link"
+                                invisible="not source_id">
+                            <span>Open Source</span>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="cbs_id"/>
+                            <field name="project_id" readonly="1"/>
+                            <field name="category_id" readonly="1"/>
+                            <field name="entry_type"/>
+                            <field name="amount"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="source_model" readonly="1"/>
+                            <field name="source_id" readonly="1"/>
+                            <field name="source_ref"/>
+                            <field name="is_auto_generated" readonly="1"/>
+                        </group>
+                    </group>
+                    <field name="name" placeholder="Description..."/>
+                    <field name="notes"/>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_costentry_search" model="ir.ui.view">
+        <field name="name">buruuj.cost.entry.search</field>
+        <field name="model">buruuj.cost.entry</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="cbs_id"/>
+                <field name="category_id"/>
+                <field name="source_ref"/>
+                <filter string="Committed" name="committed"
+                        domain="[('entry_type','=','committed')]"/>
+                <filter string="Actual" name="actual"
+                        domain="[('entry_type','=','actual')]"/>
+                <filter string="Manual Entries" name="manual"
+                        domain="[('is_auto_generated','=',False)]"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('date','&gt;=', (context_today() + relativedelta(day=1)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Project" name="g_proj"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="CBS" name="g_cbs"
+                            context="{'group_by': 'cbs_id'}"/>
+                    <filter string="Category" name="g_cat"
+                            context="{'group_by': 'category_id'}"/>
+                    <filter string="Type" name="g_type"
+                            context="{'group_by': 'entry_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_costentry" model="ir.actions.act_window">
+        <field name="name">Cost Entries</field>
+        <field name="res_model">buruuj.cost.entry</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

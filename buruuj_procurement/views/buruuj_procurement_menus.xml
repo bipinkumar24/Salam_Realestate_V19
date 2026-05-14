@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_procurement_root" name="Procurement"
+              parent="buruuj_base.menu_buruuj_root" sequence="62"
+              groups="buruuj_base.group_buruuj_qs"/>
+
+    <menuitem id="menu_proc_mr_pending" name="Pending Approval"
+              parent="menu_procurement_root" action="action_mr_pending"
+              sequence="10"/>
+    <menuitem id="menu_proc_mr" name="Material Requisitions"
+              parent="menu_procurement_root" action="action_mr"
+              sequence="20"/>
+    <menuitem id="menu_proc_rfq" name="Requests for Quotation"
+              parent="menu_procurement_root" action="action_rfq"
+              sequence="30"/>
+    <menuitem id="menu_proc_po_pending" name="POs Pending Approval"
+              parent="menu_procurement_root" action="action_po_pending"
+              sequence="40"/>
+    <menuitem id="menu_proc_po" name="Purchase Orders"
+              parent="menu_procurement_root" action="action_po"
+              sequence="50"/>
+    <menuitem id="menu_proc_grn" name="Goods Receipt Notes"
+              parent="menu_procurement_root" action="action_grn"
+              sequence="60"/>
+    <menuitem id="menu_proc_issuance" name="Material Issuances"
+              parent="menu_procurement_root" action="action_issuance"
+              sequence="70"/>
+
+    <menuitem id="menu_proc_inv" name="Inventory"
+              parent="menu_procurement_root" sequence="80"/>
+    <menuitem id="menu_proc_stock" name="Stock Balance"
+              parent="menu_proc_inv" action="action_stock_balance"
+              sequence="10"/>
+    <menuitem id="menu_proc_movements" name="Stock Movements"
+              parent="menu_proc_inv" action="action_stock_movement"
+              sequence="20"/>
+
+    <menuitem id="menu_proc_master" name="Master Data"
+              parent="menu_procurement_root" sequence="90"
+              groups="buruuj_base.group_buruuj_pm"/>
+    <menuitem id="menu_proc_material" name="Material Master"
+              parent="menu_proc_master" action="action_material"
+              sequence="10"/>
+    <menuitem id="menu_proc_matcat" name="Material Categories"
+              parent="menu_proc_master" action="action_material_category"
+              sequence="20"/>
+</odoo>

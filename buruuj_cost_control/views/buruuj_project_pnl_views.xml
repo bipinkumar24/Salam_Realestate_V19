@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_project_form_pnl" model="ir.ui.view">
+        <field name="name">project.project.form.pnl</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="buruuj_project.view_project_project_form_buruuj"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Cost Control" name="cost_control">
+                    <div class="oe_button_box" name="cost_button_box">
+                        <button name="action_view_pnl" type="object"
+                                class="oe_stat_button" icon="fa-table">
+                            <field name="cbs_count" widget="statinfo"
+                                   string="CBS Lines"/>
+                        </button>
+                        <button name="action_refresh_costs" type="object"
+                                class="oe_stat_button" icon="fa-refresh">
+                            <span>Refresh Costs</span>
+                        </button>
+                    </div>
+                    <group string="Project P&amp;L">
+                        <group>
+                            <field name="buruuj_contract_value" readonly="1"/>
+                            <field name="pnl_total_baseline" readonly="1"/>
+                            <field name="pnl_total_revised" readonly="1"/>
+                            <field name="pnl_margin_baseline" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="pnl_total_committed" readonly="1"/>
+                            <field name="pnl_total_actual" readonly="1"/>
+                            <field name="pnl_total_etc" readonly="1"/>
+                            <field name="pnl_total_fac" readonly="1"/>
+                            <field name="pnl_total_vac" readonly="1"/>
+                            <field name="pnl_margin_forecast" readonly="1"/>
+                            <field name="pnl_margin_movement" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Earned Value Metrics">
+                        <group>
+                            <field name="pnl_bcws" readonly="1"/>
+                            <field name="pnl_bcwp" readonly="1"/>
+                            <field name="pnl_acwp" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="pnl_cv" readonly="1"/>
+                            <field name="pnl_sv" readonly="1"/>
+                            <field name="pnl_cpi" readonly="1"/>
+                            <field name="pnl_spi" readonly="1"/>
+                        </group>
+                    </group>
+                    <separator string="CBS Lines"/>
+                    <field name="cbs_ids" context="{'default_project_id': id}">
+                        <list>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="category_id"/>
+                            <field name="rollup_baseline" sum="Baseline"/>
+                            <field name="rollup_actual" sum="Actual"/>
+                            <field name="rollup_fac" sum="FAC"/>
+                            <field name="rollup_vac" sum="VAC"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

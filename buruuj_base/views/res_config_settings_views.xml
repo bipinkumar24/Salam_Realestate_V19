@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_buruuj" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.buruuj</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Buruuj Construction" string="Buruuj Construction" name="buruuj_base"
+                     groups="buruuj_base.group_buruuj_manager">
+                    <block title="Defaults" name="buruuj_defaults">
+                        <setting id="buruuj_default_retention" string="Default Retention %"
+                                 help="Default retention percentage applied to new contracts.">
+                            <field name="buruuj_retention_percent"/>
+                        </setting>
+                        <setting id="buruuj_default_advance" string="Default Advance %">
+                            <field name="buruuj_advance_percent"/>
+                        </setting>
+                        <setting id="buruuj_default_dlp" string="Default DLP (months)">
+                            <field name="buruuj_dlp_months"/>
+                        </setting>
+                    </block>
+                    <block title="Site Operations" name="buruuj_site">
+                        <setting id="buruuj_geofence" string="Geofenced Attendance">
+                            <field name="enable_geofence_attendance"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_buruuj_config_settings" model="ir.actions.act_window">
+        <field name="name">Configuration</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'buruuj_base'}</field>
+    </record>
+
+</odoo>

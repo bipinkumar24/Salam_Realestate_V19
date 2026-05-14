@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- Add Buruuj cards to the portal home page -->
+  <template id="portal_my_home_buruuj"
+              name="Buruuj Portal Home Cards"
+              inherit_id="portal.portal_my_home"
+              priority="40">
+    <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+      <t t-if="request.env.user.partner_id.customer_rank > 0">
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">My Projects</t>
+          <t t-set="url" t-value="'/my/projects'"/>
+          <t t-set="placeholder_count" t-value="'projects_count'"/>
+        </t>
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">Client IPCs</t>
+          <t t-set="url" t-value="'/my/ipcs'"/>
+          <t t-set="placeholder_count" t-value="'ipcs_count'"/>
+        </t>
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">RFIs</t>
+          <t t-set="url" t-value="'/my/rfis'"/>
+          <t t-set="placeholder_count" t-value="'rfis_count'"/>
+        </t>
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">Variation Orders</t>
+          <t t-set="url" t-value="'/my/variations'"/>
+          <t t-set="placeholder_count" t-value="'variations_count'"/>
+        </t>
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">Drawings for Approval</t>
+          <t t-set="url" t-value="'/my/drawings'"/>
+          <t t-set="placeholder_count" t-value="'drawings_count'"/>
+        </t>
+      </t>
+      <t t-if="request.env.user.partner_id.is_subcontractor">
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">Subcontracts</t>
+          <t t-set="url" t-value="'/my/subcontracts'"/>
+          <t t-set="placeholder_count" t-value="'subs_count'"/>
+        </t>
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">Work Orders</t>
+          <t t-set="url" t-value="'/my/workorders'"/>
+          <t t-set="placeholder_count" t-value="'wos_count'"/>
+        </t>
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">My IPCs</t>
+          <t t-set="url" t-value="'/my/sub-ipcs'"/>
+          <t t-set="placeholder_count" t-value="'sub_ipcs_count'"/>
+        </t>
+        <t t-call="portal.portal_docs_entry">
+          <t t-set="title">Back-charges</t>
+          <t t-set="url" t-value="'/my/backcharges'"/>
+          <t t-set="placeholder_count" t-value="'backcharges_count'"/>
+        </t>
+      </t>
+    </xpath>
+  </template>
+
+  <!-- Generic error page -->
+  <template id="portal_error" name="Buruuj Portal Error">
+    <t t-call="portal.portal_layout">
+      <div class="container my-4">
+        <div class="alert alert-danger">
+          <h4>Something went wrong</h4>
+          <p t-esc="error"/>
+        </div>
+        <a href="/my" class="btn btn-secondary">Back to home</a>
+      </div>
+    </t>
+  </template>
+
+</odoo>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="seq_variance" model="ir.sequence">
+            <field name="name">Cost Variance</field>
+            <field name="code">buruuj.variance</field>
+            <field name="prefix">VAR/%(year)s/</field>
+            <field name="padding">5</field>
+        </record>
+    </data>
+</odoo>

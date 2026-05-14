@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="demo_dwg_marina_arch_l1" model="buruuj.drawing">
+            <field name="drawing_no">A-101</field>
+            <field name="title">Architectural Plan — Level 1</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="discipline">arch</field>
+            <field name="revision">R3</field>
+            <field name="sheet_size">a1</field>
+            <field name="scale">1:100</field>
+            <field name="purpose">construction</field>
+            <field name="status">approved</field>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(months=4)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <record id="demo_dwg_marina_struct_found" model="buruuj.drawing">
+            <field name="drawing_no">S-201</field>
+            <field name="title">Structural — Foundation Layout</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="discipline">struct</field>
+            <field name="revision">R2</field>
+            <field name="sheet_size">a0</field>
+            <field name="scale">1:100</field>
+            <field name="purpose">construction</field>
+            <field name="status">approved</field>
+            <field name="issue_date" eval="(DateTime.today() - relativedelta(months=5)).strftime('%Y-%m-%d')"/>
+        </record>
+
+        <record id="demo_dwg_marina_facade" model="buruuj.drawing">
+            <field name="drawing_no">A-203</field>
+            <field name="title">Facade Detail — L7 Setback</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="discipline">arch</field>
+            <field name="revision">R4</field>
+            <field name="sheet_size">a2</field>
+            <field name="purpose">approval</field>
+            <field name="status">submitted</field>
+        </record>
+
+        <record id="demo_trans_marina_1" model="buruuj.transmittal">
+            <field name="name">TRN/MAR/0007</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="date" eval="(DateTime.today() - relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+            <field name="sent_to" ref="demo_consultant_skyline"/>
+            <field name="purpose">approval</field>
+            <field name="method">portal</field>
+            <field name="state">acknowledged</field>
+            <field name="drawing_ids" eval="[(4, ref('demo_dwg_marina_facade'))]"/>
+        </record>
+
+        <record id="demo_sub_marble" model="buruuj.submittal">
+            <field name="name">SUB-MAR-0014 — Imported marble for lobby</field>
+            <field name="project_id" ref="demo_project_marina"/>
+            <field name="submittal_type">material</field>
+            <field name="item">Calacatta Oro Marble — 20mm slabs</field>
+            <field name="manufacturer">Italian Stone S.p.A.</field>
+            <field name="spec_section">09 30 00 — Tiling and Stone</field>
+            <field name="submitted_to" ref="demo_consultant_skyline"/>
+            <field name="state">responded</field>
+            <field name="response">approved_comments</field>
+            <field name="response_date" eval="(DateTime.today() - relativedelta(weeks=1)).strftime('%Y-%m-%d')"/>
+        </record>
+
+    </data>
+</odoo>
