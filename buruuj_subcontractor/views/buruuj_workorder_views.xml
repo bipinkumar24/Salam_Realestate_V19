@@ -46,6 +46,8 @@
                             <field name="subcontract_id"/>
                             <field name="project_id"/>
                             <field name="partner_id"/>
+                            <field name="boq_line_id"
+                                   options="{'no_create': True, 'no_open': True}"/>
                             <field name="location"/>
                         </group>
                         <group>

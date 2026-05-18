@@ -14,7 +14,8 @@ IPC & Billing
 """,
     'author': 'Buruuj Construction Co.',
     'license': 'OPL-1',
-    'depends': ['buruuj_subcontractor', 'buruuj_project', 'mail'],
+    'depends': ['buruuj_subcontractor', 'buruuj_project',
+                'buruuj_tendering', 'mail'],
     'data': [
         'security/ir.model.access.csv',
         'views/buruuj_ipc_views.xml',

@@ -48,7 +48,7 @@ class PaymentCertificate(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project',
+        'project.project',
         string='Construction Project', required=True, index=True,
     )
     contractor_id = fields.Many2one(
@@ -64,7 +64,7 @@ class PaymentCertificate(models.Model):
         help='Milestone completed by this payment certificate',
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
         string='Construction Phase',
     )
     tender_id = fields.Many2one(
@@ -235,7 +235,7 @@ class PaymentCertificate(models.Model):
 
 class ProjectProcurementInherit(models.Model):
     """Adds tender and IPC smart buttons to construction project."""
-    _inherit = 'salaam.construction.project'
+    _inherit = 'project.project'
 
     tender_ids = fields.One2many('salaam.tender', 'project_id', string='Tenders')
     payment_certificate_ids = fields.One2many(

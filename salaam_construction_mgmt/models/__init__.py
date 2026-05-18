@@ -7,3 +7,4 @@ from . import site_report
 from . import drawing_register
 from . import governance_document
 from . import project_inherit
+from . import progress_snapshot

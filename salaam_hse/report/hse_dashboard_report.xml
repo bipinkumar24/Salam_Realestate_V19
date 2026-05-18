@@ -32,8 +32,8 @@
     </t>
   </template>
   <record id="action_report_hse_dashboard" model="ir.actions.report">
-    <field name="name">HSE Dashboard Report</field><field name="model">salaam.construction.project</field>
+    <field name="name">HSE Dashboard Report</field><field name="model">project.project</field>
     <field name="report_type">qweb-pdf</field><field name="report_name">salaam_hse.report_hse_dashboard</field>
-    <field name="binding_model_id" ref="salaam_construction_mgmt.model_salaam_construction_project"/><field name="binding_type">report</field>
+    <field name="binding_model_id" ref="project.model_project_project"/><field name="binding_type">report</field>
   </record>
 </odoo>

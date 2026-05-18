@@ -23,7 +23,7 @@ class PropertyConstructionInherit(models.Model):
 
     # ── CONSTRUCTION PROJECT LINK ──────────────────────────────────────────────
     construction_project_id = fields.Many2one(
-        'salaam.construction.project',
+        'project.project',
         string='Construction Project',
         index=True,
         help='The construction project building this unit',

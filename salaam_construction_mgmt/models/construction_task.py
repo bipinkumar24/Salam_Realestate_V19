@@ -83,6 +83,26 @@ class ConstructionTask(models.Model):
     date_start_actual = fields.Date(string='Actual Start')
     date_end_actual = fields.Date(string='Actual End')
     progress = fields.Float(string='Progress (%)', digits=(5, 1))
+    planned_duration_days = fields.Integer(
+        string='Planned Duration (days)',
+        compute='_compute_planned_duration', store=True,
+    )
+
+    # ── GANTT DEPENDENCY ──────────────────────────────────────────────────────
+    predecessor_ids = fields.Many2many(
+        'salaam.construction.task',
+        'construction_task_dep_rel',
+        'task_id', 'predecessor_id',
+        string='Predecessor Tasks',
+        domain="[('project_id','=',project_id),('id','!=',id)]",
+        help='Tasks that must finish before this task can start (Finish-to-Start).',
+    )
+    successor_ids = fields.Many2many(
+        'salaam.construction.task',
+        'construction_task_dep_rel',
+        'predecessor_id', 'task_id',
+        string='Successor Tasks',
+    )
 
     # ── COST ──────────────────────────────────────────────────────────────────
     currency_id = fields.Many2one(
@@ -102,11 +122,84 @@ class ConstructionTask(models.Model):
         'account.move', string='Invoice / Bill', ondelete='set null',
     )
 
+    # ── EARNED-VALUE FIELDS (S-curve inputs) ──────────────────────────────────
+    planned_pct_to_date = fields.Float(
+        string='Planned % to Date',
+        compute='_compute_earned_value', digits=(5, 1), store=False,
+        help='Linear-interp planned completion percent based on today vs planned dates.',
+    )
+    planned_value = fields.Monetary(
+        string='Planned Value (BCWS)',
+        compute='_compute_earned_value',
+        currency_field='currency_id', store=False,
+        help='Budgeted Cost of Work Scheduled — budget × planned % to date.',
+    )
+    earned_value = fields.Monetary(
+        string='Earned Value (BCWP)',
+        compute='_compute_earned_value',
+        currency_field='currency_id', store=False,
+        help='Budgeted Cost of Work Performed — budget × actual progress %.',
+    )
+    schedule_variance = fields.Monetary(
+        string='Schedule Variance (EV − PV)',
+        compute='_compute_earned_value',
+        currency_field='currency_id', store=False,
+    )
+    cost_performance_index = fields.Float(
+        string='CPI',
+        compute='_compute_earned_value', digits=(5, 2), store=False,
+    )
+    schedule_performance_index = fields.Float(
+        string='SPI',
+        compute='_compute_earned_value', digits=(5, 2), store=False,
+    )
+
     # ── COMPUTED ──────────────────────────────────────────────────────────────
     @api.depends('budget_cost', 'actual_cost')
     def _compute_cost_variance(self):
         for rec in self:
             rec.cost_variance = rec.budget_cost - rec.actual_cost
+
+    @api.depends('date_start_planned', 'date_end_planned')
+    def _compute_planned_duration(self):
+        for rec in self:
+            if rec.date_start_planned and rec.date_end_planned:
+                rec.planned_duration_days = (
+                    rec.date_end_planned - rec.date_start_planned
+                ).days + 1
+            else:
+                rec.planned_duration_days = 0
+
+    @api.depends(
+        'budget_cost', 'actual_cost', 'progress',
+        'date_start_planned', 'date_end_planned',
+    )
+    def _compute_earned_value(self):
+        today = fields.Date.context_today(self)
+        for rec in self:
+            budget = rec.budget_cost or 0.0
+            # Planned % to date — linear between planned start/end
+            if rec.date_start_planned and rec.date_end_planned:
+                if today <= rec.date_start_planned:
+                    planned_pct = 0.0
+                elif today >= rec.date_end_planned:
+                    planned_pct = 100.0
+                else:
+                    total = (rec.date_end_planned - rec.date_start_planned).days or 1
+                    elapsed = (today - rec.date_start_planned).days
+                    planned_pct = max(0.0, min(100.0, (elapsed / total) * 100.0))
+            else:
+                planned_pct = 0.0
+            rec.planned_pct_to_date = planned_pct
+            rec.planned_value = budget * planned_pct / 100.0
+            rec.earned_value = budget * (rec.progress or 0.0) / 100.0
+            rec.schedule_variance = rec.earned_value - rec.planned_value
+            rec.cost_performance_index = (
+                rec.earned_value / rec.actual_cost
+            ) if rec.actual_cost else 0.0
+            rec.schedule_performance_index = (
+                rec.earned_value / rec.planned_value
+            ) if rec.planned_value else 0.0
 
     # ── ACTIONS ───────────────────────────────────────────────────────────────
     def action_start(self):

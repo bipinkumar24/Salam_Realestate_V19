@@ -159,6 +159,13 @@ class BuruujSubcontractLine(models.Model):
     sequence = fields.Integer(default=10)
     subcontract_id = fields.Many2one('buruuj.subcontract', required=True,
                                       ondelete='cascade')
+    project_id = fields.Many2one(
+        related='subcontract_id.project_id', store=True)
+    boq_line_id = fields.Many2one(
+        'buruuj.boq.line', string='BOQ Item',
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help='Link to the BOQ line this scope is drawn from. Selecting one '
+             'pre-fills item no., description, UoM and unit rate.')
     item_no = fields.Char(string='Item No.')
     description = fields.Text(required=True)
     uom_id = fields.Many2one('uom.uom', string='UoM')
@@ -166,6 +173,17 @@ class BuruujSubcontractLine(models.Model):
     unit_rate = fields.Monetary()
     amount = fields.Monetary(compute='_compute_amount', store=True)
     currency_id = fields.Many2one(related='subcontract_id.currency_id', store=True)
+
+    @api.onchange('boq_line_id')
+    def _onchange_boq_line_id(self):
+        if self.boq_line_id:
+            self.item_no = self.boq_line_id.item_no
+            self.description = self.boq_line_id.description
+            self.uom_id = self.boq_line_id.uom_id
+            if not self.quantity:
+                self.quantity = self.boq_line_id.quantity
+            if not self.unit_rate:
+                self.unit_rate = self.boq_line_id.subcontract_cost or self.boq_line_id.unit_rate
 
     @api.depends('quantity', 'unit_rate')
     def _compute_amount(self):

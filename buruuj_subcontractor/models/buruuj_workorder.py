@@ -15,6 +15,10 @@ class BuruujWorkOrder(models.Model):
                                       ondelete='restrict', tracking=True)
     project_id = fields.Many2one(
         'project.project', related='subcontract_id.project_id', store=True)
+    boq_line_id = fields.Many2one(
+        'buruuj.boq.line', string='BOQ Item',
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help='Scope this work order to a specific BOQ line.')
     partner_id = fields.Many2one(
         'res.partner', related='subcontract_id.partner_id', store=True)
     date = fields.Date(default=fields.Date.context_today)
@@ -44,6 +48,11 @@ class BuruujWorkOrder(models.Model):
                 vals['name'] = self.env['ir.sequence'].next_by_code(
                     'buruuj.work.order') or _('New')
         return super().create(vals_list)
+
+    @api.onchange('boq_line_id')
+    def _onchange_boq_line_id(self):
+        if self.boq_line_id and not self.amount:
+            self.amount = self.boq_line_id.amount
 
     def action_issue(self):
         self.state = 'issued'

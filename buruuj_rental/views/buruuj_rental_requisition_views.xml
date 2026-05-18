@@ -70,6 +70,8 @@
                         <field name="equipment_type"/>
                         <field name="capacity_required"/>
                         <field name="quantity"/>
+                        <field name="boq_line_id"
+                               options="{'no_create': True, 'no_open': True}"/>
                     </group>
                     <field name="work_description"
                            placeholder="What work will this equipment do? Where on site?"/>

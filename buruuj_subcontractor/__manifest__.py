@@ -17,7 +17,7 @@ Subcontractor Management
 """,
     'author': 'Buruuj Construction Co.',
     'license': 'OPL-1',
-    'depends': ['buruuj_base', 'buruuj_project', 'mail'],
+    'depends': ['buruuj_base', 'buruuj_project', 'buruuj_tendering', 'mail'],
     'data': [
         'security/ir.model.access.csv',
         'views/buruuj_subcontract_views.xml',

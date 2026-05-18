@@ -179,9 +179,9 @@
   </record>
 
   <record id="view_project_procurement_inherit" model="ir.ui.view">
-    <field name="name">salaam.construction.project.procurement.inherit</field>
-    <field name="model">salaam.construction.project</field>
-    <field name="inherit_id" ref="salaam_construction_mgmt.view_construction_project_form"/>
+    <field name="name">project.project.procurement.inherit</field>
+    <field name="model">project.project</field>
+    <field name="inherit_id" ref="buruuj_project.view_project_project_form_buruuj"/>
     <field name="arch" type="xml">
       <div name="button_box" position="inside">
         <button name="action_open_tenders" type="object" class="oe_stat_button" icon="fa-gavel">
@@ -197,7 +197,7 @@
     </field>
   </record>
 
-  <menuitem id="menu_procurement_root" name="Procurement" parent="salaam_construction_mgmt.menu_construction_root" sequence="50"/>
+  <menuitem id="menu_procurement_root" name="Procurement" parent="buruuj_base.menu_buruuj_root" sequence="50"/>
   <menuitem id="menu_tenders" name="Tenders" parent="menu_procurement_root" action="action_tender" sequence="10"/>
   <menuitem id="menu_ipcs" name="Payment Certificates" parent="menu_procurement_root" action="action_payment_certificate" sequence="20"/>
 

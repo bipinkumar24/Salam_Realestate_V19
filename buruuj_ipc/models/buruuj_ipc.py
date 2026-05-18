@@ -126,6 +126,12 @@ class BuruujIPCLine(models.Model):
 
     sequence = fields.Integer(default=10)
     ipc_id = fields.Many2one('buruuj.ipc', required=True, ondelete='cascade')
+    project_id = fields.Many2one(related='ipc_id.project_id', store=True)
+    boq_line_id = fields.Many2one(
+        'buruuj.boq.line', string='BOQ Item',
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help='Select the BOQ line being certified. Pulls in item no., '
+             'description, UoM, contract qty, and unit rate.')
     item_no = fields.Char()
     description = fields.Text(required=True)
     uom_id = fields.Many2one('uom.uom')
@@ -137,6 +143,15 @@ class BuruujIPCLine(models.Model):
     cumulative_amount = fields.Monetary(compute='_compute_amount', store=True)
     amount = fields.Monetary(string='This Period', compute='_compute_amount', store=True)
     currency_id = fields.Many2one(related='ipc_id.currency_id', store=True)
+
+    @api.onchange('boq_line_id')
+    def _onchange_boq_line_id(self):
+        if self.boq_line_id:
+            self.item_no = self.boq_line_id.item_no
+            self.description = self.boq_line_id.description
+            self.uom_id = self.boq_line_id.uom_id
+            self.contract_qty = self.boq_line_id.quantity
+            self.unit_rate = self.boq_line_id.unit_rate
 
     @api.depends('cumulative_qty', 'previous_qty')
     def _compute_period_qty(self):

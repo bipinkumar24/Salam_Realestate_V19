@@ -14,6 +14,11 @@ class BuruujRentalContract(models.Model):
     requisition_id = fields.Many2one("buruuj.rental.requisition",
                                        string="Source Requisition", tracking=True)
     project_id = fields.Many2one("project.project", required=True, tracking=True)
+    boq_line_id = fields.Many2one(
+        "buruuj.boq.line", string="BOQ Item",
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help="Default BOQ line this rental is charged against. "
+             "Daily timesheets inherit it unless overridden.")
     vendor_id = fields.Many2one(
         "res.partner", string="Rental Vendor", required=True, tracking=True,
         domain=[("supplier_rank", ">", 0)])
@@ -162,6 +167,9 @@ class BuruujRentalContract(models.Model):
         for c in contracts:
             if c.requisition_id and c.requisition_id.state == "quoting":
                 c.requisition_id.state = "contracted"
+            if (not c.boq_line_id and c.requisition_id
+                    and c.requisition_id.boq_line_id):
+                c.boq_line_id = c.requisition_id.boq_line_id
         return contracts
 
     def action_approve(self):

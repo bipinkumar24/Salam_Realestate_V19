@@ -12,6 +12,10 @@ class BuruujRentalRequisition(models.Model):
 
     name = fields.Char(copy=False, default=lambda s: _("New"))
     project_id = fields.Many2one("project.project", required=True, tracking=True)
+    boq_line_id = fields.Many2one(
+        "buruuj.boq.line", string="BOQ Item",
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help="Trace this equipment rental to the BOQ line it serves.")
     requested_by = fields.Many2one(
         "res.users", default=lambda s: s.env.user, tracking=True)
     date = fields.Date(default=fields.Date.context_today, required=True)
@@ -63,6 +67,14 @@ class BuruujRentalRequisition(models.Model):
     currency_id = fields.Many2one(
         "res.currency", default=lambda s: s.env.company.currency_id)
     company_id = fields.Many2one("res.company", default=lambda s: s.env.company)
+
+    @api.onchange("boq_line_id")
+    def _onchange_boq_line_id(self):
+        if self.boq_line_id and not self.estimated_cost:
+            # Use the BOQ line's equipment cost as a budget hint.
+            self.estimated_cost = (self.boq_line_id.equipment_cost
+                                    * (self.quantity or 1)
+                                    * (self.duration_days or 1))
 
     @api.depends("required_from", "required_to")
     def _compute_duration(self):

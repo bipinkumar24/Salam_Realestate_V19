@@ -26,6 +26,7 @@ and connects directly to BOQ lines, project phases, and subcontract back-charges
         "buruuj_base",
         "buruuj_project",
         "buruuj_subcontractor",
+        "buruuj_tendering",
         "mail",
         "uom",
     ],

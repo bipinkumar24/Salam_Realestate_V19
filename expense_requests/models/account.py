@@ -22,6 +22,7 @@ class Account(models.Model):
                                     default=lambda self: self._get_default_department())
     employees_fee_ids = fields.One2many('emp.fee', 'account_id', string=' ')
     amount_paid = fields.Float(string="amount_paid")
+    invoice_date = fields.Date(default=fields.Date.context_today)
 
     def _get_default_department(self):
         user = self.env.user.employee_id

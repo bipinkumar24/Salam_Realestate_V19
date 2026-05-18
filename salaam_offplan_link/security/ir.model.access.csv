@@ -1,3 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_unit_phase_link_officer,unit.phase.link.officer,model_salaam_unit_phase_link,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_unit_phase_link_manager,unit.phase.link.manager,model_salaam_unit_phase_link,salaam_construction_mgmt.group_construction_manager,1,1,1,1
+access_unit_phase_link_officer,unit.phase.link.officer,model_salaam_unit_phase_link,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_unit_phase_link_manager,unit.phase.link.manager,model_salaam_unit_phase_link,buruuj_base.group_buruuj_pm,1,1,1,1

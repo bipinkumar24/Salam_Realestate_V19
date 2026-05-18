@@ -47,7 +47,7 @@ Handed Over stages added to property.details via inherit.
         'rental_management',
         'bank_realestate_collab',
         'salaam_dev_contracts',
-        'salaam_construction_mgmt',
+        'buruuj_project',
     ],
     'data': [
         'security/ir.model.access.csv',

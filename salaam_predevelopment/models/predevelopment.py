@@ -18,7 +18,7 @@ class SalaamPredevelopment(models.Model):
       land          → salaam.project (creates or links the master project)
       unit_mix      → property.details (auto-creates unit records)
       design        → salaam.tender (triggers design/construction tender)
-      approved      → salaam.construction.project (opens construction)
+      approved      → project.project (opens construction)
     """
     _name = 'salaam.predevelopment'
     _description = 'Pre-Development Application'
@@ -137,7 +137,7 @@ class SalaamPredevelopment(models.Model):
     )
     tender_count = fields.Integer(compute='_compute_tender_count')
     construction_project_id = fields.Many2one(
-        'salaam.construction.project',
+        'project.project',
         string='Construction Project',
         readonly=True,
         help='Auto-linked or created when development is approved',

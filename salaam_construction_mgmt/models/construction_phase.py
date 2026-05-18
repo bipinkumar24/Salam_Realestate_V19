@@ -95,6 +95,23 @@ class ConstructionPhase(models.Model):
     task_count = fields.Integer(compute='_compute_task_count')
     completed_task_count = fields.Integer(compute='_compute_task_count')
 
+    # ── EARNED VALUE (aggregated from tasks) ──────────────────────────────────
+    planned_value = fields.Monetary(
+        string='Planned Value (BCWS)',
+        compute='_compute_earned_value',
+        currency_field='currency_id', store=False,
+    )
+    earned_value = fields.Monetary(
+        string='Earned Value (BCWP)',
+        compute='_compute_earned_value',
+        currency_field='currency_id', store=False,
+    )
+    actual_value = fields.Monetary(
+        string='Actual Cost (ACWP)',
+        compute='_compute_earned_value',
+        currency_field='currency_id', store=False,
+    )
+
     # ── COMPUTED ──────────────────────────────────────────────────────────────
     @api.depends('date_end_planned', 'date_end_actual', 'state')
     def _compute_delay(self):
@@ -124,6 +141,17 @@ class ConstructionPhase(models.Model):
             rec.completed_task_count = len(
                 rec.task_ids.filtered(lambda t: t.state in ('done', 'invoiced'))
             )
+
+    @api.depends(
+        'task_ids.planned_value',
+        'task_ids.earned_value',
+        'task_ids.actual_cost',
+    )
+    def _compute_earned_value(self):
+        for rec in self:
+            rec.planned_value = sum(rec.task_ids.mapped('planned_value'))
+            rec.earned_value = sum(rec.task_ids.mapped('earned_value'))
+            rec.actual_value = sum(rec.task_ids.mapped('actual_cost'))
 
     @api.constrains('weight')
     def _check_weight(self):

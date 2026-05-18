@@ -3,7 +3,7 @@ from odoo import models, fields, api, _
 
 
 class ConstructionProjectHSE(models.Model):
-    _inherit = 'salaam.construction.project'
+    _inherit = 'project.project'
 
     hse_incident_ids = fields.One2many('salaam.hse.incident', 'project_id', string='HSE Incidents')
     hse_rams_ids = fields.One2many('salaam.hse.method.statement', 'project_id', string='RAMS')

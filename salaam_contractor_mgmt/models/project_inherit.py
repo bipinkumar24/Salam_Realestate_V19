@@ -3,7 +3,7 @@ from odoo import models, fields, api, _
 
 
 class ConstructionProjectContractorMgmt(models.Model):
-    _inherit = 'salaam.construction.project'
+    _inherit = 'project.project'
 
     # ── ONE2MANY LINKS ────────────────────────────────────────────────────────
     site_instruction_ids = fields.One2many(

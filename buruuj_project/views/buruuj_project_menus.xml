@@ -18,4 +18,13 @@
     <menuitem id="menu_buruuj_risk" name="Risk Register"
               parent="buruuj_base.menu_buruuj_projects"
               action="action_buruuj_risk" sequence="60"/>
+    <menuitem id="menu_buruuj_phase_gantt" name="Phase Gantt"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_phase_gantt" sequence="70"/>
+    <menuitem id="menu_buruuj_wbs_gantt" name="WBS Gantt"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_wbs_gantt" sequence="80"/>
+    <menuitem id="menu_buruuj_progress_snapshot" name="S-Curve / Progress"
+              parent="buruuj_base.menu_buruuj_projects"
+              action="action_buruuj_progress_snapshot" sequence="90"/>
 </odoo>

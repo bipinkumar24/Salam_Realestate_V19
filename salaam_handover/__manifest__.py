@@ -40,7 +40,7 @@ Models:
     'license': 'LGPL-3',
     'depends': [
         'base', 'mail',
-        'salaam_construction_mgmt',
+        'buruuj_project',
         'salaam_dev_contracts',
         'rental_management',
     ],

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         TASK GANTT — planned vs actual bars, dependency arrows, progress bar
+         ───────────────────────────────────────────────────────────────────── -->
+    <record id="view_construction_task_gantt" model="ir.ui.view">
+        <field name="name">salaam.construction.task.gantt</field>
+        <field name="model">salaam.construction.task</field>
+        <field name="arch" type="xml">
+            <gantt string="Construction Tasks Gantt"
+                   date_start="date_start_planned"
+                   date_stop="date_end_planned"
+                   default_group_by="phase_id"
+                   default_scale="month"
+                   scales="week,month,quarter,year"
+                   progress="progress"
+                   dependency_field="predecessor_ids"
+                   dependency_inverted_field="successor_ids"
+                   color="state"
+                   precision="{'day': 'hour:full', 'week': 'day:half', 'month': 'day:full', 'quarter': 'day:full', 'year': 'month:half'}">
+                <field name="name"/>
+                <field name="phase_id"/>
+                <field name="project_id"/>
+                <field name="assigned_to_id"/>
+                <field name="state"/>
+                <field name="progress"/>
+                <field name="budget_cost"/>
+                <field name="currency_id"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="action_construction_task_gantt" model="ir.actions.act_window">
+        <field name="name">Tasks Gantt</field>
+        <field name="res_model">salaam.construction.task</field>
+        <field name="view_mode">gantt,list,form</field>
+        <field name="view_id" ref="view_construction_task_gantt"/>
+    </record>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         PHASE GANTT — high-level project schedule grouped by project
+         ───────────────────────────────────────────────────────────────────── -->
+    <record id="view_construction_phase_gantt" model="ir.ui.view">
+        <field name="name">salaam.construction.phase.gantt</field>
+        <field name="model">salaam.construction.phase</field>
+        <field name="arch" type="xml">
+            <gantt string="Construction Phases Gantt"
+                   date_start="date_start_planned"
+                   date_stop="date_end_planned"
+                   default_group_by="project_id"
+                   default_range="quarter"
+                   scales="month,quarter,year"
+                   progress="progress"
+                   color="state">
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="phase_type"/>
+                <field name="state"/>
+                <field name="progress"/>
+                <field name="weight"/>
+                <field name="budget_allocated"/>
+                <field name="currency_id"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="action_construction_phase_gantt" model="ir.actions.act_window">
+        <field name="name">Phases Gantt</field>
+        <field name="res_model">salaam.construction.phase</field>
+        <field name="view_mode">gantt,list,form</field>
+        <field name="view_id" ref="view_construction_phase_gantt"/>
+    </record>
+
+</odoo>

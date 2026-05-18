@@ -14,6 +14,11 @@ class BuruujRentalTimesheet(models.Model):
     vendor_id = fields.Many2one(related="contract_id.vendor_id", store=True)
     equipment_description = fields.Char(
         related="contract_id.equipment_description", store=True)
+    boq_line_id = fields.Many2one(
+        "buruuj.boq.line", string="BOQ Item",
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help="Override the contract's default BOQ line if today's work "
+             "served a different scope item.")
 
     date = fields.Date(required=True, default=fields.Date.context_today)
     working_hours = fields.Float(string="Working Hours", default=0.0)

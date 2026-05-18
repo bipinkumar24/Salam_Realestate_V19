@@ -24,7 +24,8 @@ Distinct from buruuj_plant (which manages owned equipment) and buruuj_tools
 """,
     "author": "Buruuj Construction Co.",
     "license": "OPL-1",
-    "depends": ["buruuj_base", "buruuj_project", "buruuj_plant", "mail"],
+    "depends": ["buruuj_base", "buruuj_project", "buruuj_plant",
+                "buruuj_tendering", "mail"],
     "data": [
         "security/ir.model.access.csv",
         "data/ir_sequence_data.xml",

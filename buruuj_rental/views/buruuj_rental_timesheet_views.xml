@@ -9,6 +9,8 @@
                 <field name="contract_id"/>
                 <field name="project_id" optional="hide"/>
                 <field name="equipment_description" optional="hide"/>
+                <field name="boq_line_id" optional="show"
+                       options="{'no_create': True, 'no_open': True}"/>
                 <field name="working_hours" sum="Working"/>
                 <field name="idle_hours" sum="Idle"/>
                 <field name="breakdown_hours" sum="Breakdown" optional="show"/>
@@ -30,6 +32,8 @@
                         <group>
                             <field name="contract_id"/>
                             <field name="date"/>
+                            <field name="boq_line_id"
+                                   options="{'no_create': True, 'no_open': True}"/>
                             <field name="operator_name"/>
                         </group>
                         <group>

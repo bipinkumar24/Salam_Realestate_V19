@@ -70,6 +70,8 @@
                             <field name="project_id"/>
                             <field name="vendor_id"/>
                             <field name="requisition_id"/>
+                            <field name="boq_line_id"
+                                   options="{'no_create': True, 'no_open': True}"/>
                             <field name="equipment_id"/>
                             <field name="equipment_description"/>
                             <field name="serial_no"/>

@@ -86,10 +86,10 @@ class NCR(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project', required=True, index=True,
+        'project.project', required=True, index=True,
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
     )
     # contractor_party_id = fields.Many2one(
     #     'salaam.project.party',

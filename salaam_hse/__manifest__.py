@@ -6,7 +6,7 @@
     'description': """
 salaam_hse
 ==========
-Lightweight HSE management extension for salaam_construction_mgmt.
+Lightweight HSE management extension for buruuj_project.
 Covers Djibouti regulatory requirements and Islamic finance ESG obligations.
 
 Models:
@@ -40,7 +40,7 @@ Models:
     'license': 'LGPL-3',
     'depends': [
         'base', 'mail',
-        'salaam_construction_mgmt',
+        'buruuj_project',
     ],
     'data': [
         'security/ir.model.access.csv',

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 
 class ProjectProject(models.Model):
@@ -63,6 +63,8 @@ class ProjectProject(models.Model):
     buruuj_milestone_ids = fields.One2many('buruuj.milestone', 'project_id',
                                             string='Milestones')
     buruuj_risk_ids = fields.One2many('buruuj.risk', 'project_id', string='Risks')
+    buruuj_progress_snapshot_ids = fields.One2many(
+        'buruuj.progress.snapshot', 'project_id', string='Progress Snapshots')
 
     # Counts
     buruuj_phase_count = fields.Integer(compute='_compute_counts')
@@ -126,6 +128,52 @@ class ProjectProject(models.Model):
                   and rec.buruuj_actual_cost > rec.buruuj_baseline_budget * 0.95):
                 score += 1
             rec.buruuj_health = 'red' if score >= 3 else ('amber' if score >= 1 else 'green')
+
+    # ---- Construction progress (Gantt / S-curve) ----
+    def action_view_phase_gantt(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Phase Gantt - %s') % self.name,
+            'res_model': 'buruuj.phase',
+            'view_mode': 'gantt,list,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {'default_project_id': self.id},
+        }
+
+    def action_view_wbs_gantt(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('WBS Gantt - %s') % self.name,
+            'res_model': 'buruuj.wbs',
+            'view_mode': 'gantt,list,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {'default_project_id': self.id},
+        }
+
+    def action_view_s_curve(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('S-Curve - %s') % self.name,
+            'res_model': 'buruuj.progress.snapshot',
+            'view_mode': 'graph,list,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {'default_project_id': self.id,
+                        'search_default_group_by_date': 1},
+        }
+
+    def action_capture_progress_snapshot(self):
+        self.ensure_one()
+        snap = self.env['buruuj.progress.snapshot'].action_capture_from_wbs(
+            self.id)
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'buruuj.progress.snapshot',
+            'res_id': snap.id,
+            'view_mode': 'form',
+        }
 
     @api.depends('buruuj_actual_end', 'buruuj_dlp_months')
     def _compute_dlp_end(self):

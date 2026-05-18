@@ -68,9 +68,12 @@
                     </group>
                     <notebook>
                         <page string="Lines">
-                            <field name="line_ids">
+                            <field name="line_ids" context="{'default_project_id': project_id}">
                                 <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
+                                    <field name="project_id" column_invisible="1"/>
+                                    <field name="boq_line_id"
+                                           options="{'no_create': True, 'no_open': True}"/>
                                     <field name="item_no"/>
                                     <field name="description"/>
                                     <field name="uom_id"/>

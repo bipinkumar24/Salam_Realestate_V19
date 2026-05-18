@@ -106,9 +106,9 @@
 
   <!-- ═══ CONSTRUCTION PHASE INHERIT — shows linked units ═══ -->
   <record id="view_construction_phase_unit_inherit" model="ir.ui.view">
-    <field name="name">salaam.construction.phase.unit.inherit</field>
-    <field name="model">salaam.construction.phase</field>
-    <field name="inherit_id" ref="salaam_construction_mgmt.view_construction_phase_form"/>
+    <field name="name">buruuj.phase.unit.inherit</field>
+    <field name="model">buruuj.phase</field>
+    <field name="inherit_id" ref="buruuj_project.view_buruuj_phase_form"/>
     <field name="arch" type="xml">
       <xpath expr="//sheet" position="inside">
         <separator string="Linked Units"/>
@@ -124,7 +124,7 @@
   <!-- ═══ MENUS ═══ -->
   <menuitem id="menu_offplan_link_config"
             name="Unit-Phase Links"
-            parent="salaam_construction_mgmt.menu_construction_config"
+            parent="buruuj_base.menu_buruuj_config"
             action="action_unit_phase_link"
             sequence="20"/>
 

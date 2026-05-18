@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===================================================================
+         PHASE GANTT - high-level project schedule
+         =================================================================== -->
+    <record id="view_buruuj_phase_gantt" model="ir.ui.view">
+        <field name="name">buruuj.phase.gantt</field>
+        <field name="model">buruuj.phase</field>
+        <field name="arch" type="xml">
+            <gantt string="Project Phases Gantt"
+                   date_start="planned_start"
+                   date_stop="planned_end"
+                   default_group_by="project_id"
+                   default_scale="month"
+                   scales="week,month,quarter,year"
+                   progress="progress"
+                   color="state">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="project_id"/>
+                <field name="state"/>
+                <field name="progress"/>
+                <field name="weight_percent"/>
+            </gantt>
+        </field>
+    </record>
+
+    <!-- ===================================================================
+         WBS GANTT - detailed activity-level schedule
+         =================================================================== -->
+    <record id="view_buruuj_wbs_gantt" model="ir.ui.view">
+        <field name="name">buruuj.wbs.gantt</field>
+        <field name="model">buruuj.wbs</field>
+        <field name="arch" type="xml">
+            <gantt string="WBS Activities Gantt"
+                   date_start="planned_start"
+                   date_stop="planned_end"
+                   default_group_by="phase_id"
+                   default_scale="month"
+                   scales="week,month,quarter,year"
+                   progress="progress"
+                   color="trade_id">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="phase_id"/>
+                <field name="trade_id"/>
+                <field name="planned_qty"/>
+                <field name="actual_qty"/>
+                <field name="progress"/>
+                <field name="planned_cost"/>
+                <field name="actual_cost"/>
+                <field name="currency_id"/>
+            </gantt>
+        </field>
+    </record>
+
+    <record id="action_buruuj_phase_gantt" model="ir.actions.act_window">
+        <field name="name">Phases Gantt</field>
+        <field name="res_model">buruuj.phase</field>
+        <field name="view_mode">gantt,list,form</field>
+    </record>
+
+    <record id="action_buruuj_wbs_gantt" model="ir.actions.act_window">
+        <field name="name">WBS Gantt</field>
+        <field name="res_model">buruuj.wbs</field>
+        <field name="view_mode">gantt,list,form</field>
+    </record>
+
+    <!-- ===================================================================
+         PROGRESS SNAPSHOT - S-CURVE
+         =================================================================== -->
+    <record id="view_buruuj_progress_snapshot_list" model="ir.ui.view">
+        <field name="name">buruuj.progress.snapshot.list</field>
+        <field name="model">buruuj.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <list editable="bottom"
+                  decoration-success="schedule_variance &gt;= 0"
+                  decoration-danger="schedule_variance &lt; 0">
+                <field name="snapshot_date"/>
+                <field name="project_id"/>
+                <field name="period_label" optional="show"/>
+                <field name="planned_progress" widget="progressbar"/>
+                <field name="earned_progress" widget="progressbar"/>
+                <field name="schedule_variance"/>
+                <field name="planned_cumulative_cost" sum="Planned"/>
+                <field name="actual_cumulative_cost" sum="Actual"/>
+                <field name="cost_variance" sum="CV"/>
+                <field name="currency_id" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_buruuj_progress_snapshot_form" model="ir.ui.view">
+        <field name="name">buruuj.progress.snapshot.form</field>
+        <field name="model">buruuj.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="project_id"/>
+                            <field name="snapshot_date"/>
+                            <field name="period_label"/>
+                        </group>
+                        <group>
+                            <field name="planned_progress"/>
+                            <field name="earned_progress"/>
+                            <field name="schedule_variance" readonly="1"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Cost">
+                            <field name="planned_cumulative_cost"/>
+                            <field name="actual_cumulative_cost"/>
+                            <field name="cost_variance" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="notes"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_buruuj_progress_snapshot_graph" model="ir.ui.view">
+        <field name="name">buruuj.progress.snapshot.graph</field>
+        <field name="model">buruuj.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <graph string="S-Curve: Planned vs Earned Progress"
+                   type="line" stacked="0" cumulated="0">
+                <field name="snapshot_date" interval="week"/>
+                <field name="planned_progress" type="measure"/>
+                <field name="earned_progress" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_buruuj_progress_snapshot_pivot" model="ir.ui.view">
+        <field name="name">buruuj.progress.snapshot.pivot</field>
+        <field name="model">buruuj.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <pivot string="Progress Snapshots">
+                <field name="project_id" type="row"/>
+                <field name="snapshot_date" interval="week" type="col"/>
+                <field name="planned_progress" type="measure"/>
+                <field name="earned_progress" type="measure"/>
+                <field name="actual_cumulative_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_buruuj_progress_snapshot_search" model="ir.ui.view">
+        <field name="name">buruuj.progress.snapshot.search</field>
+        <field name="model">buruuj.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="snapshot_date"/>
+                <filter string="Behind Schedule" name="behind"
+                        domain="[('schedule_variance','&lt;',0)]"/>
+                <filter string="Over Budget" name="over_budget"
+                        domain="[('cost_variance','&lt;',0)]"/>
+                <group>
+                    <filter string="Project" name="g_project"
+                            context="{'group_by': 'project_id'}"/>
+                    <filter string="Date" name="group_by_date"
+                            context="{'group_by': 'snapshot_date:week'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_buruuj_progress_snapshot" model="ir.actions.act_window">
+        <field name="name">Progress Snapshots (S-Curve)</field>
+        <field name="res_model">buruuj.progress.snapshot</field>
+        <field name="view_mode">graph,list,pivot,form</field>
+    </record>
+
+    <!-- ===================================================================
+         INJECT INTO PROJECT FORM - stat buttons + tab
+         =================================================================== -->
+    <record id="view_project_project_form_buruuj_progress" model="ir.ui.view">
+        <field name="name">project.project.form.buruuj.progress</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="view_project_project_form_buruuj"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Schedule (Gantt)" name="buruuj_gantt">
+                    <group>
+                        <button name="action_view_phase_gantt" type="object"
+                                string="Open Phase Gantt" class="btn-primary"
+                                icon="fa-tasks"/>
+                        <button name="action_view_wbs_gantt" type="object"
+                                string="Open WBS Gantt" class="btn-primary"
+                                icon="fa-sitemap"/>
+                    </group>
+                </page>
+                <page string="S-Curve" name="buruuj_scurve">
+                    <group>
+                        <button name="action_capture_progress_snapshot"
+                                type="object" string="Capture Snapshot Now"
+                                class="btn-primary" icon="fa-camera"
+                                help="Build a snapshot from current WBS state."/>
+                        <button name="action_view_s_curve" type="object"
+                                string="Open S-Curve Chart"
+                                class="btn-secondary" icon="fa-line-chart"/>
+                    </group>
+                    <field name="buruuj_progress_snapshot_ids">
+                        <list editable="bottom"
+                              decoration-success="schedule_variance &gt;= 0"
+                              decoration-danger="schedule_variance &lt; 0">
+                            <field name="snapshot_date"/>
+                            <field name="period_label"/>
+                            <field name="planned_progress" widget="progressbar"/>
+                            <field name="earned_progress" widget="progressbar"/>
+                            <field name="schedule_variance"/>
+                            <field name="planned_cumulative_cost"/>
+                            <field name="actual_cumulative_cost"/>
+                            <field name="cost_variance"/>
+                            <field name="currency_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

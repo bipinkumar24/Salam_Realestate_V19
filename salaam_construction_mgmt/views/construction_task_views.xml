@@ -48,6 +48,7 @@
                         <group string="Dates">
                             <field name="date_start_planned"/>
                             <field name="date_end_planned"/>
+                            <field name="planned_duration_days" readonly="1"/>
                             <field name="date_start_actual"/>
                             <field name="date_end_actual"/>
                         </group>
@@ -61,6 +62,26 @@
                     </group>
                     <group string="Progress">
                         <field name="progress" widget="progressbar"/>
+                    </group>
+                    <group>
+                        <group string="Dependencies (Gantt)">
+                            <field name="predecessor_ids" widget="many2many_tags"
+                                   options="{'no_create': True}"/>
+                            <field name="successor_ids" widget="many2many_tags"
+                                   readonly="1"/>
+                        </group>
+                        <group string="Earned Value">
+                            <field name="planned_pct_to_date" readonly="1"/>
+                            <field name="planned_value" readonly="1"/>
+                            <field name="earned_value" readonly="1"/>
+                            <field name="schedule_variance" readonly="1"/>
+                            <field name="schedule_performance_index" readonly="1"
+                                   decoration-danger="schedule_performance_index &lt; 0.9"
+                                   decoration-success="schedule_performance_index &gt;= 1"/>
+                            <field name="cost_performance_index" readonly="1"
+                                   decoration-danger="cost_performance_index &lt; 0.9"
+                                   decoration-success="cost_performance_index &gt;= 1"/>
+                        </group>
                     </group>
                     <separator string="Scope / Description"/>
                     <field name="description"/>
@@ -133,7 +154,7 @@
     <record id="action_construction_task" model="ir.actions.act_window">
         <field name="name">Construction Tasks</field>
         <field name="res_model">salaam.construction.task</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="view_mode">kanban,list,gantt,form</field>
     </record>
 
 </odoo>

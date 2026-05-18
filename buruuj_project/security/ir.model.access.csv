@@ -9,3 +9,6 @@ access_buruuj_milestone_qs,buruuj.milestone.qs,model_buruuj_milestone,buruuj_bas
 access_buruuj_milestone_pm,buruuj.milestone.pm,model_buruuj_milestone,buruuj_base.group_buruuj_pm,1,1,1,1
 access_buruuj_risk_pm,buruuj.risk.pm,model_buruuj_risk,buruuj_base.group_buruuj_pm,1,1,1,1
 access_buruuj_risk_dir,buruuj.risk.dir,model_buruuj_risk,buruuj_base.group_buruuj_director,1,1,0,0
+access_buruuj_progress_snapshot_se,buruuj.progress.snapshot.se,model_buruuj_progress_snapshot,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_buruuj_progress_snapshot_pm,buruuj.progress.snapshot.pm,model_buruuj_progress_snapshot,buruuj_base.group_buruuj_pm,1,1,1,1
+access_buruuj_progress_snapshot_qs,buruuj.progress.snapshot.qs,model_buruuj_progress_snapshot,buruuj_base.group_buruuj_qs,1,1,1,0

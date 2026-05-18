@@ -248,7 +248,7 @@
             </list>
         </field>
     </record>
-    <menuitem id="menu_handover_root" name="Handover" parent="salaam_construction_mgmt.menu_construction_root" sequence="40" />
+    <menuitem id="menu_handover_root" name="Handover" parent="buruuj_base.menu_buruuj_root" sequence="40" />
     <menuitem id="menu_snag_lists" name="Snag Lists" parent="menu_handover_root" action="action_snag_list" sequence="10" />
     <menuitem id="menu_handover_certs" name="Handover Certificates" parent="menu_handover_root" action="action_handover_certificate" sequence="20" />
     <menuitem id="menu_warranty_claims" name="Warranty Claims" parent="menu_handover_root" action="action_warranty_claim" sequence="30" />

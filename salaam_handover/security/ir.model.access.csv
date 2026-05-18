@@ -1,9 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_snag_list_officer,snag.list.officer,model_salaam_snag_list,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_snag_list_manager,snag.list.manager,model_salaam_snag_list,salaam_construction_mgmt.group_construction_manager,1,1,1,1
-access_snag_item_officer,snag.item.officer,model_salaam_snag_item,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_snag_item_manager,snag.item.manager,model_salaam_snag_item,salaam_construction_mgmt.group_construction_manager,1,1,1,1
-access_handover_cert_officer,handover.cert.officer,model_salaam_handover_certificate,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_handover_cert_manager,handover.cert.manager,model_salaam_handover_certificate,salaam_construction_mgmt.group_construction_manager,1,1,1,1
-access_warranty_claim_officer,warranty.claim.officer,model_salaam_warranty_claim,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_warranty_claim_manager,warranty.claim.manager,model_salaam_warranty_claim,salaam_construction_mgmt.group_construction_manager,1,1,1,1
+access_snag_list_officer,snag.list.officer,model_salaam_snag_list,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_snag_list_manager,snag.list.manager,model_salaam_snag_list,buruuj_base.group_buruuj_pm,1,1,1,1
+access_snag_item_officer,snag.item.officer,model_salaam_snag_item,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_snag_item_manager,snag.item.manager,model_salaam_snag_item,buruuj_base.group_buruuj_pm,1,1,1,1
+access_handover_cert_officer,handover.cert.officer,model_salaam_handover_certificate,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_handover_cert_manager,handover.cert.manager,model_salaam_handover_certificate,buruuj_base.group_buruuj_pm,1,1,1,1
+access_warranty_claim_officer,warranty.claim.officer,model_salaam_warranty_claim,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_warranty_claim_manager,warranty.claim.manager,model_salaam_warranty_claim,buruuj_base.group_buruuj_pm,1,1,1,1

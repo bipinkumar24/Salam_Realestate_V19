@@ -14,6 +14,8 @@ Extends Odoo Project with construction-specific fields and adds:
 * Milestone-based billing schedule
 * Project risk register
 * Project health indicators (Green / Amber / Red)
+* Gantt views on Phases and WBS
+* S-curve progress snapshots (planned vs earned %)
 """,
     'author': 'Buruuj Construction Co.',
     'license': 'OPL-1',
@@ -26,6 +28,7 @@ Extends Odoo Project with construction-specific fields and adds:
         'views/buruuj_variation_views.xml',
         'views/buruuj_milestone_views.xml',
         'views/buruuj_risk_views.xml',
+        'views/buruuj_progress_views.xml',
         'views/buruuj_project_menus.xml',
     ],
     'installable': True,

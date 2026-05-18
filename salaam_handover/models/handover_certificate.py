@@ -31,7 +31,7 @@ class HandoverCertificate(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project', string='Project', required=True,
+        'project.project', string='Project', required=True,
     )
     property_id = fields.Many2one(
         'property.details', string='Unit / Property',

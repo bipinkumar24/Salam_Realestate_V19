@@ -45,8 +45,15 @@
                             <field name="delay_days" readonly="1" decoration-danger="delay_days &gt; 0"/>
                         </group>
                     </group>
-                    <group string="Progress">
-                        <field name="progress" widget="progressbar"/>
+                    <group>
+                        <group string="Progress">
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                        <group string="Earned Value (rolled-up)">
+                            <field name="planned_value" readonly="1"/>
+                            <field name="earned_value" readonly="1"/>
+                            <field name="actual_value" readonly="1"/>
+                        </group>
                     </group>
                     <group string="Contract Links">
                         <field name="istisna_milestone_id"/>

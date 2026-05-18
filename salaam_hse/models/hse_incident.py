@@ -41,10 +41,10 @@ class HSEIncident(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project', required=True, index=True,
+        'project.project', required=True, index=True,
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
     )
     contractor_id = fields.Many2one('res.partner', string='Contractor on Site')
     reported_by = fields.Many2one(
@@ -156,10 +156,10 @@ class HSEMethodStatement(models.Model):
     ], string='Status', default='draft', tracking=True)
 
     project_id = fields.Many2one(
-        'salaam.construction.project', required=True, index=True,
+        'project.project', required=True, index=True,
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
     )
     contractor_id = fields.Many2one('res.partner', string='Submitting Contractor')
     submitted_by = fields.Many2one('res.users', string='Submitted By')
@@ -216,10 +216,10 @@ class HSEToolboxTalk(models.Model):
         string='Reference', readonly=True, copy=False, default='New',
     )
     project_id = fields.Many2one(
-        'salaam.construction.project', required=True, index=True,
+        'project.project', required=True, index=True,
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
     )
     contractor_id = fields.Many2one('res.partner', string='Contractor Group')
     conductor_id = fields.Many2one(
@@ -299,7 +299,7 @@ class HSEAudit(models.Model):
     ], string='Status', default='planned', tracking=True)
 
     project_id = fields.Many2one(
-        'salaam.construction.project', required=True, index=True,
+        'project.project', required=True, index=True,
     )
     audit_type = fields.Selection([
         ('internal',    'Internal HSE Audit'),

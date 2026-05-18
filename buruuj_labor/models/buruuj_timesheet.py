@@ -29,6 +29,11 @@ class BuruujTimesheet(models.Model):
         "buruuj.subcontract",
         domain="[('project_id','=',project_id)]")
     workorder_id = fields.Many2one("buruuj.workorder")
+    boq_line_id = fields.Many2one(
+        "buruuj.boq.line", string="BOQ Item",
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help="BOQ item these labor hours are booked against. "
+             "Used to compare actual vs estimated labor cost per BOQ line.")
     activity = fields.Char(string="Activity")
 
     date = fields.Date(required=True, default=fields.Date.context_today,

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
 from odoo import models, fields, api, _
 from odoo.exceptions import ValidationError, UserError
 
@@ -169,6 +170,39 @@ class ConstructionProject(models.Model):
     )
     subcontract_count = fields.Integer(compute='_compute_counts', string='Sub-Contracts')
 
+    progress_snapshot_ids = fields.One2many(
+        'salaam.construction.progress.snapshot', 'project_id',
+        string='Progress Snapshots',
+    )
+    progress_snapshot_count = fields.Integer(
+        compute='_compute_counts', string='Snapshots',
+    )
+
+    # ── EARNED-VALUE TOTALS (live, today) ─────────────────────────────────────
+    planned_value_total = fields.Monetary(
+        string='Planned Value (BCWS)',
+        compute='_compute_earned_value_totals',
+        currency_field='currency_id',
+    )
+    earned_value_total = fields.Monetary(
+        string='Earned Value (BCWP)',
+        compute='_compute_earned_value_totals',
+        currency_field='currency_id',
+    )
+    actual_value_total = fields.Monetary(
+        string='Actual Cost (ACWP)',
+        compute='_compute_earned_value_totals',
+        currency_field='currency_id',
+    )
+    spi_live = fields.Float(
+        string='SPI (live)', digits=(5, 2),
+        compute='_compute_earned_value_totals',
+    )
+    cpi_live = fields.Float(
+        string='CPI (live)', digits=(5, 2),
+        compute='_compute_earned_value_totals',
+    )
+
     # ── COMPUTED ──────────────────────────────────────────────────────────────
     @api.depends(
         'budget_line_ids.committed_amount',
@@ -206,6 +240,7 @@ class ConstructionProject(models.Model):
         'phase_ids', 'budget_line_ids', 'site_report_ids',
         'drawing_ids', 'governance_doc_ids',
         'istisna_contract_id.subcontract_ids',
+        'progress_snapshot_ids',
     )
     def _compute_counts(self):
         for rec in self:
@@ -215,6 +250,23 @@ class ConstructionProject(models.Model):
             rec.drawing_count = len(rec.drawing_ids)
             rec.governance_doc_count = len(rec.governance_doc_ids)
             rec.subcontract_count = len(rec.subcontract_ids)
+            rec.progress_snapshot_count = len(rec.progress_snapshot_ids)
+
+    @api.depends(
+        'phase_ids.planned_value',
+        'phase_ids.earned_value',
+        'phase_ids.actual_value',
+    )
+    def _compute_earned_value_totals(self):
+        for rec in self:
+            pv = sum(rec.phase_ids.mapped('planned_value'))
+            ev = sum(rec.phase_ids.mapped('earned_value'))
+            ac = sum(rec.phase_ids.mapped('actual_value'))
+            rec.planned_value_total = pv
+            rec.earned_value_total = ev
+            rec.actual_value_total = ac
+            rec.spi_live = (ev / pv) if pv else 0.0
+            rec.cpi_live = (ev / ac) if ac else 0.0
 
     # ── ORM ───────────────────────────────────────────────────────────────────
     @api.model_create_multi
@@ -309,4 +361,132 @@ class ConstructionProject(models.Model):
             'view_mode': 'list,form',
             'domain': [(field, '=', self.id)],
             'context': {'default_%s' % field: self.id},
+        }
+
+    # ── GANTT & S-CURVE ───────────────────────────────────────────────────────
+    def action_open_gantt(self):
+        """Open the task Gantt chart filtered to this project."""
+        self.ensure_one()
+        action = self.env['ir.actions.act_window']._for_xml_id(
+            'salaam_construction_mgmt.action_construction_task_gantt'
+        )
+        action['domain'] = [('project_id', '=', self.id)]
+        action['context'] = {
+            'default_project_id': self.id,
+            'search_default_project_id': self.id,
+        }
+        return action
+
+    def action_open_scurve(self):
+        """Open the S-curve graph view for this project."""
+        self.ensure_one()
+        if not self.progress_snapshot_ids:
+            self.action_generate_snapshots()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('S-Curve — %s') % self.name,
+            'res_model': 'salaam.construction.progress.snapshot',
+            'view_mode': 'graph,pivot,list',
+            'domain': [('project_id', '=', self.id)],
+            'context': {'default_project_id': self.id},
+        }
+
+    def action_generate_snapshots(self):
+        """
+        (Re-)generate weekly progress snapshots between project start and
+        max(today, planned end). Snapshots are derived data; the existing rows
+        for each project are dropped and rebuilt from current task/phase state.
+
+        Planned curve   — cumulative PV across all tasks at each snapshot date.
+        Earned curve    — for past dates uses recorded progress today
+                          (no progress history is captured per snapshot),
+                          producing a single live point-in-time earned line.
+                          The historical earned/actual columns are approximated
+                          by interpolating today's totals back along the elapsed
+                          schedule — good enough for the visual S-curve while
+                          progress history isn't stored separately.
+        """
+        Snapshot = self.env['salaam.construction.progress.snapshot']
+        for project in self:
+            start = project.date_start_actual or project.date_start_planned
+            end = project.date_end_planned
+            if not start or not end:
+                raise UserError(_(
+                    'Set a planned start and planned end on the project '
+                    '(or on its Istisna contract) before generating snapshots.'
+                ))
+            today = fields.Date.context_today(self)
+            horizon = max(end, today)
+
+            Snapshot.search([('project_id', '=', project.id)]).unlink()
+
+            tasks = project.phase_ids.mapped('task_ids').filtered(
+                lambda t: t.date_start_planned and t.date_end_planned
+                and t.budget_cost
+            )
+            total_budget = sum(tasks.mapped('budget_cost')) or 0.0
+            ev_today = project.earned_value_total or 0.0
+            ac_today = project.actual_value_total or 0.0
+
+            rows = []
+            cur = start
+            step = timedelta(days=7)
+            while cur <= horizon:
+                # Planned cumulative cost at cur — linear interp per task
+                planned_cum = 0.0
+                for t in tasks:
+                    if cur <= t.date_start_planned:
+                        pct = 0.0
+                    elif cur >= t.date_end_planned:
+                        pct = 1.0
+                    else:
+                        total_days = (
+                            t.date_end_planned - t.date_start_planned
+                        ).days or 1
+                        pct = (cur - t.date_start_planned).days / total_days
+                    planned_cum += (t.budget_cost or 0.0) * pct
+                planned_pct = (
+                    planned_cum / total_budget * 100.0
+                ) if total_budget else 0.0
+
+                # Earned/actual — interp today's totals back along the schedule
+                # so the curves render as a trend even without history.
+                if cur >= today:
+                    ev = ev_today
+                    ac = ac_today
+                else:
+                    span = (today - start).days or 1
+                    ratio = max(0.0, min(1.0, (cur - start).days / span))
+                    ev = ev_today * ratio
+                    ac = ac_today * ratio
+                actual_pct = (
+                    ev / total_budget * 100.0
+                ) if total_budget else 0.0
+
+                rows.append({
+                    'project_id': project.id,
+                    'snapshot_date': cur,
+                    'planned_pct_cumulative': planned_pct,
+                    'actual_pct_cumulative': actual_pct,
+                    'planned_cost_cumulative': planned_cum,
+                    'earned_value_cumulative': ev,
+                    'actual_cost_cumulative': ac,
+                })
+                cur += step
+            if rows:
+                Snapshot.create(rows)
+            project.message_post(body=_(
+                '%d progress snapshots regenerated.'
+            ) % len(rows))
+        return True
+
+    def action_open_progress_snapshots(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': _('Progress Snapshots'),
+            'res_model': 'salaam.construction.progress.snapshot',
+            'view_mode': 'list,graph,pivot,form',
+            'domain': [('project_id', '=', self.id)],
+            'context': {'default_project_id': self.id},
         }

@@ -74,11 +74,11 @@ class SiteInstruction(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project',
+        'project.project',
         string='Construction Project', required=True, index=True,
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
         string='Affected Phase',
     )
     # contractor_party_id = fields.Many2one(

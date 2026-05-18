@@ -8,7 +8,7 @@ class UnitPhaseLink(models.Model):
     """
     Unit-to-Construction-Phase link.
 
-    Bridges property.details (unit) with salaam.construction.phase (build stage).
+    Bridges property.details (unit) with buruuj.phase (build stage).
 
     TWO link types per unit:
 
@@ -48,12 +48,12 @@ class UnitPhaseLink(models.Model):
         required=True, ondelete='cascade', index=True,
     )
     project_id = fields.Many2one(
-        'salaam.construction.project',
+        'project.project',
         string='Construction Project',
         required=True, index=True,
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
         string='Construction Phase',
         required=True,
     )
@@ -63,7 +63,7 @@ class UnitPhaseLink(models.Model):
     ], string='Link Type', required=True, default='progress_reference')
 
     # ── LIVE DATA from linked phase ───────────────────────────────────────────
-    # Computed with getattr fallbacks — salaam.construction.phase field names
+    # Computed with getattr fallbacks — buruuj.phase field names
     # may vary across installations (progress/completion_pct, planned_end/date_end, etc.)
     phase_progress = fields.Float(
         compute='_compute_phase_data', store=True,
@@ -137,13 +137,13 @@ class UnitPhaseLink(models.Model):
 
 class ConstructionPhaseUnitTrigger(models.Model):
     """
-    Extends salaam.construction.phase.
+    Extends buruuj.phase.
     When a phase reaches 100% / completed state:
       → finds all units linked via practical_completion
       → updates their construction_status
       → sets practical_completion_date
     """
-    _inherit = 'salaam.construction.phase'
+    _inherit = 'buruuj.phase'
 
     linked_unit_count = fields.Integer(
         compute='_compute_linked_units',

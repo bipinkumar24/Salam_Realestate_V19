@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ─────────────────────────────────────────────────────────────────────
+         S-CURVE GRAPH — Planned vs Earned vs Actual cumulative cost
+         ───────────────────────────────────────────────────────────────────── -->
+    <record id="view_progress_snapshot_graph" model="ir.ui.view">
+        <field name="name">salaam.construction.progress.snapshot.graph</field>
+        <field name="model">salaam.construction.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <graph string="S-Curve" type="line" stacked="0" cumulated="0">
+                <field name="snapshot_date" interval="week"/>
+                <field name="planned_cost_cumulative" type="measure"
+                       string="Planned (BCWS)"/>
+                <field name="earned_value_cumulative" type="measure"
+                       string="Earned (BCWP)"/>
+                <field name="actual_cost_cumulative" type="measure"
+                       string="Actual (ACWP)"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Percent-based S-curve (handy when budgets aren't fully loaded) -->
+    <record id="view_progress_snapshot_graph_pct" model="ir.ui.view">
+        <field name="name">salaam.construction.progress.snapshot.graph.pct</field>
+        <field name="model">salaam.construction.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <graph string="S-Curve (%)" type="line">
+                <field name="snapshot_date" interval="week"/>
+                <field name="planned_pct_cumulative" type="measure"
+                       string="Planned %"/>
+                <field name="actual_pct_cumulative" type="measure"
+                       string="Actual %"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_progress_snapshot_pivot" model="ir.ui.view">
+        <field name="name">salaam.construction.progress.snapshot.pivot</field>
+        <field name="model">salaam.construction.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <pivot string="Progress Snapshots">
+                <field name="snapshot_date" interval="week" type="col"/>
+                <field name="project_id" type="row"/>
+                <field name="planned_cost_cumulative" type="measure"/>
+                <field name="earned_value_cumulative" type="measure"/>
+                <field name="actual_cost_cumulative" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_progress_snapshot_list" model="ir.ui.view">
+        <field name="name">salaam.construction.progress.snapshot.list</field>
+        <field name="model">salaam.construction.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <list string="Progress Snapshots"
+                  decoration-success="spi &gt;= 1 and cpi &gt;= 1"
+                  decoration-warning="(spi &gt;= 0.9 and spi &lt; 1) or (cpi &gt;= 0.9 and cpi &lt; 1)"
+                  decoration-danger="spi &lt; 0.9 or cpi &lt; 0.9">
+                <field name="snapshot_date"/>
+                <field name="project_id"/>
+                <field name="planned_pct_cumulative" widget="progressbar"/>
+                <field name="actual_pct_cumulative" widget="progressbar"/>
+                <field name="planned_cost_cumulative" sum="Planned"/>
+                <field name="earned_value_cumulative" sum="Earned"/>
+                <field name="actual_cost_cumulative" sum="Actual"/>
+                <field name="schedule_variance" sum="SV"/>
+                <field name="cost_variance" sum="CV"/>
+                <field name="spi"/>
+                <field name="cpi"/>
+                <field name="currency_id" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_progress_snapshot_search" model="ir.ui.view">
+        <field name="name">salaam.construction.progress.snapshot.search</field>
+        <field name="model">salaam.construction.progress.snapshot</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="project_id"/>
+                <field name="snapshot_date"/>
+                <filter string="Last 90 days" name="recent"
+                        domain="[('snapshot_date','&gt;=', (context_today() - relativedelta(days=90)).strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter string="Project" name="group_project"
+                            context="{'group_by':'project_id'}"/>
+                    <filter string="Week" name="group_week"
+                            context="{'group_by':'snapshot_date:week'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_progress_snapshot" model="ir.actions.act_window">
+        <field name="name">S-Curve / Progress Snapshots</field>
+        <field name="res_model">salaam.construction.progress.snapshot</field>
+        <field name="view_mode">graph,pivot,list,form</field>
+        <field name="view_id" ref="view_progress_snapshot_graph"/>
+        <field name="search_view_id" ref="view_progress_snapshot_search"/>
+    </record>
+
+</odoo>

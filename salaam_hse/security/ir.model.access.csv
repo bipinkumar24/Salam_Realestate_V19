@@ -1,9 +1,9 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hse_incident_officer,hse.incident.officer,model_salaam_hse_incident,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_hse_incident_manager,hse.incident.manager,model_salaam_hse_incident,salaam_construction_mgmt.group_construction_manager,1,1,1,1
-access_hse_rams_officer,hse.rams.officer,model_salaam_hse_method_statement,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_hse_rams_manager,hse.rams.manager,model_salaam_hse_method_statement,salaam_construction_mgmt.group_construction_manager,1,1,1,1
-access_hse_toolbox_officer,hse.toolbox.officer,model_salaam_hse_toolbox_talk,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_hse_toolbox_manager,hse.toolbox.manager,model_salaam_hse_toolbox_talk,salaam_construction_mgmt.group_construction_manager,1,1,1,1
-access_hse_audit_officer,hse.audit.officer,model_salaam_hse_audit,salaam_construction_mgmt.group_construction_officer,1,1,1,0
-access_hse_audit_manager,hse.audit.manager,model_salaam_hse_audit,salaam_construction_mgmt.group_construction_manager,1,1,1,1
+access_hse_incident_officer,hse.incident.officer,model_salaam_hse_incident,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_hse_incident_manager,hse.incident.manager,model_salaam_hse_incident,buruuj_base.group_buruuj_pm,1,1,1,1
+access_hse_rams_officer,hse.rams.officer,model_salaam_hse_method_statement,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_hse_rams_manager,hse.rams.manager,model_salaam_hse_method_statement,buruuj_base.group_buruuj_pm,1,1,1,1
+access_hse_toolbox_officer,hse.toolbox.officer,model_salaam_hse_toolbox_talk,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_hse_toolbox_manager,hse.toolbox.manager,model_salaam_hse_toolbox_talk,buruuj_base.group_buruuj_pm,1,1,1,1
+access_hse_audit_officer,hse.audit.officer,model_salaam_hse_audit,buruuj_base.group_buruuj_site_engineer,1,1,1,0
+access_hse_audit_manager,hse.audit.manager,model_salaam_hse_audit,buruuj_base.group_buruuj_pm,1,1,1,1

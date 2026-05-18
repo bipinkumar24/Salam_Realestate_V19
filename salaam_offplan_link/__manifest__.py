@@ -21,7 +21,7 @@ customers can see live construction progress on their unit.
 Models:
 -------
 1. salaam.unit.phase.link
-   Links a property.details unit to a specific salaam.construction.phase.
+   Links a property.details unit to a specific buruuj.phase.
    Two link types:
      - practical_completion: the phase whose completion marks the unit
        as physically ready for snagging (hard gate)
@@ -58,7 +58,7 @@ completion date. No progress shown for unreserved units
     'depends': [
         'base', 'mail',
         'rental_management',
-        'salaam_construction_mgmt',
+        'buruuj_project',
         'salaam_handover',
     ],
     'data': [

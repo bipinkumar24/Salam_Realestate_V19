@@ -25,7 +25,7 @@ Integration
 - Links to salaam.project (Development / Project master)
 - Creates property.details units from the Unit Mix
 - Creates salaam.tender records for design consultancy
-- Links to salaam.construction.project for build phase
+- Links to project.project for build phase
     ''',
     'author': 'Salaam Investment Bank — IAFAO',
     'depends': [

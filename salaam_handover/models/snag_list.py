@@ -42,7 +42,7 @@ class SnagList(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project',
+        'project.project',
         string='Construction Project', required=True, index=True,
     )
     property_id = fields.Many2one(
@@ -50,7 +50,7 @@ class SnagList(models.Model):
         string='Unit / Property', required=True, index=True, tracking=True
     )
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
         string='Construction Phase',
     )
     sale_contract_id = fields.Many2one(

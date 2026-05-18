@@ -145,6 +145,11 @@ class BuruujMRLine(models.Model):
     mr_id = fields.Many2one("buruuj.material.requisition",
                               required=True, ondelete="cascade")
     sequence = fields.Integer(default=10)
+    project_id = fields.Many2one(related="mr_id.project_id", store=True)
+    boq_line_id = fields.Many2one(
+        "buruuj.boq.line", string="BOQ Item",
+        domain="[('boq_id.project_id', '=', project_id)]",
+        help="Trace this material back to a BOQ line for budget tracking.")
     material_id = fields.Many2one("buruuj.material", required=True)
     specification = fields.Char(
         help="Item-specific spec override; defaults to material master.")
@@ -156,6 +161,17 @@ class BuruujMRLine(models.Model):
     notes = fields.Char()
     currency_id = fields.Many2one(
         "res.currency", related="mr_id.company_id.currency_id")
+
+    @api.onchange("boq_line_id")
+    def _onchange_boq_line_id(self):
+        if self.boq_line_id:
+            if not self.specification:
+                self.specification = self.boq_line_id.description
+            if not self.uom_id:
+                self.uom_id = self.boq_line_id.uom_id
+            if (not self.estimated_unit_price
+                    and self.boq_line_id.material_cost):
+                self.estimated_unit_price = self.boq_line_id.material_cost
 
     @api.onchange("material_id")
     def _onchange_material(self):

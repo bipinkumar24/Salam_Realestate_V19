@@ -75,7 +75,7 @@ class EOTClaim(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project', required=True, index=True,
+        'project.project', required=True, index=True,
     )
     # contractor_party_id = fields.Many2one(
     #     'salaam.project.party',
@@ -310,7 +310,7 @@ class ContractorProgramme(models.Model):
 
     # ── LINKS ─────────────────────────────────────────────────────────────────
     project_id = fields.Many2one(
-        'salaam.construction.project', required=True, index=True,
+        'project.project', required=True, index=True,
     )
     # contractor_party_id = fields.Many2one(
     #     'salaam.project.party',
@@ -511,7 +511,7 @@ class ProgrammePhasMapping(models.Model):
     )
     sequence = fields.Integer(default=10)
     phase_id = fields.Many2one(
-        'salaam.construction.phase',
+        'buruuj.phase',
         string='Construction Phase',
         required=True,
     )

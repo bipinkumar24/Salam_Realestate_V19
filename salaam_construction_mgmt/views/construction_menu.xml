@@ -31,6 +31,34 @@
               sequence="30"
               groups="salaam_construction_mgmt.group_construction_viewer"/>
 
+    <!-- PROGRESS TRACKING (Gantt & S-Curve) -->
+    <menuitem id="menu_construction_progress"
+              name="Progress Tracking"
+              parent="menu_construction_root"
+              sequence="35"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <menuitem id="menu_construction_gantt_tasks"
+              name="Tasks Gantt"
+              parent="menu_construction_progress"
+              action="action_construction_task_gantt"
+              sequence="10"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <menuitem id="menu_construction_gantt_phases"
+              name="Phases Gantt"
+              parent="menu_construction_progress"
+              action="action_construction_phase_gantt"
+              sequence="20"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
+    <menuitem id="menu_construction_scurve"
+              name="S-Curve"
+              parent="menu_construction_progress"
+              action="action_progress_snapshot"
+              sequence="30"
+              groups="salaam_construction_mgmt.group_construction_viewer"/>
+
     <!-- BUDGET -->
     <menuitem id="menu_construction_budget"
               name="Budget Tracker"

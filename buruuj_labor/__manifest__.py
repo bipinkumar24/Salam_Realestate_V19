@@ -30,6 +30,7 @@ bank files), Odoo's Payroll module can be installed alongside.
         "buruuj_base",
         "buruuj_project",
         "buruuj_subcontractor",
+        "buruuj_tendering",
         "buruuj_cost_control",
         "hr",
         "mail",
